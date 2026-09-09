@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CHEP AI</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#10131a;
+  color:#fff;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+}
+.app{
+  width:100%;
+  max-width:600px;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:#171b24;
+}
+.header{
+  padding:16px;
+  background:#202632;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid #303744;
+}
+.logo{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#6c5ce7,#00cec9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:bold;
+}
+.header h1{
+  margin:0;
+  font-size:20px;
+}
+.status{
+  font-size:12px;
+  color:#79e08b;
+  margin-top:3px;
+}
+.chat{
+  flex:1;
+  overflow-y:auto;
+  padding:16px;
+}
+.msg{
+  display:flex;
+  margin-bottom:14px;
+}
+.msg.user{
+  justify-content:flex-end;
+}
+.bubble{
+  max-width:82%;
+  padding:12px 15px;
+  border-radius:18px;
+  line-height:1.45;
+  white-space:pre-wrap;
+}
+.bot .bubble{
+  background:#272d39;
+  border-bottom-left-radius:5px;
+}
+.user .bubble{
+  background:#5b4ee8;
+  border-bottom-right-radius:5px;
+}
+.bottom{
+  padding:10px;
+  background:#202632;
+  border-top:1px solid #303744;
+}
+.row{
+  display:flex;
+  gap:8px;
+}
+#input{
+  flex:1;
+  border:0;
+  outline:0;
+  border-radius:22px;
+  padding:13px 16px;
+  background:#303744;
+  color:white;
+  font-size:15px;
+}
+button{
+  border:0;
+  border-radius:50%;
+  width:46px;
+  height:46px;
+  font-size:19px;
+  cursor:pointer;
+}
+#mic{background:#394150;color:white}
+#send{background:#6c5ce7;color:white}
+.small{
+  text-align:center;
+  color:#858d9d;
+  font-size:11px;
+  margin-top:7px;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="logo">C</div>
+    <div>
+      <h1>CHEP AI</h1>
+      <div class="status">● Đang hoạt động</div>
+    </div>
+  </div>
+
+  <div class="chat" id="chat"></div>
+
+  <div class="bottom">
+    <div class="row">
+      <button id="mic" title="Nói">🎙️</button>
+      <input id="input" type="text" placeholder="Nói chuyện với CHEP...">
+      <button id="send" title="Gửi">➤</button>
+    </div>
+    <div class="small">CHEP — trợ lý AI của bạn</div>
+  </div>
+
+</div>
+
+<script>
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+const send = document.getElementById("send");
+const mic = document.getElementById("mic");
+
+function addMessage(text, type){
+  const msg = document.createElement("div");
+  msg.className = "msg " + type;
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = text;
+
+  msg.appendChild(bubble);
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function speak(text){
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "vi-VN";
+    u.rate = 1;
+    speechSynthesis.speak(u);
+  }
+}
+
+function chepReply(text){
+  const t = text.toLowerCase().trim();
+
+  if(
+    t.includes("xin chào") ||
+    t.includes("chào") ||
+    t.includes("hello")
+  ){
+    return "Xin chào! Mình là CHEP 🤖. Hôm nay mình có thể nói chuyện với bạn.";
+  }
+
+  if(t.includes("bạn là ai") || t.includes("chep là ai")){
+    return "Mình là CHEP AI 🤖 — một trợ lý được thiết kế để trò chuyện, nghe và nói với bạn.";
+  }
+
+  if(t.includes("tên bạn")){
+    return "Tên mình là CHEP.";
+  }
+
+  if(t.includes("cảm ơn")){
+    return "Không có gì 😎";
+  }
+
+  if(t.includes("bạn khỏe không")){
+    return "Mình vẫn hoạt động tốt đây! 😎";
+  }
+
+  if(t.includes("roblox")){
+    return "Roblox nghe thú vị đấy! Bạn có thể kể cho mình về game bạn đang làm.";
+  }
+
+  return "CHEP đã nhận được: \"" + text +
+         "\"\n\nĐây là phiên bản web của CHEP. Khi kết nối máy chủ AI, CHEP sẽ có thể trả lời thông minh hơn.";
+}
+
+function sendMessage(){
+  const text = input.value.trim();
+
+  if(!text) return;
+
+  addMessage(text, "user");
+  input.value = "";
+
+  setTimeout(() => {
+    const answer = chepReply(text);
+    addMessage(answer, "bot");
+    speak(answer);
+  }, 400);
+}
+
+send.addEventListener("click", sendMessage);
+
+input.addEventListener("keydown", e => {
+  if(e.key === "Enter"){
+    sendMessage();
+  }
+});
+
+const SpeechRecognition =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+if(SpeechRecognition){
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "vi-VN";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  mic.addEventListener("click", () => {
+    recognition.start();
+    mic.textContent = "🔴";
+  });
+
+  recognition.onresult = event => {
+    input.value = event.results[0][0].transcript;
+    mic.textContent = "🎙️";
+    sendMessage();
+  };
+
+  recognition.onerror = () => {
+    mic.textContent = "🎙️";
+  };
+
+  recognition.onend = () => {
+    mic.textContent = "🎙️";
+  };
+
+}else{
+  mic.addEventListener("click", () => {
+    alert("Trình duyệt này chưa hỗ trợ nhận giọng nói.");
+  });
+}
+
+addMessage(
+  "Xin chào! Mình là CHEP 🤖\nBạn có thể nhắn tin hoặc bấm 🎙️ để nói chuyện với mình.",
+  "bot"
+);
+</script>
+
+</body>
+</html>

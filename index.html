@@ -851,13 +851,3 @@ window.addEventListener(
 
 </body>
   </html>
-import OpenAI from "openai";
-const client = new OpenAI();
-
-const response = await client.responses.create({
-  model: "gpt-6-astra",
-  tools: [{ type: "web_search" }],
-  input: "What was a positive news story from today?",
-});
-
-console.log(response.output_text);

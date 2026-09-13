@@ -1,853 +1,95 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080d1c">
-<meta name="description" content="CHEP AI - Trợ lý AI của bạn">
-<title>CHEP AI</title>
-
-<style>
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Arial,
-    sans-serif;
-  background: #050816;
-  color: white;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  overflow: hidden;
-  background:
-    radial-gradient(
-      circle at 10% 5%,
-      rgba(124, 58, 237, 0.35),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 95% 85%,
-      rgba(6, 182, 212, 0.25),
-      transparent 35%
-    ),
-    #050816;
-}
-
-.app {
-  width: 100%;
-  max-width: 760px;
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: rgba(7, 12, 27, 0.88);
-  backdrop-filter: blur(18px);
-}
-
-/* HEADER */
-
-.header {
-  flex-shrink: 0;
-  min-height: 82px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 18px;
-  border-bottom: 1px solid rgba(100, 116, 139, 0.25);
-  background: rgba(12, 18, 38, 0.92);
-}
-
-.logo {
-  width: 54px;
-  height: 54px;
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  border-radius: 18px;
-  font-size: 27px;
-  font-weight: 900;
-  background:
-    linear-gradient(
-      135deg,
-      #8b5cf6,
-      #2563eb 55%,
-      #06b6d4
-    );
-  box-shadow:
-    0 0 18px rgba(124, 58, 237, 0.65),
-    inset 0 0 12px rgba(255, 255, 255, 0.15);
-  animation: logoPulse 2.5s infinite;
-}
-
-.title {
-  min-width: 0;
-}
-
-.title h1 {
-  margin: 0;
-  font-size: 23px;
-  line-height: 1.1;
-  letter-spacing: 1px;
-}
-
-.status {
-  margin-top: 5px;
-  color: #4ade80;
-  font-size: 12px;
-}
-
-.status span {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 5px;
-  border-radius: 50%;
-  background: #4ade80;
-  box-shadow: 0 0 9px #4ade80;
-}
-
-/* CHAT */
-
-.chat {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 20px 17px 24px;
-  scroll-behavior: smooth;
-  background:
-    radial-gradient(
-      circle at 50% 20%,
-      rgba(59, 130, 246, 0.08),
-      transparent 42%
-    );
-}
-
-.chat::-webkit-scrollbar {
-  width: 5px;
-}
-
-.chat::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: #334155;
-}
-
-/* MESSAGE */
-
-.message {
-  display: flex;
-  width: 100%;
-  margin: 13px 0;
-  animation: appear 0.25s ease;
-}
-
-.message.bot {
-  justify-content: flex-start;
-}
-
-.message.user {
-  justify-content: flex-end;
-}
-
-.bubble {
-  max-width: 84%;
-  padding: 13px 16px;
-  border-radius: 20px;
-  font-size: 16px;
-  line-height: 1.55;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-.message.bot .bubble {
-  color: #f8fafc;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(30, 41, 59, 0.98),
-      rgba(15, 23, 42, 0.98)
-    );
-  border: 1px solid #33466f;
-  border-bottom-left-radius: 6px;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
-}
-
-.message.user .bubble {
-  color: white;
-  background:
-    linear-gradient(
-      135deg,
-      #7c3aed,
-      #4f46e5 50%,
-      #2563eb
-    );
-  border-bottom-right-radius: 6px;
-  box-shadow: 0 7px 25px rgba(37, 99, 235, 0.28);
-}
-
-/* TYPING */
-
-.typing {
-  display: none;
-  align-items: center;
-  gap: 5px;
-  width: fit-content;
-  margin: 10px 0;
-  padding: 12px 15px;
-  border: 1px solid #33466f;
-  border-radius: 18px;
-  border-bottom-left-radius: 6px;
-  background: #111a30;
-}
-
-.typing.show {
-  display: flex;
-}
-
-.typing i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #94a3b8;
-  animation: typing 1.2s infinite;
-}
-
-.typing i:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-.typing i:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-/* BOTTOM */
-
-.bottom {
-  flex-shrink: 0;
-  border-top: 1px solid rgba(100, 116, 139, 0.25);
-  background: rgba(5, 10, 24, 0.96);
-}
-
-.row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 10px 10px 7px;
-}
-
-.row input {
-  min-width: 0;
-  flex: 1;
-  height: 48px;
-  padding: 0 15px;
-  border: 1px solid #33446d;
-  border-radius: 17px;
-  outline: none;
-  color: white;
-  background: #10182d;
-  font-size: 16px;
-}
-
-.row input::placeholder {
-  color: #64748b;
-}
-
-.row input:focus {
-  border-color: #8b5cf6;
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.22);
-}
-
-.row button {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  border: 0;
-  border-radius: 16px;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  transition:
-    transform 0.15s,
-    filter 0.15s;
-}
-
-.row button:active {
-  transform: scale(0.92);
-}
-
-.mic {
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
-  box-shadow: 0 0 15px rgba(124, 58, 237, 0.35);
-}
-
-.mic.listening {
-  background: linear-gradient(135deg, #dc2626, #ef4444);
-  animation: micPulse 1s infinite;
-}
-
-.send {
-  background: linear-gradient(135deg, #2563eb, #06b6d4);
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
-}
-
-.small {
-  padding: 0 12px 9px;
-  text-align: center;
-  color: #64748b;
-  font-size: 11px;
-}
-
-/* MOBILE */
-
-@media (max-width: 420px) {
-  .header {
-    padding: 12px;
-  }
-
-  .logo {
-    width: 48px;
-    height: 48px;
-    border-radius: 16px;
-  }
-
-  .title h1 {
-    font-size: 21px;
-  }
-
-  .chat {
-    padding: 15px 11px 20px;
-  }
-
-  .bubble {
-    max-width: 89%;
-    font-size: 15px;
-  }
-
-  .row {
-    padding: 8px 7px 5px;
-  }
-
-  .row button {
-    width: 46px;
-    height: 46px;
-  }
-
-  .row input {
-    height: 46px;
-    font-size: 15px;
-  }
-}
-
-/* ANIMATIONS */
-
-@keyframes logoPulse {
-  0%,
-  100% {
-    box-shadow:
-      0 0 16px rgba(124, 58, 237, 0.55),
-      inset 0 0 12px rgba(255, 255, 255, 0.12);
-  }
-
-  50% {
-    box-shadow:
-      0 0 30px rgba(6, 182, 212, 0.65),
-      inset 0 0 12px rgba(255, 255, 255, 0.16);
-  }
-}
-
-@keyframes appear {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes typing {
-  0%,
-  60%,
-  100% {
-    opacity: 0.3;
-    transform: translateY(0);
-  }
-
-  30% {
-    opacity: 1;
-    transform: translateY(-3px);
-  }
-}
-
-@keyframes micPulse {
-  0%,
-  100% {
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
-  }
-
-  50% {
-    box-shadow: 0 0 25px rgba(239, 68, 68, 0.8);
-  }
-}
-</style>
-</head>
-
-<body>
-
-<div class="app">
-
-  <header class="header">
-    <div class="logo">C</div>
-
-    <div class="title">
-      <h1>CHEP AI</h1>
-
-      <div class="status">
-        <span></span>Đang hoạt động
-      </div>
-    </div>
-  </header>
-
-
-  <main class="chat" id="chat">
-
-    <div class="message bot">
-      <div class="bubble">
-Xin chào! Mình là CHEP 🤖
-
-Mình đã sẵn sàng trò chuyện với bạn. Bạn muốn hỏi gì?
-      </div>
-    </div>
-
-    <div class="typing" id="typing">
-      <i></i>
-      <i></i>
-      <i></i>
-    </div>
-
-  </main>
-
-
-  <footer class="bottom">
-
-    <div class="row">
-
-      <button
-        class="mic"
-        id="mic"
-        type="button"
-        title="Nói chuyện với CHEP"
-      >
-        🎙️
-      </button>
-
-      <input
-        id="input"
-        type="text"
-        autocomplete="off"
-        placeholder="Nói chuyện với CHEP..."
-      >
-
-      <button
-        class="send"
-        id="send"
-        type="button"
-        title="Gửi"
-      >
-        ➤
-      </button>
-
-    </div>
-
-    <div class="small">
-      CHEP — trợ lý AI của bạn 🤖
-    </div>
-
-  </footer>
-
-</div>
-
-
-<script>
-const chat = document.getElementById("chat");
-const input = document.getElementById("input");
-const send = document.getElementById("send");
-const mic = document.getElementById("mic");
-const typing = document.getElementById("typing");
-
-
-/* =========================
-   HIỂN THỊ TIN NHẮN
-========================= */
-
-function addMessage(text, type) {
-
-  const message = document.createElement("div");
-
-  message.className =
-    "message " + type;
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className = "bubble";
-
-  bubble.textContent = text;
-
-  message.appendChild(bubble);
-
-  chat.insertBefore(message, typing);
-
-  chat.scrollTop = chat.scrollHeight;
-}
-
-
-/* =========================
-   HIỆU ỨNG ĐANG SUY NGHĨ
-========================= */
-
-function showTyping() {
-  typing.classList.add("show");
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function hideTyping() {
-  typing.classList.remove("show");
-}
-
-
-/* =========================
-   CHEP ĐỌC BẰNG GIỌNG NÓI
-========================= */
-
-function speak(text) {
-
-  if (!("speechSynthesis" in window)) {
-    return;
-  }
-
-  try {
-
-    speechSynthesis.cancel();
-
-    const voice =
-      new SpeechSynthesisUtterance(text);
-
-    voice.lang = "vi-VN";
-    voice.rate = 1;
-    voice.pitch = 1;
-
-    speechSynthesis.speak(voice);
-
-  } catch (error) {
-    console.log("Speech error:", error);
-  }
-}
-
-
-/* =========================
-   GỌI CHEP AI
-========================= */
-
-async function askCHEP(text) {
-
-  /*
-    CHEP sẽ gửi câu hỏi tới:
-
-    /api/chat
-
-    Endpoint này nằm trên
-    Cloudflare Worker của bạn.
-
-    API KEY KHÔNG nằm trong index.html.
-  */
-
-  const response = await fetch("/api/chat", {
-
-    method: "POST",
-
-    headers: {
+export default {
+  async fetch(request, env) {
+    const cors = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
       "Content-Type": "application/json"
-    },
+    };
 
-    body: JSON.stringify({
-      message: text
-    })
-
-  });
-
-  if (!response.ok) {
-
-    throw new Error(
-      "Máy chủ CHEP chưa phản hồi."
-    );
-
-  }
-
-  const data = await response.json();
-
-  /*
-    Hỗ trợ nhiều kiểu JSON trả về.
-  */
-
-  if (typeof data.reply === "string") {
-    return data.reply;
-  }
-
-  if (typeof data.response === "string") {
-    return data.response;
-  }
-
-  if (typeof data.message === "string") {
-    return data.message;
-  }
-
-  if (
-    data.choices &&
-    data.choices[0] &&
-    data.choices[0].message
-  ) {
-
-    return data.choices[0].message.content;
-
-  }
-
-  return "CHEP đã nhận được câu hỏi nhưng chưa đọc được câu trả lời từ máy chủ.";
-}
-
-
-/* =========================
-   GỬI TIN NHẮN
-========================= */
-
-let sending = false;
-
-async function sendMessage() {
-
-  if (sending) {
-    return;
-  }
-
-  const text =
-    input.value.trim();
-
-  if (!text) {
-    return;
-  }
-
-  sending = true;
-
-  addMessage(text, "user");
-
-  input.value = "";
-
-  input.disabled = true;
-
-  send.disabled = true;
-
-  showTyping();
-
-
-  try {
-
-    const answer =
-      await askCHEP(text);
-
-    hideTyping();
-
-    addMessage(
-      answer,
-      "bot"
-    );
-
-    speak(answer);
-
-  } catch (error) {
-
-    console.error(error);
-
-    hideTyping();
-
-    addMessage(
-      "⚠️ CHEP chưa kết nối được với máy chủ AI.\n\n" +
-      "Bạn hãy kiểm tra Cloudflare Worker và endpoint /api/chat.",
-      "bot"
-    );
-
-  }
-
-
-  input.disabled = false;
-
-  send.disabled = false;
-
-  sending = false;
-
-  input.focus();
-}
-
-
-/* =========================
-   NÚT GỬI
-========================= */
-
-send.addEventListener(
-  "click",
-  sendMessage
-);
-
-
-/* =========================
-   ENTER ĐỂ GỬI
-========================= */
-
-input.addEventListener(
-  "keydown",
-  function(event) {
-
-    if (event.key === "Enter") {
-
-      event.preventDefault();
-
-      sendMessage();
-
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: cors });
     }
 
-  }
-);
+    const url = new URL(request.url);
 
-
-/* =========================
-   NHẬN GIỌNG NÓI
-========================= */
-
-const SpeechRecognition =
-  window.SpeechRecognition ||
-  window.webkitSpeechRecognition;
-
-
-if (SpeechRecognition) {
-
-  const recognition =
-    new SpeechRecognition();
-
-  recognition.lang = "vi-VN";
-
-  recognition.continuous = false;
-
-  recognition.interimResults = false;
-
-
-  mic.addEventListener(
-    "click",
-    function() {
-
-      try {
-
-        recognition.start();
-
-        mic.classList.add(
-          "listening"
+    if (url.pathname === "/api/chat") {
+      if (request.method !== "POST") {
+        return new Response(
+          JSON.stringify({ error: "Chỉ hỗ trợ POST tại /api/chat" }),
+          { status: 405, headers: cors }
         );
-
-        mic.textContent = "🔴";
-
-      } catch (error) {
-
-        console.log(error);
-
       }
 
+      try {
+        const body = await request.json();
+        const message = body.message;
+
+        if (!message || typeof message !== "string") {
+          return new Response(
+            JSON.stringify({ error: "Thiếu message" }),
+            { status: 400, headers: cors }
+          );
+        }
+
+        if (!env.OPENAI_API_KEY) {
+          return new Response(
+            JSON.stringify({ error: "Chưa có OPENAI_API_KEY" }),
+            { status: 500, headers: cors }
+          );
+        }
+
+        const response = await fetch(
+          "https://api.openai.com/v1/responses",
+          {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: "gpt-5-mini",
+              instructions:
+                "Bạn là CHEP, một trợ lý AI thân thiện. Hãy trả lời bằng tiếng Việt, rõ ràng và hữu ích.",
+              input: message
+            })
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          return new Response(
+            JSON.stringify({
+              error: data.error?.message || "OpenAI API bị lỗi"
+            }),
+            { status: response.status, headers: cors }
+          );
+        }
+
+        return new Response(
+          JSON.stringify({
+            reply: data.output_text || "CHEP chưa nhận được câu trả lời."
+          }),
+          { headers: cors }
+        );
+
+      } catch (error) {
+        return new Response(
+          JSON.stringify({
+            error: "Lỗi Worker: " + error.message
+          }),
+          { status: 500, headers: cors }
+        );
+      }
     }
-  );
 
-
-  recognition.onresult =
-    function(event) {
-
-      const result =
-        event.results[0][0].transcript;
-
-      input.value = result;
-
-      mic.classList.remove(
-        "listening"
-      );
-
-      mic.textContent = "🎙️";
-
-      sendMessage();
-
-    };
-
-
-  recognition.onerror =
-    function() {
-
-      mic.classList.remove(
-        "listening"
-      );
-
-      mic.textContent = "🎙️";
-
-    };
-
-
-  recognition.onend =
-    function() {
-
-      mic.classList.remove(
-        "listening"
-      );
-
-      mic.textContent = "🎙️";
-
-    };
-
-} else {
-
-  mic.addEventListener(
-    "click",
-    function() {
-
-      alert(
-        "Trình duyệt này chưa hỗ trợ nhận giọng nói. Hãy thử Chrome."
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================
-   TỰ ĐỘNG ĐẶT CON TRỎ
-========================= */
-
-window.addEventListener(
-  "load",
-  function() {
-
-    input.focus();
-
+    return new Response(
+      JSON.stringify({
+        ok: true,
+        message: "CHEP AI Worker đang hoạt động."
+      }),
+      { headers: cors }
+    );
   }
-);
-</script>
-
-</body>
-    </html>
+};

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <title>Đấu Trường Biến Dị</title>
 
@@ -20,181 +20,195 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#05050b;
+  background:#070914;
   font-family:Arial,sans-serif;
+}
+
+body{
+  touch-action:none;
 }
 
 #game{
   position:fixed;
   inset:0;
   overflow:hidden;
+  background:#070914;
 }
 
 canvas{
-  display:block;
+  position:absolute;
+  inset:0;
   width:100%;
   height:100%;
+  display:block;
 }
 
 /* =========================
-   UI
+   TOP UI
 ========================= */
 
-#top{
+#ui{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:10;
+}
+
+.title{
   position:absolute;
   top:8px;
   left:0;
   width:100%;
-  z-index:20;
-  pointer-events:none;
-}
-
-.title{
   text-align:center;
-  color:white;
-  font-size:20px;
+  color:#fff;
+  font-size:21px;
   font-weight:900;
-  text-shadow:0 2px 5px #000;
   letter-spacing:2px;
+  text-shadow:0 3px 8px #000;
 }
 
 .bars{
+  position:absolute;
+  left:4%;
+  top:42px;
   width:92%;
-  margin:7px auto 0;
   display:flex;
   gap:14px;
 }
 
-.barbox{
+.box{
   width:50%;
 }
 
-.label{
-  color:white;
+.name{
+  color:#fff;
   font-size:12px;
-  font-weight:bold;
-  margin-bottom:3px;
-  text-shadow:0 2px 4px #000;
+  font-weight:900;
+  margin-bottom:4px;
+  text-shadow:0 2px 5px #000;
 }
 
 .hp{
-  height:15px;
-  background:#252532;
-  border:2px solid #77778c;
+  height:16px;
+  border:2px solid #666a7c;
   border-radius:20px;
   overflow:hidden;
+  background:#222432;
 }
 
-.hp i{
-  display:block;
-  width:100%;
+.hp > div{
   height:100%;
-  background:#ed343c;
-  transition:.15s;
+  width:100%;
+  background:linear-gradient(90deg,#b51f31,#ff4052);
+  transition:width .12s;
 }
 
 .rage{
-  height:8px;
   margin-top:4px;
-  background:#20202c;
-  border:1px solid #66667b;
+  height:9px;
+  border:1px solid #65687b;
   border-radius:20px;
   overflow:hidden;
+  background:#1e2030;
 }
 
-.rage i{
-  display:block;
-  width:0%;
+.rage > div{
   height:100%;
-  background:#a83cff;
+  width:0%;
+  background:linear-gradient(90deg,#7622d5,#d05cff);
+  transition:width .12s;
 }
 
 #message{
-  margin-top:6px;
+  position:absolute;
+  top:90px;
+  width:100%;
   text-align:center;
-  color:white;
+  color:#fff;
   font-size:14px;
   font-weight:900;
-  text-shadow:0 2px 5px #000;
+  text-shadow:0 2px 7px #000;
 }
 
 /* =========================
    CONTROLS
 ========================= */
 
-#controls{
+.controls{
   position:absolute;
   left:0;
   right:0;
-  bottom:9px;
+  bottom:8px;
   height:125px;
-  z-index:30;
+  z-index:20;
+  pointer-events:none;
 }
 
-.leftControls{
+.group{
   position:absolute;
+  bottom:4px;
+  display:flex;
+  gap:7px;
+  pointer-events:auto;
+}
+
+.left{
   left:10px;
-  bottom:5px;
-  display:flex;
-  gap:7px;
 }
 
-.rightControls{
-  position:absolute;
+.right{
   right:10px;
-  bottom:5px;
-  display:flex;
-  gap:7px;
 }
 
 button{
-  width:57px;
-  height:57px;
+  width:54px;
+  height:56px;
   border:0;
   border-radius:17px;
-  color:white;
+  color:#fff;
+  background:#303449;
   font-size:20px;
   font-weight:900;
-  background:#303247;
-  box-shadow:0 5px 0 #11121b;
+  box-shadow:0 5px 0 #11131d;
+  touch-action:none;
 }
 
 button:active{
   transform:translateY(4px);
-  box-shadow:0 1px 0 #11121b;
+  box-shadow:0 1px 0 #11131d;
 }
 
-.attack{
-  background:#c52d3e;
-}
-
-.skill{
-  background:#7435c7;
-}
-
-.power{
-  background:#a84921;
-}
-
-.mutate{
-  background:#8038d4;
+.moveBtn{
+  background:#303952;
 }
 
 .jump{
-  background:#2774ac;
+  background:#2778b6;
 }
 
-.ready{
+.attack{
+  background:#c52e40;
+}
+
+.skill{
+  background:#7335c7;
+}
+
+.power{
+  background:#ac4c20;
+}
+
+.mutate{
+  background:#8439d6;
+}
+
+.mutate.ready{
   animation:pulse .6s infinite alternate;
 }
 
 @keyframes pulse{
-  from{
-    box-shadow:0 0 5px #9e42ff;
-  }
-  to{
-    box-shadow:0 0 25px #d274ff;
-  }
+  from{box-shadow:0 0 5px #8f38dc,0 5px 0 #11131d;}
+  to{box-shadow:0 0 24px #d568ff,0 5px 0 #11131d;}
 }
 
 /* =========================
@@ -209,37 +223,41 @@ button:active{
   justify-content:center;
   flex-direction:column;
   background:rgba(0,0,0,.78);
-  z-index:100;
+  z-index:30;
 }
 
 #result{
-  color:white;
-  font-size:34px;
+  color:#fff;
+  font-size:35px;
   font-weight:900;
-  text-align:center;
   margin-bottom:20px;
+  text-align:center;
+  text-shadow:0 3px 10px #000;
 }
 
 .restart{
   width:190px;
-  background:#7836c9;
+  background:#7837c8;
   font-size:16px;
 }
 
-/* nhỏ hơn */
-@media(max-width:500px){
+/* =========================
+   MOBILE
+========================= */
 
+@media(max-width:500px){
   .title{
     font-size:17px;
   }
 
   button{
-    width:50px;
+    width:49px;
     height:53px;
     font-size:17px;
   }
 
   .bars{
+    left:3%;
     width:94%;
   }
 }
@@ -250,40 +268,36 @@ button:active{
 
 <div id="game">
 
-<div id="top">
+<canvas id="canvas"></canvas>
 
-  <div class="title">
-    ⚡ ĐẤU TRƯỜNG BIẾN DỊ
-  </div>
+<div id="ui">
+
+  <div class="title">⚡ ĐẤU TRƯỜNG BIẾN DỊ</div>
 
   <div class="bars">
 
-    <div class="barbox">
-      <div class="label">⚡ KẺ TỐC ĐỘ</div>
+    <div class="box">
+      <div class="name">⚡ KẺ TỐC ĐỘ</div>
 
       <div class="hp">
-        <i id="playerHP"></i>
+        <div id="playerHP"></div>
       </div>
 
       <div class="rage">
-        <i id="playerRage"></i>
+        <div id="playerRage"></div>
       </div>
     </div>
 
-    <div class="barbox">
-
-      <div class="label" style="text-align:right">
-        ☠ BOSS
-      </div>
+    <div class="box">
+      <div class="name" style="text-align:right">☠ BOSS</div>
 
       <div class="hp">
-        <i id="enemyHP"></i>
+        <div id="bossHP"></div>
       </div>
 
       <div class="rage">
-        <i id="enemyRage"></i>
+        <div id="bossRage"></div>
       </div>
-
     </div>
 
   </div>
@@ -294,23 +308,24 @@ button:active{
 
 </div>
 
+<div class="controls">
 
-<div id="controls">
-
-  <div class="leftControls">
+  <div class="group left">
 
     <button
-      ontouchstart="move(-1)"
+      class="moveBtn"
+      ontouchstart="moveLeft()"
       ontouchend="stopMove()"
-      onmousedown="move(-1)"
+      onmousedown="moveLeft()"
       onmouseup="stopMove()">
       ◀
     </button>
 
     <button
-      ontouchstart="move(1)"
+      class="moveBtn"
+      ontouchstart="moveRight()"
       ontouchend="stopMove()"
-      onmousedown="move(1)"
+      onmousedown="moveRight()"
       onmouseup="stopMove()">
       ▶
     </button>
@@ -318,37 +333,20 @@ button:active{
     <button
       class="jump"
       onclick="jump()">
-      ⬆️
+      ⬆
     </button>
 
   </div>
 
+  <div class="group right">
 
-  <div class="rightControls">
+    <button class="attack" onclick="attack()">👊</button>
 
-    <button
-      class="attack"
-      onclick="attack()">
-      👊
-    </button>
+    <button class="skill" onclick="dash()">💨</button>
 
-    <button
-      class="skill"
-      onclick="dash()">
-      💨
-    </button>
+    <button class="skill" onclick="afterImage()">⚡</button>
 
-    <button
-      class="skill"
-      onclick="afterImage()">
-      ⚡
-    </button>
-
-    <button
-      class="power"
-      onclick="breakSpeed()">
-      💥
-    </button>
+    <button class="power" onclick="breakSpeed()">💥</button>
 
     <button
       id="mutateButton"
@@ -360,7 +358,6 @@ button:active{
   </div>
 
 </div>
-
 
 <div id="resultScreen">
 
@@ -377,559 +374,1733 @@ button:active{
 </div>
 
 
-<!-- THREE.JS -->
+<script>
+/* =========================================================
+   CANVAS
+========================================================= */
 
-<script type="importmap">
-{
-  "imports":{
-    "three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+const canvas =
+  document.getElementById("canvas");
+
+const ctx =
+  canvas.getContext("2d");
+
+let W = 0;
+let H = 0;
+let dpr = 1;
+
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let player = {
+  x:-2.8,
+  y:0,
+  vy:0,
+  hp:100,
+  rage:0,
+  facing:1,
+  action:"",
+  actionTime:0,
+  mutated:false,
+  jump:false,
+  hitFlash:0
+};
+
+let boss = {
+  x:2.8,
+  y:0,
+  hp:100,
+  rage:0,
+  facing:-1,
+  action:"",
+  actionTime:0,
+  mutated:false,
+  hitFlash:0
+};
+
+let particles = [];
+let speedLines = [];
+
+let moveDirection = 0;
+let gameOver = false;
+let hitStop = 0;
+let shake = 0;
+
+let last = performance.now();
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+function resize(){
+
+  dpr = Math.min(window.devicePixelRatio || 1,2);
+
+  W = window.innerWidth;
+  H = window.innerHeight;
+
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+
+  canvas.style.width = W + "px";
+  canvas.style.height = H + "px";
+
+  ctx.setTransform(
+    dpr,0,0,dpr,0,0
+  );
+}
+
+window.addEventListener(
+  "resize",
+  resize
+);
+
+resize();
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function clamp(v,min,max){
+  return Math.max(min,Math.min(max,v));
+}
+
+function distance(){
+  return Math.abs(player.x - boss.x);
+}
+
+function say(text){
+  document.getElementById(
+    "message"
+  ).textContent = text;
+}
+
+function rand(min,max){
+  return Math.random()*(max-min)+min;
+}
+
+
+/* =========================================================
+   UI
+========================================================= */
+
+function updateUI(){
+
+  document.getElementById("playerHP")
+    .style.width = player.hp + "%";
+
+  document.getElementById("bossHP")
+    .style.width = boss.hp + "%";
+
+  document.getElementById("playerRage")
+    .style.width = player.rage + "%";
+
+  document.getElementById("bossRage")
+    .style.width = boss.rage + "%";
+
+  const btn =
+    document.getElementById("mutateButton");
+
+  if(player.rage >= 100){
+    btn.classList.add("ready");
+  }else{
+    btn.classList.remove("ready");
   }
 }
-</script>
 
 
-<script type="module">
+/* =========================================================
+   INPUT
+========================================================= */
 
-import * as THREE from "three";
+function moveLeft(){
+  if(gameOver)return;
+  moveDirection = -1;
+}
 
+function moveRight(){
+  if(gameOver)return;
+  moveDirection = 1;
+}
 
-/* =========================================
-   GAME
-========================================= */
+function stopMove(){
+  moveDirection = 0;
+}
 
-let scene;
-let camera;
-let renderer;
+function jump(){
 
-let player;
-let boss;
+  if(gameOver || player.jump)return;
 
-let playerGroup;
-let bossGroup;
-
-let playerHP=100;
-let bossHP=100;
-
-let playerRage=0;
-let bossRage=0;
-
-let playerX=-3.4;
-let bossX=3.4;
-
-let playerY=0;
-let bossY=0;
-
-let moveDirection=0;
-
-let jumping=false;
-let attacking=false;
-
-let playerMutated=false;
-let bossMutated=false;
-
-let gameOver=false;
-
-let lastTime=performance.now();
-
-let hitStopUntil=0;
+  player.jump = true;
+  player.vy = 8.8;
+}
 
 
-/* =========================================
-   INITIALIZE
-========================================= */
+/* =========================================================
+   PARTICLES
+========================================================= */
 
-function init(){
+function burst(x,y,count,color1,color2){
 
-  scene=new THREE.Scene();
+  for(let i=0;i<count;i++){
 
-  scene.background=new THREE.Color(0x080a18);
-
-  scene.fog=
-    new THREE.Fog(0x080a18,15,32);
-
-
-  /* CAMERA */
-
-  camera=
-    new THREE.OrthographicCamera(
-      -7,7,
-      4.2,-4.2,
-      .1,100
-    );
-
-  camera.position.set(0,3.3,15);
-
-  camera.lookAt(0,2,0);
-
-
-  /* RENDERER */
-
-  renderer=
-    new THREE.WebGLRenderer({
-      antialias:true,
-      powerPreference:"high-performance"
+    particles.push({
+      x:x,
+      y:y,
+      vx:rand(-4,4),
+      vy:rand(-2,5),
+      life:rand(.25,.55),
+      max:0.55,
+      size:rand(3,7),
+      c:Math.random()<.5 ? color1 : color2
     });
+  }
+}
 
-  renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio,1.5)
-  );
+function addSpeedLines(x,y){
 
-  renderer.setSize(
-    window.innerWidth,
-    window.innerHeight
-  );
+  for(let i=0;i<3;i++){
 
-  renderer.shadowMap.enabled=true;
-
-  document
-    .getElementById("game")
-    .prepend(renderer.domElement);
+    speedLines.push({
+      x:x+rand(-.5,.5),
+      y:y+rand(0,1.8),
+      vx:rand(-10,-6),
+      life:.25
+    });
+  }
+}
 
 
-  /* LIGHT */
+/* =========================================================
+   COMBAT
+========================================================= */
 
-  const ambient=
-    new THREE.HemisphereLight(
-      0x9999ff,
-      0x161622,
-      2.2
+function hitStopNow(ms=110){
+
+  hitStop = ms;
+  shake = 9;
+}
+
+
+function hitBoss(damage,knockback){
+
+  boss.hp -= damage;
+
+  boss.rage =
+    clamp(
+      boss.rage + damage*.32,
+      0,100
     );
 
-  scene.add(ambient);
-
-
-  const light=
-    new THREE.DirectionalLight(
-      0xffffff,
-      3
+  player.rage =
+    clamp(
+      player.rage + damage*1.25,
+      0,100
     );
 
-  light.position.set(-4,8,10);
+  boss.x += knockback;
 
-  light.castShadow=true;
+  boss.x =
+    clamp(boss.x,-6,6);
 
-  scene.add(light);
+  boss.hitFlash = .18;
 
-
-  /* ARENA */
-
-  createArena();
-
-
-  /* CHARACTERS */
-
-  playerGroup=
-    createSpeedCharacter(false);
-
-  playerGroup.position.set(
-    playerX,
-    0,
-    0
+  burst(
+    screenX(boss.x),
+    screenY(boss.y+1.4),
+    18,
+    "#ffffff",
+    "#7e43ff"
   );
 
-  scene.add(playerGroup);
+  hitStopNow();
 
-
-  bossGroup=
-    createSpeedCharacter(true);
-
-  bossGroup.position.set(
-    bossX,
-    0,
-    0
-  );
-
-  bossGroup.scale.x=-1;
-
-  scene.add(bossGroup);
-
-
-  window.addEventListener(
-    "resize",
-    resize
-  );
-
+  if(boss.hp <= 0){
+    boss.hp = 0;
+    win();
+  }
 
   updateUI();
+}
+
+
+function hitPlayer(damage,knockback){
+
+  player.hp -= damage;
+
+  player.x += knockback;
+
+  player.x =
+    clamp(player.x,-6,6);
+
+  player.hitFlash = .18;
+
+  burst(
+    screenX(player.x),
+    screenY(player.y+1.4),
+    15,
+    "#ffffff",
+    "#ff3950"
+  );
+
+  hitStopNow();
+
+  if(player.hp <= 0){
+    player.hp = 0;
+    lose();
+  }
+
+  updateUI();
+}
+
+
+/* =========================================================
+   ATTACK
+========================================================= */
+
+function attack(){
+
+  if(gameOver || player.action)return;
+
+  player.action = "punch";
+  player.actionTime = .28;
+
+  if(distance() <= 1.9){
+
+    setTimeout(()=>{
+
+      if(!gameOver){
+        hitBoss(
+          player.mutated ? 18 : 10,
+          player.facing * .45
+        );
+
+        say("👊 ĐÁNH TRÚNG!");
+
+      }
+
+    },95);
+
+  }else{
+
+    say("💨 Quá xa!");
+  }
+}
+
+
+function dash(){
+
+  if(gameOver || player.action)return;
+
+  if(distance() > 5){
+
+    say("💨 Boss quá xa!");
+    return;
+  }
+
+  player.action = "dash";
+  player.actionTime = .35;
+
+  player.x =
+    boss.x - player.facing*.95;
+
+  player.x =
+    clamp(player.x,-6,6);
+
+  addSpeedLines(
+    screenX(player.x),
+    screenY(player.y+1)
+  );
+
+  say("💨 LƯỚT XUYÊN!");
+
+  setTimeout(()=>{
+
+    if(!gameOver && distance() <= 1.8){
+
+      hitBoss(
+        player.mutated ? 25 : 15,
+        player.facing*.8
+      );
+    }
+
+  },80);
+}
+
+
+function afterImage(){
+
+  if(gameOver || player.action)return;
+
+  if(distance() > 2.6){
+
+    say("⚡ Hãy áp sát!");
+    return;
+  }
+
+  player.action = "after";
+  player.actionTime = .38;
+
+  say("⚡ ẢNH TỐC!");
+
+  for(let i=0;i<5;i++){
+
+    setTimeout(()=>{
+
+      addSpeedLines(
+        screenX(player.x)-i*12,
+        screenY(player.y+1)
+      );
+
+    },i*35);
+  }
+
+  setTimeout(()=>{
+
+    if(!gameOver && distance() <= 2){
+
+      hitBoss(
+        player.mutated ? 28 : 17,
+        player.facing*.5
+      );
+    }
+
+  },100);
+}
+
+
+function breakSpeed(){
+
+  if(gameOver || player.action)return;
+
+  if(distance() > 2){
+
+    say("💥 Quá xa!");
+    return;
+  }
+
+  player.action = "break";
+  player.actionTime = .48;
+
+  say("💥 PHÁ TỐC!");
+
+  setTimeout(()=>{
+
+    if(!gameOver && distance() <= 2.2){
+
+      hitBoss(
+        player.mutated ? 40 : 25,
+        player.facing*1.15
+      );
+    }
+
+  },135);
+}
+
+
+/* =========================================================
+   MUTATION
+========================================================= */
+
+function mutate(){
+
+  if(gameOver)return;
+
+  if(player.rage < 100){
+
+    say("🧬 NỘI CHƯA ĐẦY!");
+    return;
+  }
+
+  if(player.mutated){
+
+    say("🔥 Đang biến dị!");
+    return;
+  }
+
+  player.rage = 0;
+  player.mutated = true;
+  player.action = "transform";
+  player.actionTime = .6;
+
+  burst(
+    screenX(player.x),
+    screenY(player.y+1.4),
+    45,
+    "#ffffff",
+    "#b348ff"
+  );
+
+  say("🧬 KẺ TỐC ĐỘ — BIẾN DỊ!");
+
+  updateUI();
+
+  setTimeout(()=>{
+
+    player.action = "";
+
+  },600);
+
+  setTimeout(()=>{
+
+    player.mutated = false;
+
+    say("↩️ Biến dị kết thúc!");
+
+  },8000);
+}
+
+
+/* =========================================================
+   BOSS AI
+========================================================= */
+
+function bossAI(dt){
+
+  if(gameOver)return;
+
+  const d = distance();
+
+  if(d > 1.75){
+
+    const dir =
+      player.x > boss.x ? 1 : -1;
+
+    boss.x += dir * 1.5 * dt;
+
+    boss.facing = dir;
+
+    if(Math.random() < .18){
+      addSpeedLines(
+        screenX(boss.x),
+        screenY(boss.y+.8)
+      );
+    }
+
+    return;
+  }
+
+  boss.facing =
+    player.x >= boss.x ? 1 : -1;
+
+  if(
+    !boss.action &&
+    Math.random() < .018
+  ){
+
+    boss.action = "punch";
+    boss.actionTime = .3;
+
+    setTimeout(()=>{
+
+      if(
+        !gameOver &&
+        distance() < 1.95
+      ){
+
+        const damage =
+          boss.mutated ? 18 : 9;
+
+        hitPlayer(
+          damage,
+          boss.facing*.38
+        );
+
+        say("☠️ BOSS TẤN CÔNG!");
+      }
+
+    },100);
+  }
+
+  if(boss.rage >= 100 && !boss.mutated){
+
+    boss.rage = 0;
+    boss.mutated = true;
+
+    burst(
+      screenX(boss.x),
+      screenY(boss.y+1.5),
+      35,
+      "#ff5268",
+      "#82152c"
+    );
+
+    say("☠️ BOSS ĐÃ BIẾN DỊ!");
+
+    setTimeout(()=>{
+
+      boss.mutated = false;
+
+    },8000);
+  }
+}
+
+
+/* =========================================================
+   UPDATE GAME
+========================================================= */
+
+function update(dt){
+
+  if(gameOver)return;
+
+  if(hitStop > 0){
+    hitStop -= dt*1000;
+    return;
+  }
+
+  /* movement */
+
+  if(moveDirection !== 0){
+
+    player.x +=
+      moveDirection * 3.8 * dt;
+
+    player.x =
+      clamp(player.x,-6,6);
+
+    player.facing =
+      moveDirection;
+
+    if(!player.action){
+
+      addSpeedLines(
+        screenX(player.x),
+        screenY(player.y+.8)
+      );
+    }
+  }
+
+  /* jump */
+
+  if(player.jump){
+
+    player.y += player.vy * dt;
+
+    player.vy -= 18 * dt;
+
+    if(player.y <= 0){
+
+      player.y = 0;
+      player.vy = 0;
+      player.jump = false;
+    }
+  }
+
+  /* actions */
+
+  if(player.actionTime > 0){
+
+    player.actionTime -= dt;
+
+    if(player.actionTime <= 0){
+
+      player.action = "";
+    }
+  }
+
+  if(boss.actionTime > 0){
+
+    boss.actionTime -= dt;
+
+    if(boss.actionTime <= 0){
+
+      boss.action = "";
+    }
+  }
+
+  if(player.hitFlash > 0)
+    player.hitFlash -= dt;
+
+  if(boss.hitFlash > 0)
+    boss.hitFlash -= dt;
+
+  /* boss */
+
+  bossAI(dt);
+
+  /* particles */
+
+  for(let i=particles.length-1;i>=0;i--){
+
+    const p = particles[i];
+
+    p.x += p.vx*dt;
+    p.y += p.vy*dt;
+    p.vy -= 8*dt;
+    p.life -= dt;
+
+    if(p.life <= 0)
+      particles.splice(i,1);
+  }
+
+  /* speed */
+
+  for(let i=speedLines.length-1;i>=0;i--){
+
+    const s = speedLines[i];
+
+    s.x += s.vx*dt;
+    s.life -= dt;
+
+    if(s.life <= 0)
+      speedLines.splice(i,1);
+  }
+
+  shake *= .86;
+}
+
+
+/* =========================================================
+   CAMERA / WORLD
+========================================================= */
+
+function getCamera(){
+
+  const middle =
+    (player.x + boss.x) / 2;
+
+  return middle;
+}
+
+function worldToScreen(x){
+
+  const cam =
+    getCamera();
+
+  return (
+    W*.5 +
+    (x-cam)*W*.105
+  );
+}
+
+function screenX(x){
+  return worldToScreen(x);
+}
+
+function screenY(y){
+
+  const ground =
+    H*.70;
+
+  return ground - y*H*.14;
+}
+
+
+/* =========================================================
+   DRAW BACKGROUND
+========================================================= */
+
+function drawBackground(){
+
+  const sky =
+    ctx.createLinearGradient(
+      0,0,0,H
+    );
+
+  sky.addColorStop(0,"#080b18");
+  sky.addColorStop(.5,"#171338");
+  sky.addColorStop(1,"#05060d");
+
+  ctx.fillStyle = sky;
+  ctx.fillRect(0,0,W,H);
+
+
+  /* moon glow */
+
+  const moon =
+    ctx.createRadialGradient(
+      W*.5,H*.30,10,
+      W*.5,H*.30,230
+    );
+
+  moon.addColorStop(0,"rgba(126,65,255,.22)");
+  moon.addColorStop(1,"rgba(126,65,255,0)");
+
+  ctx.fillStyle = moon;
+  ctx.fillRect(0,0,W,H);
+
+
+  /* city silhouettes */
+
+  ctx.fillStyle = "#101125";
+
+  for(let i=0;i<16;i++){
+
+    const bw =
+      45 + (i%4)*18;
+
+    const bh =
+      70 + (i%5)*24;
+
+    const x =
+      i*bw-20;
+
+    ctx.fillRect(
+      x,
+      H*.54-bh,
+      bw-7,
+      bh
+    );
+  }
+
+
+  /* lights */
+
+  ctx.fillStyle = "rgba(120,145,255,.18)";
+
+  for(let i=0;i<30;i++){
+
+    const x =
+      (i*83)%W;
+
+    const y =
+      H*.35 + (i%6)*24;
+
+    ctx.fillRect(
+      x,
+      y,
+      5,
+      8
+    );
+  }
+}
+
+
+/* =========================================================
+   DRAW ARENA
+========================================================= */
+
+function drawArena(){
+
+  const groundY =
+    H*.70;
+
+  /* back platform */
+
+  ctx.fillStyle = "#252638";
+
+  ctx.fillRect(
+    0,
+    groundY,
+    W,
+    H-groundY
+  );
+
+
+  /* lines */
+
+  ctx.strokeStyle =
+    "rgba(120,120,160,.12)";
+
+  ctx.lineWidth=1;
+
+  for(let x=-W;x<W*2;x+=55){
+
+    ctx.beginPath();
+
+    ctx.moveTo(x,groundY);
+
+    ctx.lineTo(x+15,H);
+
+    ctx.stroke();
+  }
+
+
+  for(let y=groundY+30;y<H;y+=38){
+
+    ctx.beginPath();
+
+    ctx.moveTo(0,y);
+    ctx.lineTo(W,y);
+
+    ctx.stroke();
+  }
+
+
+  /* floor edge */
+
+  ctx.fillStyle = "#66677b";
+
+  ctx.fillRect(
+    0,
+    groundY-5,
+    W,
+    5
+  );
+
+
+  /* center glow */
+
+  const g =
+    ctx.createRadialGradient(
+      W*.5,
+      groundY,
+      10,
+      W*.5,
+      groundY,
+      W*.25
+    );
+
+  g.addColorStop(0,"rgba(150,80,255,.16)");
+  g.addColorStop(1,"rgba(150,80,255,0)");
+
+  ctx.fillStyle = g;
+
+  ctx.fillRect(
+    0,
+    groundY-100,
+    W,
+    220
+  );
+}
+
+
+/* =========================================================
+   3D-STYLE CHARACTER DRAW
+========================================================= */
+
+function drawCharacter(ch,isBoss){
+
+  const x =
+    worldToScreen(ch.x);
+
+  const ground =
+    H*.70;
+
+  const y =
+    ground -
+    ch.y*H*.14;
+
+
+  ctx.save();
+
+  /* shadow */
+
+  ctx.globalAlpha=.28;
+
+  ctx.fillStyle="#000";
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    x,
+    ground+7,
+    34,
+    10,
+    0,0,Math.PI*2
+  );
+
+  ctx.fill();
+
+  ctx.globalAlpha=1;
+
+
+  /* mutation aura */
+
+  if(ch.mutated){
+
+    const aura =
+      ctx.createRadialGradient(
+        x,y-52,
+        8,
+        x,y-52,
+        75
+      );
+
+    aura.addColorStop(
+      0,
+      isBoss
+        ? "rgba(255,40,75,.25)"
+        : "rgba(173,60,255,.32)"
+    );
+
+    aura.addColorStop(
+      1,
+      "rgba(0,0,0,0)"
+    );
+
+    ctx.fillStyle=aura;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,y-52,
+      75,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+  }
+
+
+  /* body scale feeling */
+
+  let bodyW=42;
+  let bodyH=65;
+
+  if(ch.mutated){
+
+    bodyW=48;
+    bodyH=72;
+  }
+
+
+  /* legs */
+
+  drawLimb(
+    x-13,
+    y-8,
+    x-17,
+    y+34,
+    isBoss ? "#26202a":"#161b2c",
+    12
+  );
+
+  drawLimb(
+    x+13,
+    y-8,
+    x+17,
+    y+34,
+    isBoss ? "#26202a":"#161b2c",
+    12
+  );
+
+
+  /* boots */
+
+  drawBoot(
+    x-20,
+    y+31,
+    isBoss
+      ? "#4d1822"
+      : "#1c3255"
+  );
+
+  drawBoot(
+    x+20,
+    y+31,
+    isBoss
+      ? "#4d1822"
+      : "#1c3255"
+  );
+
+
+  /* torso */
+
+  const torsoGrad =
+    ctx.createLinearGradient(
+      x-bodyW/2,
+      y-76,
+      x+bodyW/2,
+      y-10
+    );
+
+  if(isBoss){
+
+    torsoGrad.addColorStop(0,"#8f2138");
+    torsoGrad.addColorStop(.5,"#c7354d");
+    torsoGrad.addColorStop(1,"#571827");
+
+  }else{
+
+    torsoGrad.addColorStop(0,"#141b2d");
+    torsoGrad.addColorStop(.5,"#243756");
+    torsoGrad.addColorStop(1,"#0a101d");
+  }
+
+  ctx.fillStyle=torsoGrad;
+
+  roundRect(
+    ctx,
+    x-bodyW/2,
+    y-84,
+    bodyW,
+    bodyH,
+    14
+  );
+
+  ctx.fill();
+
+
+  /* chest */
+
+  if(!isBoss){
+
+    ctx.save();
+
+    ctx.fillStyle =
+      ch.mutated
+        ? "#d76cff"
+        : "#ffd227";
+
+    ctx.shadowBlur =
+      ch.mutated ? 18 : 8;
+
+    ctx.shadowColor =
+      ch.mutated
+        ? "#ad48ff"
+        : "#ffd227";
+
+    ctx.beginPath();
+
+    ctx.moveTo(x,y-70);
+    ctx.lineTo(x+8,y-54);
+    ctx.lineTo(x+2,y-54);
+    ctx.lineTo(x+9,y-34);
+    ctx.lineTo(x-4,y-51);
+    ctx.lineTo(x+1,y-51);
+    ctx.closePath();
+
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+
+  /* arms */
+
+  let punchOffset=0;
+
+  if(ch.action==="punch")
+    punchOffset = 27;
+
+  if(ch.action==="break")
+    punchOffset = 34;
+
+  if(ch.action==="dash")
+    punchOffset = 18;
+
+
+  drawLimb(
+    x-24,
+    y-70,
+    x-40,
+    y-34,
+    isBoss ? "#d08f69":"#e7ac7c",
+    13
+  );
+
+  drawLimb(
+    x+24,
+    y-70,
+    x+40+(punchOffset*ch.facing),
+    y-36,
+    isBoss ? "#d08f69":"#e7ac7c",
+    13
+  );
+
+
+  /* gloves */
+
+  drawSphere(
+    x-42,
+    y-31,
+    11,
+    isBoss ? "#501b27":"#23385d"
+  );
+
+  drawSphere(
+    x+42+(punchOffset*ch.facing),
+    y-32,
+    11,
+    isBoss ? "#501b27":"#23385d"
+  );
+
+
+  /* neck */
+
+  ctx.fillStyle =
+    isBoss ? "#bb815f":"#d9996c";
+
+  ctx.fillRect(
+    x-8,
+    y-96,
+    16,
+    13
+  );
+
+
+  /* head */
+
+  const headGrad =
+    ctx.createRadialGradient(
+      x-8,
+      y-112,
+      5,
+      x,
+      y-104,
+      30
+    );
+
+  headGrad.addColorStop(
+    0,
+    isBoss ? "#dcab86":"#ffd0a5"
+  );
+
+  headGrad.addColorStop(
+    1,
+    isBoss ? "#8f5c46":"#c47f5f"
+  );
+
+  ctx.fillStyle=headGrad;
+
+  ctx.beginPath();
+
+  ctx.arc(
+    x,
+    y-108,
+    27,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* hair */
+
+  if(!isBoss){
+
+    ctx.fillStyle =
+      ch.mutated
+        ? "#c35dff"
+        : "#141927";
+
+    ctx.beginPath();
+
+    ctx.moveTo(x-27,y-111);
+    ctx.lineTo(x-20,y-137);
+    ctx.lineTo(x-7,y-128);
+    ctx.lineTo(x+3,y-145);
+    ctx.lineTo(x+10,y-127);
+    ctx.lineTo(x+28,y-138);
+    ctx.lineTo(x+20,y-108);
+    ctx.closePath();
+
+    ctx.fill();
+
+  }else{
+
+    ctx.fillStyle =
+      ch.mutated ? "#7a091e":"#4d1725";
+
+    ctx.beginPath();
+
+    ctx.moveTo(x-27,y-111);
+    ctx.quadraticCurveTo(
+      x-20,y-140,
+      x+4,y-132
+    );
+
+    ctx.quadraticCurveTo(
+      x+21,y-140,
+      x+27,y-111
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+  }
+
+
+  /* face */
+
+  ctx.fillStyle="#111";
+
+  ctx.fillRect(
+    x-15,
+    y-109,
+    8,
+    4
+  );
+
+  ctx.fillRect(
+    x+7,
+    y-109,
+    8,
+    4
+  );
+
+
+  /* hit flash */
+
+  if(ch.hitFlash > 0){
+
+    ctx.globalAlpha =
+      clamp(ch.hitFlash/.18,0,1);
+
+    ctx.fillStyle="#fff";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,
+      y-74,
+      53,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.globalAlpha=1;
+  }
+
+
+  /* speed effect */
+
+  if(ch.action==="dash" ||
+     ch.action==="after"){
+
+    for(let i=0;i<5;i++){
+
+      ctx.strokeStyle =
+        isBoss
+          ? "rgba(255,60,90,.35)"
+          : "rgba(119,79,255,.45)";
+
+      ctx.lineWidth=3;
+
+      ctx.beginPath();
+
+      const sx =
+        x-ch.facing*(30+i*15);
+
+      ctx.moveTo(
+        sx,
+        y-60+i*9
+      );
+
+      ctx.lineTo(
+        sx-ch.facing*35,
+        y-60+i*9
+      );
+
+      ctx.stroke();
+    }
+  }
+
+
+  ctx.restore();
+}
+
+
+/* =========================================================
+   SHAPE HELPERS
+========================================================= */
+
+function drawLimb(x1,y1,x2,y2,color,width){
+
+  const dx=x2-x1;
+  const dy=y2-y1;
+  const len=Math.hypot(dx,dy);
+
+  const ang=Math.atan2(dy,dx);
+
+  ctx.save();
+
+  ctx.translate(x1,y1);
+  ctx.rotate(ang);
+
+  const grad=
+    ctx.createLinearGradient(
+      0,-width/2,
+      0,width/2
+    );
+
+  grad.addColorStop(0,"#ffffff55");
+  grad.addColorStop(.25,color);
+  grad.addColorStop(1,"#00000055");
+
+  ctx.fillStyle=grad;
+
+  roundRect(
+    ctx,
+    0,
+    -width/2,
+    len,
+    width,
+    width/2
+  );
+
+  ctx.fill();
+
+  ctx.restore();
+}
+
+
+function drawBoot(x,y,color){
+
+  const g=
+    ctx.createLinearGradient(
+      x-12,y-10,
+      x+14,y+8
+    );
+
+  g.addColorStop(0,"#ffffff33");
+  g.addColorStop(.35,color);
+  g.addColorStop(1,"#00000088");
+
+  ctx.fillStyle=g;
+
+  roundRect(
+    ctx,
+    x-11,
+    y-9,
+    25,
+    17,
+    6
+  );
+
+  ctx.fill();
+}
+
+
+function drawSphere(x,y,r,color){
+
+  const g=
+    ctx.createRadialGradient(
+      x-r*.4,
+      y-r*.5,
+      2,
+      x,
+      y,
+      r
+    );
+
+  g.addColorStop(0,"#ffffff77");
+  g.addColorStop(.25,color);
+  g.addColorStop(1,"#00000099");
+
+  ctx.fillStyle=g;
+
+  ctx.beginPath();
+
+  ctx.arc(
+    x,
+    y,
+    r,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+}
+
+
+function roundRect(ctx,x,y,w,h,r){
+
+  r=Math.min(r,w/2,h/2);
+
+  ctx.beginPath();
+
+  ctx.moveTo(x+r,y);
+
+  ctx.arcTo(
+    x+w,y,
+    x+w,y+h,
+    r
+  );
+
+  ctx.arcTo(
+    x+w,y+h,
+    x,y+h,
+    r
+  );
+
+  ctx.arcTo(
+    x,y+h,
+    x,y,
+    r
+  );
+
+  ctx.arcTo(
+    x,y,
+    x+w,y,
+    r
+  );
+
+  ctx.closePath();
+}
+
+
+/* =========================================================
+   DRAW EFFECTS
+========================================================= */
+
+function drawParticles(){
+
+  for(const p of particles){
+
+    ctx.globalAlpha =
+      clamp(p.life/p.max,0,1);
+
+    ctx.fillStyle=p.c;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      screenX(p.x),
+      screenY(p.y),
+      p.size,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+  }
+
+  ctx.globalAlpha=1;
+
+
+  for(const s of speedLines){
+
+    ctx.globalAlpha =
+      clamp(s.life/.25,0,1);
+
+    ctx.strokeStyle="#a85cff";
+    ctx.lineWidth=3;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      worldToScreen(s.x),
+      screenY(s.y)
+    );
+
+    ctx.lineTo(
+      worldToScreen(s.x+.7),
+      screenY(s.y)
+    );
+
+    ctx.stroke();
+  }
+
+  ctx.globalAlpha=1;
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+  ctx.save();
+
+  if(shake > .2){
+
+    ctx.translate(
+      rand(-shake,shake),
+      rand(-shake,shake)
+    );
+  }
+
+  drawBackground();
+  drawArena();
+
+  /* fighters order by x */
+
+  if(player.x < boss.x){
+
+    drawCharacter(
+      player,
+      false
+    );
+
+    drawCharacter(
+      boss,
+      true
+    );
+
+  }else{
+
+    drawCharacter(
+      boss,
+      true
+    );
+
+    drawCharacter(
+      player,
+      false
+    );
+  }
+
+  drawParticles();
+
+  ctx.restore();
+}
+
+
+/* =========================================================
+   MAIN LOOP
+========================================================= */
+
+function loop(now){
+
+  const dt =
+    Math.min(
+      .033,
+      (now-last)/1000
+    );
+
+  last=now;
+
+  update(dt);
+  render();
 
   requestAnimationFrame(loop);
 }
 
-
-/* =========================================
-   ARENA
-========================================= */
-
-function createArena(){
-
-  const floorMat=
-    new THREE.MeshStandardMaterial({
-      color:0x292a39,
-      roughness:.8
-    });
-
-  const floor=
-    new THREE.Mesh(
-      new THREE.BoxGeometry(18,.5,5),
-      floorMat
-    );
-
-  floor.position.y=-.3;
-
-  floor.receiveShadow=true;
-
-  scene.add(floor);
+requestAnimationFrame(loop);
 
 
-  /* BACK WALL */
+/* =========================================================
+   WIN / LOSE
+========================================================= */
 
-  const wallMat=
-    new THREE.MeshStandardMaterial({
-      color:0x15162b
-    });
+function win(){
 
-  const wall=
-    new THREE.Mesh(
-      new THREE.BoxGeometry(20,9,.5),
-      wallMat
-    );
+  gameOver=true;
 
-  wall.position.set(0,3,-2.5);
+  say("🏆 KẺ TỐC ĐỘ CHIẾN THẮNG!");
 
-  scene.add(wall);
+  document.getElementById(
+    "result"
+  ).textContent =
+    "🏆 CHIẾN THẮNG!";
 
+  document.getElementById(
+    "resultScreen"
+  ).style.display="flex";
+}
 
-  /* LIGHT CIRCLES */
+function lose(){
 
-  for(let i=-2;i<=2;i++){
+  gameOver=true;
 
-    const ring=
-      new THREE.Mesh(
-        new THREE.TorusGeometry(
-          1.5,
-          .025,
-          8,
-          40
-        ),
-        new THREE.MeshBasicMaterial({
-          color:0x7439b8,
-          transparent:true,
-          opacity:.35
-        })
-      );
+  say("💀 Bạn đã bị đánh bại!");
 
-    ring.rotation.x=Math.PI/2;
+  document.getElementById(
+    "result"
+  ).textContent =
+    "💀 THẤT BẠI";
 
-    ring.position.set(
-      i*3,
-      .01,
-      -1
-    );
-
-    scene.add(ring);
-  }
+  document.getElementById(
+    "resultScreen"
+  ).style.display="flex";
 }
 
 
-/* =========================================
-   CREATE 3D CHARACTER
-========================================= */
+/* =========================================================
+   RESTART
+========================================================= */
 
-function createSpeedCharacter(isBoss){
+function restartGame(){
 
-  const g=
-    new THREE.Group();
+  player.x=-2.8;
+  player.y=0;
+  player.vy=0;
+  player.hp=100;
+  player.rage=0;
+  player.facing=1;
+  player.action="";
+  player.actionTime=0;
+  player.mutated=false;
+  player.jump=false;
+  player.hitFlash=0;
 
+  boss.x=2.8;
+  boss.y=0;
+  boss.hp=100;
+  boss.rage=0;
+  boss.facing=-1;
+  boss.action="";
+  boss.actionTime=0;
+  boss.mutated=false;
+  boss.hitFlash=0;
 
-  const skinColor=
-    isBoss ? 0xb87e58 : 0xe8ae7d;
+  particles=[];
+  speedLines=[];
 
-  const clothes=
-    isBoss ? 0x9d243c : 0x121a2b;
+  gameOver=false;
+  hitStop=0;
+  shake=0;
+  moveDirection=0;
 
+  document.getElementById(
+    "resultScreen"
+  ).style.display="none";
 
-  /* BODY */
+  say("⚡ Kẻ Tốc Độ trở lại!");
 
-  const body=
-    new THREE.Mesh(
-      new THREE.CapsuleGeometry(
-        .48,
-        .85,
-        6,
-        12
-      ),
-      new THREE.MeshStandardMaterial({
-        color:clothes,
-        roughness:.65
-      })
-    );
-
-  body.position.y=1.65;
-
-  body.castShadow=true;
-
-  g.add(body);
-
-
-  /* HEAD */
-
-  const head=
-    new THREE.Mesh(
-      new THREE.SphereGeometry(
-        .42,
-        16,
-        12
-      ),
-      new THREE.MeshStandardMaterial({
-        color:skinColor,
-        roughness:.7
-      })
-    );
-
-  head.position.y=2.55;
-
-  head.castShadow=true;
-
-  g.add(head);
+  updateUI();
+}
 
 
-  /* HAIR */
+/* =========================================================
+   KEYBOARD
+========================================================= */
 
-  const hairMat=
-    new THREE.MeshStandardMaterial({
-      color:isBoss ? 0x481622 : 0x10131d
-    });
+window.addEventListener(
+  "keydown",
+  e=>{
 
+    if(e.key==="ArrowLeft")
+      moveLeft();
 
-  for(let i=0;i<5;i++){
+    if(e.key==="ArrowRight")
+      moveRight();
 
-    const hair=
-      new THREE.Mesh(
-        new THREE.ConeGeometry(
-          .13,
-          .45,
-          5
-        ),
-        hairMat
-      );
+    if(e.key==="ArrowUp")
+      jump();
 
-    hair.position.set(
-      -.25+i*.12,
-      2.92,
-      .02
-    );
+    if(e.key==="z")
+      attack();
 
-    hair.rotation.z=
-      (i-2)*.15;
+    if(e.key==="x")
+      dash();
 
-    g.add(hair);
+    if(e.key==="c")
+      afterImage();
+
+    if(e.key==="v")
+      breakSpeed();
+
+    if(e.key==="b")
+      mutate();
   }
+);
 
+window.addEventListener(
+  "keyup",
+  e=>{
 
-  /* EYES */
+    if(
+      e.key==="ArrowLeft" ||
+      e.key==="ArrowRight"
+    ){
 
-  const eyeMat=
-    new THREE.MeshBasicMaterial({
-      color:0x080808
-    });
-
-  for(const x of [-.14,.14]){
-
-    const eye=
-      new THREE.Mesh(
-        new THREE.BoxGeometry(
-          .09,.06,.035
-        ),
-        eyeMat
-      );
-
-    eye.position.set(
-      x,
-      2.57,
-      .39
-    );
-
-    g.add(eye);
+      stopMove();
+    }
   }
+);
 
 
-  /* ARMS */
+/* =========================================================
+   START
+========================================================= */
 
-  const armMat=
-    new THREE.MeshStandardMaterial({
-      color:skinColor
-    });
+updateUI();
+say("⚡ Kẻ Tốc Độ bước vào đấu trường!");
 
+</script>
 
-  const leftArm=
-    new THREE.Mesh(
-      new THREE.CapsuleGeometry(
-        .14,
-        .62,
-        5,
-        8
-      ),
-      armMat
-    );
-
-  leftArm.position.set(
-    -.62,
-    1.65,
-    0
-  );
-
-  leftArm.rotation.z=-.25;
-
-  leftArm.castShadow=true;
-
-  g.add(leftArm);
-
-
-  const rightArm=
-    leftArm.clone();
-
-  rightArm.position.x=.62;
-
-  rightArm.rotation.z=.25;
-
-  g.add(rightArm);
-
-
-  /* GLOVES */
-
-  const gloveMat=
-    new THREE.MeshStandardMaterial({
-      color:isBoss ? 0x32111a : 0x222d45
-    });
-
-
-  const glove=
-    new THREE.Mesh(
-      new THREE.SphereGeometry(
-        .17,
-        10,
-        8
-      ),
-      gloveMat
-    );
-
-  glove.position.set(
-    -.76,
-    1.32,
-    .02
-  );
-
-  g.add(glove);
-
-
-  const glove2=
-    glove.clone();
-
-  glove2.position.x=.76;
-
-  g.add(glove2);
-
-
-  /* LEGS */
-
-  const legMat=
-    new THREE.MeshStandardMaterial({
-      color:0x10131d
-    });
-
-
-  const leftLeg=
-    new THREE.Mesh(
-      new THREE.CapsuleGeometry(
-        .18,
-        .72,
-        5,
-        8
-      ),
-      legMat
-    );
-
-  leftLeg.position.set(
-    -.25,
-    .72,
-    0
-  );
-
-  leftLeg.castShadow=true;
-
-  g.add(leftLeg);
-
-
-  const rightLeg=
-    leftLeg.clone();
-
-  rightLeg.position.x=.25;
-
-  g.add(rightLeg);
-
-
-  /* BOOTS */
-
-  const bootMat=
-    new THREE.MeshStandardMaterial({
-      color:isBoss ? 0x35151d : 0x17233b
-    });
-
-
-  const boot=
-    new THREE.Mesh(
-      new THREE.BoxGeometry(
-        .35,.22,.55
-      ),
-      bootMat
-    );
-
-  boot.position.set(
-    -.25,
-    .25,
-    .12
-  );
-
-  g.add(boot);
-
-
-  const boot2=
-    boot.clone();
-
-  boot2.position.x=.25;
-
-  g.add(boot2);
-
-
-  /* SPEED SYMBOL */
-
-  if(!isBoss){
-
-    const lightning=
-      new THREE.Mesh(
-        new THREE.ConeGeometry(
-          .16,
-          .5,
-          3
-        ),
-        new THREE.MeshBasicMaterial({
-          color:0xffd21f
-        })
-      );
-
-    lightning.rotation.z=.5;
-
-    lightning.position.set(
-      0,
-      1.72,
-      .48
-    );
-
-    g.add(lightning);
-  }
-
-
-  g.userData={
-    leftArm,
-    rightArm,
-   
+</body>
+  </html>

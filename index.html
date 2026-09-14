@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
 <title>Đấu Trường Biến Dị</title>
 
@@ -11,476 +11,151 @@ content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no
 *{
   box-sizing:border-box;
   user-select:none;
+  -webkit-user-select:none;
   -webkit-tap-highlight-color:transparent;
 }
 
-body{
+html,body{
   margin:0;
+  width:100%;
+  height:100%;
   overflow:hidden;
-  background:#05060c;
-  color:white;
+  background:#05050b;
   font-family:Arial,sans-serif;
 }
 
 #game{
-  position:relative;
-  width:100vw;
-  height:100dvh;
+  position:fixed;
+  inset:0;
   overflow:hidden;
-  background:
-    radial-gradient(circle at 50% 25%,#38206d 0%,transparent 38%),
-    linear-gradient(#10152b,#05060c);
+}
+
+canvas{
+  display:block;
+  width:100%;
+  height:100%;
 }
 
 /* =========================
    UI
 ========================= */
 
-.title{
+#top{
   position:absolute;
-  top:7px;
+  top:8px;
   left:0;
   width:100%;
+  z-index:20;
+  pointer-events:none;
+}
+
+.title{
   text-align:center;
+  color:white;
   font-size:20px;
   font-weight:900;
+  text-shadow:0 2px 5px #000;
   letter-spacing:2px;
-  z-index:30;
 }
 
 .bars{
-  position:absolute;
-  top:39px;
-  left:4%;
   width:92%;
+  margin:7px auto 0;
   display:flex;
   gap:14px;
-  z-index:30;
 }
 
-.status{
+.barbox{
   width:50%;
 }
 
-.name{
+.label{
+  color:white;
   font-size:12px;
-  font-weight:900;
+  font-weight:bold;
   margin-bottom:3px;
+  text-shadow:0 2px 4px #000;
 }
 
-.hp,.rage{
-  width:100%;
+.hp{
   height:15px;
-  background:#242536;
-  border:2px solid #55576b;
+  background:#252532;
+  border:2px solid #77778c;
   border-radius:20px;
   overflow:hidden;
 }
 
-.hpFill{
+.hp i{
+  display:block;
   width:100%;
   height:100%;
-  background:#e53935;
-  transition:.12s;
+  background:#ed343c;
+  transition:.15s;
 }
 
 .rage{
   height:8px;
   margin-top:4px;
-}
-
-.rageFill{
-  width:0%;
-  height:100%;
-  background:#a54cff;
-  transition:.12s;
-}
-
-#message{
-  position:absolute;
-  top:88px;
-  left:0;
-  width:100%;
-  text-align:center;
-  font-weight:900;
-  font-size:15px;
-  z-index:30;
-}
-
-/* =========================
-   ARENA
-========================= */
-
-.arena{
-  position:absolute;
-  left:0;
-  right:0;
-  top:108px;
-  bottom:158px;
+  background:#20202c;
+  border:1px solid #66667b;
+  border-radius:20px;
   overflow:hidden;
 }
 
-.arena::before{
-  content:"";
-  position:absolute;
-  width:160px;
-  height:160px;
-  left:50%;
-  top:25%;
-  transform:translate(-50%,-50%);
-  border:2px solid rgba(180,100,255,.15);
-  border-radius:50%;
+.rage i{
+  display:block;
+  width:0%;
+  height:100%;
+  background:#a83cff;
 }
 
-.floor{
-  position:absolute;
-  left:0;
-  bottom:0;
-  width:100%;
-  height:24%;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      #252535 0px,
-      #252535 40px,
-      #29293a 41px,
-      #29293a 42px
-    );
-  border-top:4px solid #59576b;
-}
-
-/* =========================
-   CHARACTER
-========================= */
-
-.fighter{
-  position:absolute;
-  width:80px;
-  height:145px;
-  bottom:23%;
-  z-index:10;
-  transition:left .06s;
-}
-
-#player{
-  left:17%;
-}
-
-#enemy{
-  left:72%;
-  transform:scaleX(-1);
-}
-
-/* đầu */
-
-.head{
-  position:absolute;
-  left:18px;
-  top:0;
-  width:45px;
-  height:45px;
-  border-radius:50%;
-  background:#f2bd91;
-  border:3px solid #111;
-  z-index:4;
-}
-
-/* tóc Kẻ Tốc Độ */
-
-#player .head::before{
-  content:"";
-  position:absolute;
-  left:2px;
-  top:-13px;
-  width:40px;
-  height:22px;
-  background:#10131d;
-  clip-path:polygon(
-    0 100%,
-    8% 25%,
-    28% 65%,
-    45% 0,
-    55% 55%,
-    75% 10%,
-    88% 60%,
-    100% 35%,
-    92% 100%
-  );
-}
-
-/* mắt */
-
-#player .head::after{
-  content:"";
-  position:absolute;
-  width:8px;
-  height:4px;
-  background:#10131d;
-  left:9px;
-  top:21px;
-  box-shadow:19px 0 #10131d;
-}
-
-/* thân */
-
-.body{
-  position:absolute;
-  left:11px;
-  top:42px;
-  width:58px;
-  height:62px;
-  border-radius:17px 17px 10px 10px;
-  background:#171c2a;
-  border:3px solid #0a0b10;
-}
-
-/* vệt sáng trên áo */
-
-#player .body::after{
-  content:"⚡";
-  position:absolute;
-  left:17px;
-  top:12px;
-  font-size:25px;
-}
-
-/* tay */
-
-.arm{
-  position:absolute;
-  top:46px;
-  width:18px;
-  height:57px;
-  border-radius:14px;
-  background:#f2bd91;
-  border:3px solid #101010;
-  transform-origin:top center;
-  z-index:2;
-}
-
-.arm.left{
-  left:-2px;
-  transform:rotate(25deg);
-}
-
-.arm.right{
-  right:-2px;
-  transform:rotate(-25deg);
-}
-
-/* chân */
-
-.leg{
-  position:absolute;
-  top:98px;
-  width:20px;
-  height:52px;
-  border-radius:12px;
-  background:#11151f;
-  border:3px solid #08090d;
-}
-
-.leg.left{
-  left:16px;
-}
-
-.leg.right{
-  right:16px;
-}
-
-/* BOSS */
-
-#enemy .head{
-  background:#d6a67e;
-}
-
-#enemy .head::before{
-  content:"";
-  position:absolute;
-  width:45px;
-  height:18px;
-  left:-3px;
-  top:-9px;
-  background:#491a27;
-  border-radius:50% 50% 20% 20%;
-}
-
-#enemy .body{
-  background:#a5263e;
-}
-
-#enemy .body::after{
-  content:"☠";
-  position:absolute;
-  left:16px;
-  top:13px;
-  font-size:24px;
-}
-
-/* =========================
-   MUTATION
-========================= */
-
-.mutated .head{
-  background:#a9ff62;
-  box-shadow:
-    0 0 15px #72ff32,
-    0 0 35px #72ff32;
-}
-
-.mutated .body{
-  background:#7625d8;
-  box-shadow:
-    0 0 20px #9b42ff,
-    0 0 45px #9b42ff;
-  transform:scale(1.15);
-}
-
-.mutated .arm,
-.mutated .leg{
-  box-shadow:0 0 18px #a14cff;
-}
-
-.mutated::after{
-  content:"BIẾN DỊ";
-  position:absolute;
-  left:-20px;
-  top:-35px;
-  width:120px;
+#message{
+  margin-top:6px;
   text-align:center;
-  color:#d990ff;
-  font-size:15px;
+  color:white;
+  font-size:14px;
   font-weight:900;
-  text-shadow:0 0 12px #a342ff;
-}
-
-/* =========================
-   ANIMATIONS
-========================= */
-
-.attackAnim .arm.right{
-  animation:punch .25s ease;
-}
-
-@keyframes punch{
-  0%{transform:rotate(-25deg)}
-  50%{transform:rotate(-105deg) translateX(20px)}
-  100%{transform:rotate(-25deg)}
-}
-
-.kickAnim .leg.right{
-  animation:fastKick .28s ease;
-}
-
-@keyframes fastKick{
-  0%{transform:rotate(0)}
-  50%{transform:rotate(-70deg) translateX(18px)}
-  100%{transform:rotate(0)}
-}
-
-.dashAnim{
-  animation:dash .22s ease;
-}
-
-@keyframes dash{
-  0%{filter:none}
-  50%{filter:blur(2px)}
-  100%{filter:none}
-}
-
-.hit{
-  animation:hit .18s ease;
-}
-
-@keyframes hit{
-  0%{transform:translateX(0)}
-  35%{transform:translateX(12px) rotate(3deg)}
-  100%{transform:translateX(0)}
-}
-
-#enemy.hit{
-  transform:scaleX(-1);
-  animation:bossHit .18s ease;
-}
-
-@keyframes bossHit{
-  0%{margin-left:0}
-  35%{margin-left:18px}
-  100%{margin-left:0}
-}
-
-.flash{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:80px;
-  height:80px;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  background:white;
-  opacity:.9;
-  pointer-events:none;
-  z-index:50;
-  animation:flash .15s ease-out forwards;
-}
-
-@keyframes flash{
-  from{transform:translate(-50%,-50%) scale(.2);opacity:.9}
-  to{transform:translate(-50%,-50%) scale(1.8);opacity:0}
-}
-
-.speedLine{
-  position:absolute;
-  height:3px;
-  width:80px;
-  background:#b86cff;
-  opacity:.8;
-  animation:speedLine .3s linear forwards;
-  z-index:5;
-}
-
-@keyframes speedLine{
-  from{transform:translateX(0);opacity:.8}
-  to{transform:translateX(-120px);opacity:0}
+  text-shadow:0 2px 5px #000;
 }
 
 /* =========================
    CONTROLS
 ========================= */
 
-.controls{
+#controls{
   position:absolute;
   left:0;
-  bottom:8px;
-  width:100%;
-  height:140px;
-  z-index:60;
+  right:0;
+  bottom:9px;
+  height:125px;
+  z-index:30;
 }
 
-.move{
+.leftControls{
   position:absolute;
-  left:8px;
+  left:10px;
   bottom:5px;
   display:flex;
-  gap:6px;
+  gap:7px;
 }
 
-.actions{
+.rightControls{
   position:absolute;
-  right:8px;
+  right:10px;
   bottom:5px;
   display:flex;
-  gap:6px;
+  gap:7px;
 }
 
 button{
+  width:57px;
+  height:57px;
   border:0;
+  border-radius:17px;
   color:white;
+  font-size:20px;
   font-weight:900;
-  border-radius:16px;
-  min-width:54px;
-  height:56px;
-  background:#292b3d;
+  background:#303247;
   box-shadow:0 5px 0 #11121b;
 }
 
@@ -489,97 +164,83 @@ button:active{
   box-shadow:0 1px 0 #11121b;
 }
 
-.moveBtn{
-  font-size:22px;
-  background:#30354f;
-}
-
-.jump{
-  background:#276da8;
-}
-
-.punch{
-  background:#b82e40;
+.attack{
+  background:#c52d3e;
 }
 
 .skill{
-  background:#7133bd;
+  background:#7435c7;
 }
 
-.strong{
-  background:#9c3d20;
+.power{
+  background:#a84921;
 }
 
 .mutate{
-  background:#7c35ce;
+  background:#8038d4;
 }
 
-.mutate.ready{
-  animation:pulse .65s infinite alternate;
+.jump{
+  background:#2774ac;
+}
+
+.ready{
+  animation:pulse .6s infinite alternate;
 }
 
 @keyframes pulse{
   from{
-    box-shadow:0 0 5px #9b4cff;
+    box-shadow:0 0 5px #9e42ff;
   }
   to{
-    box-shadow:0 0 25px #d06cff;
+    box-shadow:0 0 25px #d274ff;
   }
 }
 
 /* =========================
-   OVERLAY
+   RESULT
 ========================= */
 
-#overlay{
+#resultScreen{
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,.82);
   display:none;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   flex-direction:column;
+  background:rgba(0,0,0,.78);
   z-index:100;
 }
 
 #result{
-  font-size:36px;
+  color:white;
+  font-size:34px;
   font-weight:900;
+  text-align:center;
   margin-bottom:20px;
 }
 
 .restart{
-  width:180px;
-  background:#7939ce;
+  width:190px;
+  background:#7836c9;
+  font-size:16px;
 }
 
+/* nhỏ hơn */
 @media(max-width:500px){
 
   .title{
     font-size:17px;
   }
 
-  .arena{
-    top:105px;
-    bottom:160px;
-  }
-
-  .fighter{
-    transform:scale(.85);
-  }
-
-  #enemy{
-    transform:scaleX(-1) scale(.85);
-  }
-
   button{
-    min-width:48px;
+    width:50px;
     height:53px;
-    font-size:11px;
+    font-size:17px;
   }
 
-  .moveBtn{
-    font-size:20px;
+  .bars{
+    width:94%;
   }
 }
 </style>
@@ -589,893 +250,686 @@ button:active{
 
 <div id="game">
 
-<div class="title">
-⚡ ĐẤU TRƯỜNG BIẾN DỊ
-</div>
+<div id="top">
 
-<div class="bars">
+  <div class="title">
+    ⚡ ĐẤU TRƯỜNG BIẾN DỊ
+  </div>
 
-<div class="status">
+  <div class="bars">
 
-<div class="name">
-⚡ KẺ TỐC ĐỘ
-</div>
+    <div class="barbox">
+      <div class="label">⚡ KẺ TỐC ĐỘ</div>
 
-<div class="hp">
-<div id="playerHP" class="hpFill"></div>
-</div>
+      <div class="hp">
+        <i id="playerHP"></i>
+      </div>
 
-<div class="rage">
-<div id="playerRage" class="rageFill"></div>
-</div>
+      <div class="rage">
+        <i id="playerRage"></i>
+      </div>
+    </div>
 
-</div>
+    <div class="barbox">
 
-<div class="status">
+      <div class="label" style="text-align:right">
+        ☠ BOSS
+      </div>
 
-<div class="name" style="text-align:right">
-☠ BOSS
-</div>
+      <div class="hp">
+        <i id="enemyHP"></i>
+      </div>
 
-<div class="hp">
-<div id="enemyHP" class="hpFill"></div>
-</div>
+      <div class="rage">
+        <i id="enemyRage"></i>
+      </div>
 
-<div class="rage">
-<div id="enemyRage" class="rageFill"></div>
-</div>
+    </div>
 
-</div>
+  </div>
 
-</div>
-
-<div id="message">
-⚡ Kẻ Tốc Độ đã vào đấu trường!
-</div>
-
-<div class="arena">
-
-<div id="player" class="fighter">
-
-<div class="head"></div>
-<div class="body"></div>
-
-<div class="arm left"></div>
-<div class="arm right"></div>
-
-<div class="leg left"></div>
-<div class="leg right"></div>
-
-</div>
-
-<div id="enemy" class="fighter">
-
-<div class="head"></div>
-<div class="body"></div>
-
-<div class="arm left"></div>
-<div class="arm right"></div>
-
-<div class="leg left"></div>
-<div class="leg right"></div>
-
-</div>
-
-<div class="floor"></div>
+  <div id="message">
+    ⚡ Kẻ Tốc Độ bước vào đấu trường!
+  </div>
 
 </div>
 
 
-<!-- CONTROLS -->
+<div id="controls">
 
-<div class="controls">
+  <div class="leftControls">
 
-<div class="move">
+    <button
+      ontouchstart="move(-1)"
+      ontouchend="stopMove()"
+      onmousedown="move(-1)"
+      onmouseup="stopMove()">
+      ◀
+    </button>
 
-<button
-class="moveBtn"
-ontouchstart="startMove(-1)"
-ontouchend="stopMove()"
-onmousedown="startMove(-1)"
-onmouseup="stopMove()">
-◀
-</button>
+    <button
+      ontouchstart="move(1)"
+      ontouchend="stopMove()"
+      onmousedown="move(1)"
+      onmouseup="stopMove()">
+      ▶
+    </button>
 
-<button
-class="moveBtn"
-ontouchstart="startMove(1)"
-ontouchend="stopMove()"
-onmousedown="startMove(1)"
-onmouseup="stopMove()">
-▶
-</button>
+    <button
+      class="jump"
+      onclick="jump()">
+      ⬆️
+    </button>
 
-<button
-class="jump"
-onclick="jump()">
-⬆️
-</button>
+  </div>
+
+
+  <div class="rightControls">
+
+    <button
+      class="attack"
+      onclick="attack()">
+      👊
+    </button>
+
+    <button
+      class="skill"
+      onclick="dash()">
+      💨
+    </button>
+
+    <button
+      class="skill"
+      onclick="afterImage()">
+      ⚡
+    </button>
+
+    <button
+      class="power"
+      onclick="breakSpeed()">
+      💥
+    </button>
+
+    <button
+      id="mutateButton"
+      class="mutate"
+      onclick="mutate()">
+      🧬
+    </button>
+
+  </div>
 
 </div>
 
-<div class="actions">
 
-<button
-class="punch"
-onclick="normalAttack()">
-👊
-</button>
+<div id="resultScreen">
 
-<button
-class="skill"
-onclick="dashSkill()">
-💨
-</button>
+  <div id="result"></div>
 
-<button
-class="skill"
-onclick="afterImage()">
-⚡
-</button>
-
-<button
-class="strong"
-onclick="breakSpeed()">
-💥
-</button>
-
-<button
-id="mutateBtn"
-class="mutate"
-onclick="mutate()">
-🧬
-</button>
+  <button
+    class="restart"
+    onclick="restartGame()">
+    🔄 CHƠI LẠI
+  </button>
 
 </div>
 
 </div>
 
 
-<div id="overlay">
+<!-- THREE.JS -->
 
-<div id="result"></div>
-
-<button
-class="restart"
-onclick="restartGame()">
-🔄 CHƠI LẠI
-</button>
-
-</div>
-
-</div>
+<script type="importmap">
+{
+  "imports":{
+    "three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+  }
+}
+</script>
 
 
-<script>
+<script type="module">
 
-/* =========================
-GAME DATA
-========================= */
+import * as THREE from "three";
+
+
+/* =========================================
+   GAME
+========================================= */
+
+let scene;
+let camera;
+let renderer;
+
+let player;
+let boss;
+
+let playerGroup;
+let bossGroup;
 
 let playerHP=100;
-let enemyHP=100;
+let bossHP=100;
 
 let playerRage=0;
-let enemyRage=0;
+let bossRage=0;
 
-let playerX=17;
-let enemyX=72;
+let playerX=-3.4;
+let bossX=3.4;
+
+let playerY=0;
+let bossY=0;
 
 let moveDirection=0;
 
-let guarding=false;
 let jumping=false;
+let attacking=false;
 
 let playerMutated=false;
-let enemyMutated=false;
+let bossMutated=false;
 
 let gameOver=false;
 
-let attacking=false;
+let lastTime=performance.now();
 
-let mutationTimer;
+let hitStopUntil=0;
 
 
-/* =========================
-UPDATE
-========================= */
+/* =========================================
+   INITIALIZE
+========================================= */
 
-function update(){
+function init(){
 
-playerHP=Math.max(0,playerHP);
-enemyHP=Math.max(0,enemyHP);
+  scene=new THREE.Scene();
 
-playerRage=Math.min(100,playerRage);
-enemyRage=Math.min(100,enemyRage);
+  scene.background=new THREE.Color(0x080a18);
 
-document.getElementById("playerHP").style.width=
-playerHP+"%";
+  scene.fog=
+    new THREE.Fog(0x080a18,15,32);
 
-document.getElementById("enemyHP").style.width=
-enemyHP+"%";
 
-document.getElementById("playerRage").style.width=
-playerRage+"%";
+  /* CAMERA */
 
-document.getElementById("enemyRage").style.width=
-enemyRage+"%";
+  camera=
+    new THREE.OrthographicCamera(
+      -7,7,
+      4.2,-4.2,
+      .1,100
+    );
 
-document.getElementById("player").style.left=
-playerX+"%";
+  camera.position.set(0,3.3,15);
 
-document.getElementById("enemy").style.left=
-enemyX+"%";
+  camera.lookAt(0,2,0);
 
-if(playerRage>=100)
-document.getElementById("mutateBtn")
-.classList.add("ready");
-else
-document.getElementById("mutateBtn")
-.classList.remove("ready");
 
+  /* RENDERER */
+
+  renderer=
+    new THREE.WebGLRenderer({
+      antialias:true,
+      powerPreference:"high-performance"
+    });
+
+  renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio,1.5)
+  );
+
+  renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+  );
+
+  renderer.shadowMap.enabled=true;
+
+  document
+    .getElementById("game")
+    .prepend(renderer.domElement);
+
+
+  /* LIGHT */
+
+  const ambient=
+    new THREE.HemisphereLight(
+      0x9999ff,
+      0x161622,
+      2.2
+    );
+
+  scene.add(ambient);
+
+
+  const light=
+    new THREE.DirectionalLight(
+      0xffffff,
+      3
+    );
+
+  light.position.set(-4,8,10);
+
+  light.castShadow=true;
+
+  scene.add(light);
+
+
+  /* ARENA */
+
+  createArena();
+
+
+  /* CHARACTERS */
+
+  playerGroup=
+    createSpeedCharacter(false);
+
+  playerGroup.position.set(
+    playerX,
+    0,
+    0
+  );
+
+  scene.add(playerGroup);
+
+
+  bossGroup=
+    createSpeedCharacter(true);
+
+  bossGroup.position.set(
+    bossX,
+    0,
+    0
+  );
+
+  bossGroup.scale.x=-1;
+
+  scene.add(bossGroup);
+
+
+  window.addEventListener(
+    "resize",
+    resize
+  );
+
+
+  updateUI();
+
+  requestAnimationFrame(loop);
 }
 
 
-/* =========================
-MESSAGE
-========================= */
+/* =========================================
+   ARENA
+========================================= */
 
-function say(text){
+function createArena(){
 
-document.getElementById("message")
-.textContent=text;
+  const floorMat=
+    new THREE.MeshStandardMaterial({
+      color:0x292a39,
+      roughness:.8
+    });
 
+  const floor=
+    new THREE.Mesh(
+      new THREE.BoxGeometry(18,.5,5),
+      floorMat
+    );
+
+  floor.position.y=-.3;
+
+  floor.receiveShadow=true;
+
+  scene.add(floor);
+
+
+  /* BACK WALL */
+
+  const wallMat=
+    new THREE.MeshStandardMaterial({
+      color:0x15162b
+    });
+
+  const wall=
+    new THREE.Mesh(
+      new THREE.BoxGeometry(20,9,.5),
+      wallMat
+    );
+
+  wall.position.set(0,3,-2.5);
+
+  scene.add(wall);
+
+
+  /* LIGHT CIRCLES */
+
+  for(let i=-2;i<=2;i++){
+
+    const ring=
+      new THREE.Mesh(
+        new THREE.TorusGeometry(
+          1.5,
+          .025,
+          8,
+          40
+        ),
+        new THREE.MeshBasicMaterial({
+          color:0x7439b8,
+          transparent:true,
+          opacity:.35
+        })
+      );
+
+    ring.rotation.x=Math.PI/2;
+
+    ring.position.set(
+      i*3,
+      .01,
+      -1
+    );
+
+    scene.add(ring);
+  }
 }
 
 
-/* =========================
-MOVE
-========================= */
+/* =========================================
+   CREATE 3D CHARACTER
+========================================= */
 
-function startMove(dir){
+function createSpeedCharacter(isBoss){
 
-if(gameOver)return;
+  const g=
+    new THREE.Group();
 
-moveDirection=dir;
 
-}
+  const skinColor=
+    isBoss ? 0xb87e58 : 0xe8ae7d;
 
-function stopMove(){
+  const clothes=
+    isBoss ? 0x9d243c : 0x121a2b;
 
-moveDirection=0;
 
-}
+  /* BODY */
 
-setInterval(()=>{
+  const body=
+    new THREE.Mesh(
+      new THREE.CapsuleGeometry(
+        .48,
+        .85,
+        6,
+        12
+      ),
+      new THREE.MeshStandardMaterial({
+        color:clothes,
+        roughness:.65
+      })
+    );
 
-if(gameOver)return;
+  body.position.y=1.65;
 
-if(moveDirection!==0){
+  body.castShadow=true;
 
-playerX+=moveDirection*1.35;
+  g.add(body);
 
-playerX=Math.max(3,Math.min(84,playerX));
 
-update();
+  /* HEAD */
 
-}
+  const head=
+    new THREE.Mesh(
+      new THREE.SphereGeometry(
+        .42,
+        16,
+        12
+      ),
+      new THREE.MeshStandardMaterial({
+        color:skinColor,
+        roughness:.7
+      })
+    );
 
-},30);
+  head.position.y=2.55;
 
+  head.castShadow=true;
 
-/* =========================
-JUMP
-========================= */
+  g.add(head);
 
-function jump(){
 
-if(gameOver||jumping)return;
+  /* HAIR */
 
-jumping=true;
+  const hairMat=
+    new THREE.MeshStandardMaterial({
+      color:isBoss ? 0x481622 : 0x10131d
+    });
 
-let p=document.getElementById("player");
 
-p.style.bottom="50%";
+  for(let i=0;i<5;i++){
 
-setTimeout(()=>{
+    const hair=
+      new THREE.Mesh(
+        new THREE.ConeGeometry(
+          .13,
+          .45,
+          5
+        ),
+        hairMat
+      );
 
-p.style.bottom="23%";
+    hair.position.set(
+      -.25+i*.12,
+      2.92,
+      .02
+    );
 
-jumping=false;
+    hair.rotation.z=
+      (i-2)*.15;
 
-},430);
+    g.add(hair);
+  }
 
-}
 
+  /* EYES */
 
-/* =========================
-DISTANCE
-========================= */
+  const eyeMat=
+    new THREE.MeshBasicMaterial({
+      color:0x080808
+    });
 
-function distance(){
+  for(const x of [-.14,.14]){
 
-return Math.abs(playerX-enemyX);
+    const eye=
+      new THREE.Mesh(
+        new THREE.BoxGeometry(
+          .09,.06,.035
+        ),
+        eyeMat
+      );
 
-}
+    eye.position.set(
+      x,
+      2.57,
+      .39
+    );
 
+    g.add(eye);
+  }
 
-/* =========================
-HIT EFFECT
-========================= */
 
-function hitEffect(){
+  /* ARMS */
 
-let flash=document.createElement("div");
+  const armMat=
+    new THREE.MeshStandardMaterial({
+      color:skinColor
+    });
 
-flash.className="flash";
 
-document.querySelector(".arena")
-.appendChild(flash);
+  const leftArm=
+    new THREE.Mesh(
+      new THREE.CapsuleGeometry(
+        .14,
+        .62,
+        5,
+        8
+      ),
+      armMat
+    );
 
-setTimeout(()=>flash.remove(),180);
+  leftArm.position.set(
+    -.62,
+    1.65,
+    0
+  );
 
-}
+  leftArm.rotation.z=-.25;
 
+  leftArm.castShadow=true;
 
-/* =========================
-HIT STOP
-========================= */
+  g.add(leftArm);
 
-function hitStop(){
 
-let game=document.getElementById("game");
+  const rightArm=
+    leftArm.clone();
 
-game.style.filter="brightness(1.5)";
+  rightArm.position.x=.62;
 
-setTimeout(()=>{
+  rightArm.rotation.z=.25;
 
-game.style.filter="";
+  g.add(rightArm);
 
-},110);
 
-}
+  /* GLOVES */
 
+  const gloveMat=
+    new THREE.MeshStandardMaterial({
+      color:isBoss ? 0x32111a : 0x222d45
+    });
 
-/* =========================
-ENEMY HIT
-========================= */
 
-function damageEnemy(damage,knockback){
+  const glove=
+    new THREE.Mesh(
+      new THREE.SphereGeometry(
+        .17,
+        10,
+        8
+      ),
+      gloveMat
+    );
 
-enemyHP-=damage;
+  glove.position.set(
+    -.76,
+    1.32,
+    .02
+  );
 
-playerRage=
-Math.min(100,playerRage+damage*1.3);
+  g.add(glove);
 
-enemyX+=knockback;
 
-enemyX=Math.min(88,Math.max(5,enemyX));
+  const glove2=
+    glove.clone();
 
-let enemy=
-document.getElementById("enemy");
+  glove2.position.x=.76;
 
-enemy.classList.remove("hit");
+  g.add(glove2);
 
-void enemy.offsetWidth;
 
-enemy.classList.add("hit");
+  /* LEGS */
 
-hitEffect();
+  const legMat=
+    new THREE.MeshStandardMaterial({
+      color:0x10131d
+    });
 
-hitStop();
 
-update();
+  const leftLeg=
+    new THREE.Mesh(
+      new THREE.CapsuleGeometry(
+        .18,
+        .72,
+        5,
+        8
+      ),
+      legMat
+    );
 
-checkWin();
+  leftLeg.position.set(
+    -.25,
+    .72,
+    0
+  );
 
-}
+  leftLeg.castShadow=true;
 
+  g.add(leftLeg);
 
-/* =========================
-NORMAL ATTACK
-========================= */
 
-function normalAttack(){
+  const rightLeg=
+    leftLeg.clone();
 
-if(gameOver||attacking)return;
+  rightLeg.position.x=.25;
 
-if(distance()>18){
+  g.add(rightLeg);
 
-say("💨 Quá xa!");
 
-return;
+  /* BOOTS */
 
-}
+  const bootMat=
+    new THREE.MeshStandardMaterial({
+      color:isBoss ? 0x35151d : 0x17233b
+    });
 
-attacking=true;
 
-let p=document.getElementById("player");
+  const boot=
+    new THREE.Mesh(
+      new THREE.BoxGeometry(
+        .35,.22,.55
+      ),
+      bootMat
+    );
 
-p.classList.add("attackAnim");
+  boot.position.set(
+    -.25,
+    .25,
+    .12
+  );
 
-setTimeout(()=>{
+  g.add(boot);
 
-if(!gameOver)
-damageEnemy(playerMutated?18:10,2);
 
-},100);
+  const boot2=
+    boot.clone();
 
-setTimeout(()=>{
+  boot2.position.x=.25;
 
-p.classList.remove("attackAnim");
-attacking=false;
+  g.add(boot2);
 
-},270);
 
-}
+  /* SPEED SYMBOL */
 
+  if(!isBoss){
 
-/* =========================
-DASH SKILL
-========================= */
+    const lightning=
+      new THREE.Mesh(
+        new THREE.ConeGeometry(
+          .16,
+          .5,
+          3
+        ),
+        new THREE.MeshBasicMaterial({
+          color:0xffd21f
+        })
+      );
 
-function dashSkill(){
+    lightning.rotation.z=.5;
 
-if(gameOver||attacking)return;
+    lightning.position.set(
+      0,
+      1.72,
+      .48
+    );
 
-if(distance()>35){
+    g.add(lightning);
+  }
 
-say("💨 Không đủ khoảng cách!");
 
-return;
-
-}
-
-attacking=true;
-
-let p=document.getElementById("player");
-
-let oldX=playerX;
-
-playerX=enemyX-9;
-
-playerX=Math.max(3,Math.min(84,playerX));
-
-p.classList.add("dashAnim");
-
-createSpeedLines();
-
-say("💨 LƯỚT XUYÊN!");
-
-update();
-
-setTimeout(()=>{
-
-if(!gameOver){
-
-damageEnemy(
-playerMutated?25:15,
-playerMutated?5:4
-);
-
-}
-
-},100);
-
-setTimeout(()=>{
-
-p.classList.remove("dashAnim");
-attacking=false;
-
-},330);
-
-}
-
-
-/* =========================
-SPEED LINES
-========================= */
-
-function createSpeedLines(){
-
-for(let i=0;i<5;i++){
-
-let line=document.createElement("div");
-
-line.className="speedLine";
-
-line.style.left=
-(playerX*1.05+Math.random()*5)+"%";
-
-line.style.top=
-(35+Math.random()*40)+"%";
-
-document.querySelector(".arena")
-.appendChild(line);
-
-setTimeout(()=>line.remove(),350);
-
-}
-
-}
-
-
-/* =========================
-AFTER IMAGE
-========================= */
-
-function afterImage(){
-
-if(gameOver||attacking)return;
-
-if(distance()>24){
-
-say("⚡ Hãy áp sát!");
-
-return;
-
-}
-
-attacking=true;
-
-say("⚡ ẢNH TỐC!");
-
-let p=document.getElementById("player");
-
-let clone=p.cloneNode(true);
-
-clone.id="";
-
-clone.style.opacity=".3";
-clone.style.filter="blur(4px)";
-clone.style.left=playerX+"%";
-
-document.querySelector(".arena")
-.appendChild(clone);
-
-setTimeout(()=>clone.remove(),350);
-
-setTimeout(()=>{
-
-damageEnemy(
-playerMutated?28:17,
-3
-);
-
-},120);
-
-setTimeout(()=>{
-
-attacking=false;
-
-},350);
-
-}
-
-
-/* =========================
-BREAK SPEED
-========================= */
-
-function breakSpeed(){
-
-if(gameOver||attacking)return;
-
-if(distance()>20){
-
-say("💥 Quá xa!");
-
-return;
-
-}
-
-attacking=true;
-
-say("💥 PHÁ TỐC!");
-
-let p=document.getElementById("player");
-
-p.classList.add("attackAnim");
-
-setTimeout(()=>{
-
-damageEnemy(
-playerMutated?40:25,
-8
-);
-
-},140);
-
-setTimeout(()=>{
-
-p.classList.remove("attackAnim");
-
-attacking=false;
-
-},400);
-
-}
-
-
-/* =========================
-MUTATION
-========================= */
-
-function mutate(){
-
-if(gameOver)return;
-
-if(playerRage<100){
-
-say("🧬 NỘI chưa đầy!");
-
-return;
-
-}
-
-if(playerMutated){
-
-say("🔥 Đang biến dị!");
-
-return;
-
-}
-
-playerRage=0;
-
-playerMutated=true;
-
-document.getElementById("player")
-.classList.add("mutated");
-
-say("🧬 KẺ TỐC ĐỘ — BIẾN DỊ!");
-
-update();
-
-clearTimeout(mutationTimer);
-
-mutationTimer=setTimeout(()=>{
-
-playerMutated=false;
-
-document.getElementById("player")
-.classList.remove("mutated");
-
-say("↩️ Biến dị kết thúc!");
-
-update();
-
-},8000);
-
-}
-
-
-/* =========================
-BOSS AI
-========================= */
-
-function bossAI(){
-
-if(gameOver)return;
-
-let d=distance();
-
-if(d>17){
-
-if(enemyX>playerX)
-enemyX-=.75;
-else
-enemyX+=.75;
-
-enemyX=Math.max(5,Math.min(87,enemyX));
-
-update();
-
-return;
-
-}
-
-if(Math.random()<.62){
-
-let damage=
-enemyMutated?18:9;
-
-if(guarding){
-
-damage=Math.floor(damage*.25);
-
-say("🛡️ Đỡ được đòn Boss!");
-
-}else{
-
-say("💥 Boss đánh!");
-
-}
-
-playerHP-=damage;
-
-enemyRage=
-Math.min(100,enemyRage+15);
-
-update();
-
-checkWin();
-
-}
-
-}
-
-setInterval(bossAI,650);
-
-
-/* =========================
-BOSS MUTATION
-========================= */
-
-function enemyMutation(){
-
-if(enemyRage<100||enemyMutated)return;
-
-enemyRage=0;
-
-enemyMutated=true;
-
-document.getElementById("enemy")
-.classList.add("mutated");
-
-say("☠️ BOSS ĐÃ BIẾN DỊ!");
-
-update();
-
-setTimeout(()=>{
-
-enemyMutated=false;
-
-document.getElementById("enemy")
-.classList.remove("mutated");
-
-say("Boss trở lại bình thường!");
-
-update();
-
-},8000);
-
-}
-
-setInterval(enemyMutation,500);
-
-
-/* =========================
-GUARD
-========================= */
-
-function activateGuard(){
-
-guarding=true;
-
-say("🛡️ Đang phòng thủ!");
-
-setTimeout(()=>{
-
-guarding=false;
-
-},850);
-
-}
-
-
-/* =========================
-TOUCH GUARD
-========================= */
-
-document.addEventListener("keydown",e=>{
-
-if(e.key===" "){
-activateGuard();
-}
-
-});
-
-
-/* =========================
-WIN
-========================= */
-
-function checkWin(){
-
-if(playerHP<=0){
-
-playerHP=0;
-
-endGame("💀 THẤT BẠI");
-
-return;
-
-}
-
-if(enemyHP<=0){
-
-enemyHP=0;
-
-endGame("🏆 KẺ TỐC ĐỘ CHIẾN THẮNG!");
-
-}
-
-update();
-
-}
-
-
-/* =========================
-END
-========================= */
-
-function endGame(text){
-
-gameOver=true;
-
-moveDirection=0;
-
-document.getElementById("result")
-.textContent=text;
-
-document.getElementById("overlay")
-.style.display="flex";
-
-}
-
-
-/* =========================
-RESTART
-========================= */
-
-function restartGame(){
-
-playerHP=100;
-enemyHP=100;
-
-playerRage=0;
-enemyRage=0;
-
-playerX=17;
-enemyX=72;
-
-moveDirection=0;
-
-guarding=false;
-jumping=false;
-
-playerMutated=false;
-enemyMutated=false;
-
-gameOver=false;
-attacking=false;
-
-clearTimeout(mutationTimer);
-
-document.getElementById("player")
-.classList.remove("mutated");
-
-document.getElementById("enemy")
-.classList.remove("mutated");
-
-document.getElementById("overlay")
-.style.display="none";
-
-say("⚡ Kẻ Tốc Độ đã trở lại!");
-
-update();
-
-}
-
-
-/* =========================
-START
-========================= */
-
-update();
-
-</script>
-
-</body>
-      </html>
+  g.userData={
+    leftArm,
+    rightArm,
+   

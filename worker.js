@@ -1,102 +1,765 @@
-export default {
-  async fetch(request, env) {
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Đấu Trường Biến Dị</title>
 
-    // Cho phép trình duyệt CHEP gọi Worker
-    if (request.method === "OPTIONS") {
-      return new Response(null, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type"
-        }
-      });
-    }
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
 
-    if (request.method !== "POST") {
-      return new Response("CHEP AI Server đang hoạt động 🤖", {
-        headers: {
-          "Access-Control-Allow-Origin": "*"
-        }
-      });
-    }
+body{
+  margin:0;
+  overflow:hidden;
+  background:#080914;
+  color:white;
+  font-family:Arial,sans-serif;
+}
 
-    try {
-      const body = await request.json();
-      const message = body.message;
+#game{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 25%,#30205c 0%,transparent 35%),
+    linear-gradient(#11152b,#090a12);
+}
 
-      if (!message) {
-        return new Response(
-          JSON.stringify({ error: "Không có tin nhắn." }),
-          {
-            status: 400,
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*"
-            }
-          }
-        );
-      }
+/* TIÊU ĐỀ */
+.title{
+  position:absolute;
+  top:10px;
+  left:0;
+  width:100%;
+  text-align:center;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:2px;
+  z-index:10;
+}
 
-      const response = await fetch(
-        "https://api.openai.com/v1/responses",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${env.OPENAI_API_KEY}`
-          },
-          body: JSON.stringify({
-            model: "gpt-5",
-            instructions:
-              "Bạn là CHEP AI, một trợ lý thân thiện. Hãy trả lời bằng tiếng Việt, rõ ràng, tự nhiên và hữu ích.",
-            input: message
-          })
-        }
-      );
+/* THANH TRẠNG THÁI */
+.bars{
+  position:absolute;
+  top:50px;
+  left:5%;
+  width:90%;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  z-index:10;
+}
 
-      const data = await response.json();
+.status{
+  width:48%;
+}
 
-      if (!response.ok) {
-        return new Response(
-          JSON.stringify({
-            error: data.error?.message || "OpenAI API gặp lỗi."
-          }),
-          {
-            status: response.status,
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*"
-            }
-          }
-        );
-      }
+.name{
+  font-weight:bold;
+  margin-bottom:4px;
+}
 
-      return new Response(
-        JSON.stringify({
-          reply: data.output_text || "CHEP chưa nhận được câu trả lời."
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
-          }
-        }
-      );
+.hp,.rage{
+  width:100%;
+  height:16px;
+  background:#252535;
+  border:2px solid #55556b;
+  border-radius:20px;
+  overflow:hidden;
+}
 
-    } catch (error) {
+.hpFill{
+  height:100%;
+  background:#e53935;
+  width:100%;
+  transition:.2s;
+}
 
-      return new Response(
-        JSON.stringify({
-          error: "Lỗi máy chủ CHEP: " + error.message
-        }),
-        {
-          status: 500,
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
-          }
-        }
-      );
-    }
+.rage{
+  height:10px;
+  margin-top:5px;
+}
+
+.rageFill{
+  height:100%;
+  width:0%;
+  background:#9c4dff;
+  transition:.2s;
+}
+
+/* ĐẤU TRƯỜNG */
+.arena{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:190px;
+  top:120px;
+}
+
+.floor{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:25%;
+  background:
+    linear-gradient(#29283a,#171722);
+  border-top:4px solid #4c4961;
+}
+
+/* NHÂN VẬT */
+.fighter{
+  position:absolute;
+  bottom:22%;
+  width:80px;
+  height:140px;
+  transition:.12s;
+}
+
+#player{
+  left:18%;
+}
+
+#enemy{
+  right:18%;
+  transform:scaleX(-1);
+}
+
+.head{
+  position:absolute;
+  width:48px;
+  height:48px;
+  left:16px;
+  top:0;
+  border-radius:50%;
+  background:#ffd0a6;
+  border:3px solid #171722;
+}
+
+.body{
+  position:absolute;
+  width:58px;
+  height:65px;
+  left:11px;
+  top:43px;
+  border-radius:18px 18px 10px 10px;
+  background:#2878ff;
+  border:3px solid #111;
+}
+
+.enemyBody{
+  background:#e33455;
+}
+
+.arm{
+  position:absolute;
+  width:18px;
+  height:58px;
+  top:48px;
+  border-radius:15px;
+  background:#ffd0a6;
+  border:3px solid #111;
+  transform-origin:top center;
+}
+
+.arm.left{
+  left:-3px;
+  transform:rotate(25deg);
+}
+
+.arm.right{
+  right:-3px;
+  transform:rotate(-25deg);
+}
+
+.leg{
+  position:absolute;
+  width:20px;
+  height:55px;
+  top:100px;
+  border-radius:12px;
+  background:#222;
+  border:3px solid #111;
+}
+
+.leg.left{left:14px}
+.leg.right{right:14px}
+
+/* BIẾN DỊ */
+.mutated .head{
+  background:#b9ff72;
+  box-shadow:0 0 20px #79ff3b;
+}
+
+.mutated .body{
+  background:#8c36ff;
+  box-shadow:0 0 30px #9d4cff;
+  transform:scale(1.12);
+}
+
+.mutated .arm,
+.mutated .leg{
+  box-shadow:0 0 15px #9d4cff;
+}
+
+.mutated::after{
+  content:"BIẾN DỊ";
+  position:absolute;
+  top:-35px;
+  left:-15px;
+  width:110px;
+  text-align:center;
+  color:#d58cff;
+  font-weight:900;
+  text-shadow:0 0 12px #9c4dff;
+}
+
+/* THÔNG BÁO */
+#message{
+  position:absolute;
+  top:125px;
+  left:0;
+  width:100%;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  min-height:25px;
+}
+
+/* NÚT */
+.controls{
+  position:absolute;
+  bottom:15px;
+  left:0;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:end;
+  gap:10px;
+  padding:0 12px;
+  z-index:20;
+}
+
+button{
+  border:0;
+  color:white;
+  font-weight:900;
+  font-size:14px;
+  border-radius:18px;
+  min-width:78px;
+  height:65px;
+  background:#25263a;
+  box-shadow:0 5px 0 #11121c;
+}
+
+button:active{
+  transform:translateY(4px);
+  box-shadow:0 1px 0 #11121c;
+}
+
+.attack{background:#b52c39}
+.kick{background:#c66a21}
+.guard{background:#2668a9}
+.mutate{
+  background:#7438c8;
+}
+
+#overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:100;
+}
+
+#result{
+  font-size:38px;
+  font-weight:900;
+  margin-bottom:20px;
+  text-align:center;
+}
+
+.restart{
+  background:#7d3cff;
+  width:180px;
+}
+
+/* MOBILE */
+@media(max-width:500px){
+  .title{
+    font-size:18px;
   }
-};
+
+  .bars{
+    top:45px;
+  }
+
+  .arena{
+    bottom:175px;
+  }
+
+  .fighter{
+    transform:scale(.85);
+  }
+
+  #enemy{
+    transform:scaleX(-1) scale(.85);
+  }
+
+  #player{
+    left:10%;
+  }
+
+  #enemy{
+    right:10%;
+  }
+
+  button{
+    min-width:70px;
+    height:60px;
+    font-size:12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+  <div class="title">⚔️ ĐẤU TRƯỜNG BIẾN DỊ</div>
+
+  <div class="bars">
+
+    <div class="status">
+      <div class="name">🧍 CHIẾN BINH</div>
+
+      <div class="hp">
+        <div id="playerHP" class="hpFill"></div>
+      </div>
+
+      <div class="rage">
+        <div id="playerRage" class="rageFill"></div>
+      </div>
+    </div>
+
+    <div class="status">
+      <div class="name" style="text-align:right">ĐỐI THỦ 🤖</div>
+
+      <div class="hp">
+        <div id="enemyHP" class="hpFill"></div>
+      </div>
+
+      <div class="rage">
+        <div id="enemyRage" class="rageFill"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="message">🔥 Hãy chiến đấu!</div>
+
+  <div class="arena">
+
+    <div id="player" class="fighter">
+
+      <div class="head"></div>
+      <div class="body"></div>
+
+      <div class="arm left"></div>
+      <div class="arm right"></div>
+
+      <div class="leg left"></div>
+      <div class="leg right"></div>
+
+    </div>
+
+    <div id="enemy" class="fighter">
+
+      <div class="head"></div>
+      <div class="body enemyBody"></div>
+
+      <div class="arm left"></div>
+      <div class="arm right"></div>
+
+      <div class="leg left"></div>
+      <div class="leg right"></div>
+
+    </div>
+
+    <div class="floor"></div>
+
+  </div>
+
+  <div class="controls">
+
+    <button class="attack" onclick="attack()">👊 ĐẤM</button>
+
+    <button class="kick" onclick="kick()">🦵 ĐÁ</button>
+
+    <button class="guard" onclick="guard()">🛡️ ĐỠ</button>
+
+    <button class="mutate" onclick="mutate()">🧬 BIẾN DỊ</button>
+
+  </div>
+
+  <div id="overlay">
+
+    <div id="result"></div>
+
+    <button class="restart" onclick="restartGame()">
+      🔄 CHƠI LẠI
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+let playerHP = 100;
+let enemyHP = 100;
+
+let playerRage = 0;
+let enemyRage = 0;
+
+let guarding = false;
+let playerMutated = false;
+let enemyMutated = false;
+
+let gameOver = false;
+
+let mutateTimer = null;
+
+
+/* HIỂN THỊ */
+
+function update(){
+
+  document.getElementById("playerHP").style.width =
+    playerHP + "%";
+
+  document.getElementById("enemyHP").style.width =
+    enemyHP + "%";
+
+  document.getElementById("playerRage").style.width =
+    playerRage + "%";
+
+  document.getElementById("enemyRage").style.width =
+    enemyRage + "%";
+}
+
+
+/* THÔNG BÁO */
+
+function say(text){
+
+  document.getElementById("message").textContent = text;
+
+}
+
+
+/* ĐÁNH */
+
+function attack(){
+
+  if(gameOver) return;
+
+  let damage = playerMutated ? 16 : 10;
+
+  if(Math.random() < .85){
+
+    enemyHP -= damage;
+
+    playerRage = Math.min(100,playerRage + 15);
+
+    say("👊 Đấm trúng!");
+
+  }else{
+
+    say("💨 Đấm hụt!");
+
+  }
+
+  update();
+
+  checkWin();
+
+  if(!gameOver){
+
+    setTimeout(enemyAttack,700);
+
+  }
+
+}
+
+
+/* ĐÁ */
+
+function kick(){
+
+  if(gameOver) return;
+
+  let damage = playerMutated ? 23 : 14;
+
+  if(Math.random() < .75){
+
+    enemyHP -= damage;
+
+    playerRage = Math.min(100,playerRage + 20);
+
+    say("🦵 Đá trúng!");
+
+  }else{
+
+    say("💨 Đá hụt!");
+
+  }
+
+  update();
+
+  checkWin();
+
+  if(!gameOver){
+
+    setTimeout(enemyAttack,700);
+
+  }
+
+}
+
+
+/* ĐỠ */
+
+function guard(){
+
+  if(gameOver) return;
+
+  guarding = true;
+
+  say("🛡️ Đang đỡ đòn!");
+
+  setTimeout(()=>{
+
+    guarding = false;
+
+  },1000);
+
+}
+
+
+/* ĐỐI THỦ */
+
+function enemyAttack(){
+
+  if(gameOver) return;
+
+  let damage = enemyMutated ? 17 : 9;
+
+  if(Math.random() < .8){
+
+    if(guarding){
+
+      damage = Math.floor(damage * .3);
+
+      say("🛡️ Bạn đỡ được đòn!");
+
+    }else{
+
+      say("💥 Đối thủ tấn công!");
+
+    }
+
+    playerHP -= damage;
+
+    enemyRage = Math.min(100,enemyRage + 14);
+
+  }
+
+  update();
+
+  checkWin();
+
+}
+
+
+/* BIẾN DỊ */
+
+function mutate(){
+
+  if(gameOver) return;
+
+  if(playerRage < 100){
+
+    say("🧬 NỘI chưa đầy!");
+
+    return;
+
+  }
+
+  if(playerMutated){
+
+    say("🔥 Bạn đang biến dị!");
+
+    return;
+
+  }
+
+  playerRage = 0;
+
+  playerMutated = true;
+
+  document.getElementById("player").classList.add("mutated");
+
+  say("🧬 BIẾN DỊ KÍCH HOẠT!");
+
+  update();
+
+  clearTimeout(mutateTimer);
+
+  mutateTimer = setTimeout(()=>{
+
+    playerMutated = false;
+
+    document.getElementById("player")
+      .classList.remove("mutated");
+
+    say("↩️ Biến dị kết thúc!");
+
+  },8000);
+
+}
+
+
+/* BIẾN DỊ ĐỐI THỦ */
+
+function enemyMutate(){
+
+  if(enemyRage < 100 || enemyMutated) return;
+
+  enemyRage = 0;
+
+  enemyMutated = true;
+
+  document.getElementById("enemy").classList.add("mutated");
+
+  say("⚠️ ĐỐI THỦ ĐÃ BIẾN DỊ!");
+
+  update();
+
+  setTimeout(()=>{
+
+    enemyMutated = false;
+
+    document.getElementById("enemy")
+      .classList.remove("mutated");
+
+  },8000);
+
+}
+
+
+/* KIỂM TRA THẮNG */
+
+function checkWin(){
+
+  if(playerHP <= 0){
+
+    playerHP = 0;
+
+    endGame("💀 THẤT BẠI");
+
+  }
+
+  if(enemyHP <= 0){
+
+    enemyHP = 0;
+
+    endGame("🏆 CHIẾN THẮNG!");
+
+  }
+
+  update();
+
+}
+
+
+/* KẾT THÚC */
+
+function endGame(text){
+
+  gameOver = true;
+
+  document.getElementById("result").textContent = text;
+
+  document.getElementById("overlay").style.display =
+    "flex";
+
+}
+
+
+/* CHƠI LẠI */
+
+function restartGame(){
+
+  playerHP = 100;
+  enemyHP = 100;
+
+  playerRage = 0;
+  enemyRage = 0;
+
+  guarding = false;
+
+  playerMutated = false;
+  enemyMutated = false;
+
+  gameOver = false;
+
+  document.getElementById("player")
+    .classList.remove("mutated");
+
+  document.getElementById("enemy")
+    .classList.remove("mutated");
+
+  document.getElementById("overlay").style.display =
+    "none";
+
+  say("🔥 Hãy chiến đấu!");
+
+  update();
+
+}
+
+
+/* AI TỰ TÍCH NỘI */
+
+setInterval(()=>{
+
+  if(gameOver) return;
+
+  if(enemyRage >= 100){
+
+    enemyMutate();
+
+  }
+
+},1000);
+
+
+/* KHỞI ĐỘNG */
+
+update();
+
+</script>
+
+</body>
+</html>

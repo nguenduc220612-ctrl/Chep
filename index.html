@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
 <title>Đấu Trường Biến Dị</title>
 
@@ -20,7 +20,7 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#070914;
+  background:#060711;
   font-family:Arial,sans-serif;
 }
 
@@ -44,7 +44,7 @@ canvas{
 }
 
 /* =========================
-   TOP UI
+   UI
 ========================= */
 
 #ui{
@@ -56,12 +56,12 @@ canvas{
 
 .title{
   position:absolute;
-  top:8px;
+  top:7px;
   left:0;
   width:100%;
   text-align:center;
   color:#fff;
-  font-size:21px;
+  font-size:20px;
   font-weight:900;
   letter-spacing:2px;
   text-shadow:0 3px 8px #000;
@@ -70,7 +70,7 @@ canvas{
 .bars{
   position:absolute;
   left:4%;
-  top:42px;
+  top:41px;
   width:92%;
   display:flex;
   gap:14px;
@@ -93,20 +93,20 @@ canvas{
   border:2px solid #666a7c;
   border-radius:20px;
   overflow:hidden;
-  background:#222432;
+  background:#222431;
 }
 
 .hp > div{
   height:100%;
   width:100%;
-  background:linear-gradient(90deg,#b51f31,#ff4052);
+  background:linear-gradient(90deg,#a91d2d,#ff4153);
   transition:width .12s;
 }
 
 .rage{
   margin-top:4px;
   height:9px;
-  border:1px solid #65687b;
+  border:1px solid #65687a;
   border-radius:20px;
   overflow:hidden;
   background:#1e2030;
@@ -116,12 +116,11 @@ canvas{
   height:100%;
   width:0%;
   background:linear-gradient(90deg,#7622d5,#d05cff);
-  transition:width .12s;
 }
 
 #message{
   position:absolute;
-  top:90px;
+  top:88px;
   width:100%;
   text-align:center;
   color:#fff;
@@ -152,13 +151,8 @@ canvas{
   pointer-events:auto;
 }
 
-.left{
-  left:10px;
-}
-
-.right{
-  right:10px;
-}
+.left{ left:10px; }
+.right{ right:10px; }
 
 button{
   width:54px;
@@ -178,37 +172,24 @@ button:active{
   box-shadow:0 1px 0 #11131d;
 }
 
-.moveBtn{
-  background:#303952;
-}
-
-.jump{
-  background:#2778b6;
-}
-
-.attack{
-  background:#c52e40;
-}
-
-.skill{
-  background:#7335c7;
-}
-
-.power{
-  background:#ac4c20;
-}
-
-.mutate{
-  background:#8439d6;
-}
+.moveBtn{ background:#303952; }
+.jump{ background:#2778b6; }
+.attack{ background:#c52e40; }
+.skill{ background:#7335c7; }
+.power{ background:#ac4c20; }
+.mutate{ background:#8439d6; }
 
 .mutate.ready{
   animation:pulse .6s infinite alternate;
 }
 
 @keyframes pulse{
-  from{box-shadow:0 0 5px #8f38dc,0 5px 0 #11131d;}
-  to{box-shadow:0 0 24px #d568ff,0 5px 0 #11131d;}
+  from{
+    box-shadow:0 0 5px #8f38dc,0 5px 0 #11131d;
+  }
+  to{
+    box-shadow:0 0 24px #d568ff,0 5px 0 #11131d;
+  }
 }
 
 /* =========================
@@ -232,7 +213,6 @@ button:active{
   font-weight:900;
   margin-bottom:20px;
   text-align:center;
-  text-shadow:0 3px 10px #000;
 }
 
 .restart{
@@ -241,14 +221,8 @@ button:active{
   font-size:16px;
 }
 
-/* =========================
-   MOBILE
-========================= */
-
 @media(max-width:500px){
-  .title{
-    font-size:17px;
-  }
+  .title{font-size:17px;}
 
   button{
     width:49px;
@@ -317,43 +291,30 @@ button:active{
       ontouchstart="moveLeft()"
       ontouchend="stopMove()"
       onmousedown="moveLeft()"
-      onmouseup="stopMove()">
-      ◀
-    </button>
+      onmouseup="stopMove()">◀</button>
 
     <button
       class="moveBtn"
       ontouchstart="moveRight()"
       ontouchend="stopMove()"
       onmousedown="moveRight()"
-      onmouseup="stopMove()">
-      ▶
-    </button>
+      onmouseup="stopMove()">▶</button>
 
-    <button
-      class="jump"
-      onclick="jump()">
-      ⬆
-    </button>
+    <button class="jump" onclick="jump()">⬆</button>
 
   </div>
 
   <div class="group right">
 
     <button class="attack" onclick="attack()">👊</button>
-
     <button class="skill" onclick="dash()">💨</button>
-
     <button class="skill" onclick="afterImage()">⚡</button>
-
     <button class="power" onclick="breakSpeed()">💥</button>
 
     <button
       id="mutateButton"
       class="mutate"
-      onclick="mutate()">
-      🧬
-    </button>
+      onclick="mutate()">🧬</button>
 
   </div>
 
@@ -365,36 +326,50 @@ button:active{
 
   <button
     class="restart"
-    onclick="restartGame()">
-    🔄 CHƠI LẠI
-  </button>
+    onclick="restartGame()">🔄 CHƠI LẠI</button>
 
 </div>
 
 </div>
-
 
 <script>
+
 /* =========================================================
    CANVAS
 ========================================================= */
 
-const canvas =
-  document.getElementById("canvas");
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
 
-const ctx =
-  canvas.getContext("2d");
+let W=0;
+let H=0;
+let dpr=1;
 
-let W = 0;
-let H = 0;
-let dpr = 1;
+function resize(){
+
+  dpr=Math.min(window.devicePixelRatio||1,2);
+
+  W=window.innerWidth;
+  H=window.innerHeight;
+
+  canvas.width=W*dpr;
+  canvas.height=H*dpr;
+
+  canvas.style.width=W+"px";
+  canvas.style.height=H+"px";
+
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+window.addEventListener("resize",resize);
+resize();
 
 
 /* =========================================================
-   GAME STATE
+   PLAYER
 ========================================================= */
 
-let player = {
+let player={
   x:-2.8,
   y:0,
   vy:0,
@@ -408,79 +383,65 @@ let player = {
   hitFlash:0
 };
 
-let boss = {
+
+/* =========================================================
+   BOSS
+========================================================= */
+
+let boss={
   x:2.8,
   y:0,
   hp:100,
   rage:0,
   facing:-1,
+
   action:"",
   actionTime:0,
+
   mutated:false,
-  hitFlash:0
+  hitFlash:0,
+
+  state:"approach",
+  stateTime:0,
+
+  cooldown:0,
+  dodgeCooldown:0,
+  comboStep:0,
+
+  enraged:false
 };
 
-let particles = [];
-let speedLines = [];
 
-let moveDirection = 0;
-let gameOver = false;
-let hitStop = 0;
-let shake = 0;
+let particles=[];
+let speedLines=[];
 
-let last = performance.now();
+let moveDirection=0;
+let gameOver=false;
 
+let hitStop=0;
+let shake=0;
 
-/* =========================================================
-   RESIZE
-========================================================= */
-
-function resize(){
-
-  dpr = Math.min(window.devicePixelRatio || 1,2);
-
-  W = window.innerWidth;
-  H = window.innerHeight;
-
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-
-  canvas.style.width = W + "px";
-  canvas.style.height = H + "px";
-
-  ctx.setTransform(
-    dpr,0,0,dpr,0,0
-  );
-}
-
-window.addEventListener(
-  "resize",
-  resize
-);
-
-resize();
+let last=performance.now();
 
 
 /* =========================================================
-   HELPERS
+   BASIC
 ========================================================= */
 
 function clamp(v,min,max){
   return Math.max(min,Math.min(max,v));
 }
 
+function rand(min,max){
+  return Math.random()*(max-min)+min;
+}
+
 function distance(){
-  return Math.abs(player.x - boss.x);
+  return Math.abs(player.x-boss.x);
 }
 
 function say(text){
-  document.getElementById(
-    "message"
-  ).textContent = text;
-}
-
-function rand(min,max){
-  return Math.random()*(max-min)+min;
+  document.getElementById("message").textContent=text;
 }
 
 
@@ -491,25 +452,24 @@ function rand(min,max){
 function updateUI(){
 
   document.getElementById("playerHP")
-    .style.width = player.hp + "%";
+    .style.width=player.hp+"%";
 
   document.getElementById("bossHP")
-    .style.width = boss.hp + "%";
+    .style.width=boss.hp+"%";
 
   document.getElementById("playerRage")
-    .style.width = player.rage + "%";
+    .style.width=player.rage+"%";
 
   document.getElementById("bossRage")
-    .style.width = boss.rage + "%";
+    .style.width=boss.rage+"%";
 
-  const btn =
+  const button=
     document.getElementById("mutateButton");
 
-  if(player.rage >= 100){
-    btn.classList.add("ready");
-  }else{
-    btn.classList.remove("ready");
-  }
+  if(player.rage>=100)
+    button.classList.add("ready");
+  else
+    button.classList.remove("ready");
 }
 
 
@@ -519,44 +479,44 @@ function updateUI(){
 
 function moveLeft(){
   if(gameOver)return;
-  moveDirection = -1;
+  moveDirection=-1;
 }
 
 function moveRight(){
   if(gameOver)return;
-  moveDirection = 1;
+  moveDirection=1;
 }
 
 function stopMove(){
-  moveDirection = 0;
+  moveDirection=0;
 }
 
 function jump(){
 
-  if(gameOver || player.jump)return;
+  if(gameOver||player.jump)return;
 
-  player.jump = true;
-  player.vy = 8.8;
+  player.jump=true;
+  player.vy=8.8;
 }
 
 
 /* =========================================================
-   PARTICLES
+   EFFECTS
 ========================================================= */
 
-function burst(x,y,count,color1,color2){
+function burst(x,y,count,c1,c2){
 
   for(let i=0;i<count;i++){
 
     particles.push({
-      x:x,
-      y:y,
+      x,
+      y,
       vx:rand(-4,4),
       vy:rand(-2,5),
       life:rand(.25,.55),
-      max:0.55,
+      max:.55,
       size:rand(3,7),
-      c:Math.random()<.5 ? color1 : color2
+      c:Math.random()<.5?c1:c2
     });
   }
 }
@@ -574,53 +534,48 @@ function addSpeedLines(x,y){
   }
 }
 
-
-/* =========================================================
-   COMBAT
-========================================================= */
-
-function hitStopNow(ms=110){
-
-  hitStop = ms;
-  shake = 9;
+function hitStopNow(ms=105){
+  hitStop=ms;
+  shake=9;
 }
 
 
+/* =========================================================
+   DAMAGE
+========================================================= */
+
 function hitBoss(damage,knockback){
 
-  boss.hp -= damage;
+  boss.hp-=damage;
 
-  boss.rage =
-    clamp(
-      boss.rage + damage*.32,
-      0,100
-    );
+  player.rage=
+    clamp(player.rage+damage*1.25,0,100);
 
-  player.rage =
-    clamp(
-      player.rage + damage*1.25,
-      0,100
-    );
+  boss.rage=
+    clamp(boss.rage+damage*.28,0,100);
 
-  boss.x += knockback;
+  boss.x+=knockback;
 
-  boss.x =
-    clamp(boss.x,-6,6);
+  boss.x=clamp(boss.x,-6,6);
 
-  boss.hitFlash = .18;
+  boss.hitFlash=.18;
 
   burst(
     screenX(boss.x),
-    screenY(boss.y+1.4),
+    screenY(1.4),
     18,
     "#ffffff",
-    "#7e43ff"
+    "#7d45ff"
   );
 
   hitStopNow();
 
-  if(boss.hp <= 0){
-    boss.hp = 0;
+  /* Boss ghi nhớ: vừa bị trúng */
+  boss.state="react";
+  boss.stateTime=.28;
+
+  if(boss.hp<=0){
+    boss.hp=0;
     win();
   }
 
@@ -630,27 +585,29 @@ function hitBoss(damage,knockback){
 
 function hitPlayer(damage,knockback){
 
-  player.hp -= damage;
+  player.hp-=damage;
 
-  player.x += knockback;
+  player.x+=knockback;
 
-  player.x =
-    clamp(player.x,-6,6);
+  player.x=clamp(player.x,-6,6);
 
-  player.hitFlash = .18;
+  player.hitFlash=.18;
+
+  player.rage=
+    clamp(player.rage+damage*.65,0,100);
 
   burst(
     screenX(player.x),
-    screenY(player.y+1.4),
-    15,
+    screenY(1.4),
+    16,
     "#ffffff",
-    "#ff3950"
+    "#ff4052"
   );
 
   hitStopNow();
 
-  if(player.hp <= 0){
-    player.hp = 0;
+  if(player.hp<=0){
+    player.hp=0;
     lose();
   }
 
@@ -659,28 +616,27 @@ function hitPlayer(damage,knockback){
 
 
 /* =========================================================
-   ATTACK
+   PLAYER ATTACKS
 ========================================================= */
 
 function attack(){
 
-  if(gameOver || player.action)return;
+  if(gameOver||player.action)return;
 
-  player.action = "punch";
-  player.actionTime = .28;
+  player.action="punch";
+  player.actionTime=.28;
 
-  if(distance() <= 1.9){
+  if(distance()<=1.9){
 
     setTimeout(()=>{
 
       if(!gameOver){
         hitBoss(
-          player.mutated ? 18 : 10,
-          player.facing * .45
+          player.mutated?18:10,
+          player.facing*.45
         );
 
         say("👊 ĐÁNH TRÚNG!");
-
       }
 
     },95);
@@ -694,36 +650,34 @@ function attack(){
 
 function dash(){
 
-  if(gameOver || player.action)return;
+  if(gameOver||player.action)return;
 
-  if(distance() > 5){
+  if(distance()>5){
 
     say("💨 Boss quá xa!");
     return;
   }
 
-  player.action = "dash";
-  player.actionTime = .35;
+  player.action="dash";
+  player.actionTime=.35;
 
-  player.x =
-    boss.x - player.facing*.95;
+  player.x=boss.x-player.facing*.95;
 
-  player.x =
-    clamp(player.x,-6,6);
+  player.x=clamp(player.x,-6,6);
 
   addSpeedLines(
     screenX(player.x),
-    screenY(player.y+1)
+    screenY(1)
   );
 
   say("💨 LƯỚT XUYÊN!");
 
   setTimeout(()=>{
 
-    if(!gameOver && distance() <= 1.8){
+    if(!gameOver && distance()<=1.8){
 
       hitBoss(
-        player.mutated ? 25 : 15,
+        player.mutated?25:15,
         player.facing*.8
       );
     }
@@ -734,16 +688,16 @@ function dash(){
 
 function afterImage(){
 
-  if(gameOver || player.action)return;
+  if(gameOver||player.action)return;
 
-  if(distance() > 2.6){
+  if(distance()>2.6){
 
     say("⚡ Hãy áp sát!");
     return;
   }
 
-  player.action = "after";
-  player.actionTime = .38;
+  player.action="after";
+  player.actionTime=.38;
 
   say("⚡ ẢNH TỐC!");
 
@@ -753,7 +707,7 @@ function afterImage(){
 
       addSpeedLines(
         screenX(player.x)-i*12,
-        screenY(player.y+1)
+        screenY(1)
       );
 
     },i*35);
@@ -761,10 +715,10 @@ function afterImage(){
 
   setTimeout(()=>{
 
-    if(!gameOver && distance() <= 2){
+    if(!gameOver && distance()<=2){
 
       hitBoss(
-        player.mutated ? 28 : 17,
+        player.mutated?28:17,
         player.facing*.5
       );
     }
@@ -775,25 +729,25 @@ function afterImage(){
 
 function breakSpeed(){
 
-  if(gameOver || player.action)return;
+  if(gameOver||player.action)return;
 
-  if(distance() > 2){
+  if(distance()>2){
 
     say("💥 Quá xa!");
     return;
   }
 
-  player.action = "break";
-  player.actionTime = .48;
+  player.action="break";
+  player.actionTime=.48;
 
   say("💥 PHÁ TỐC!");
 
   setTimeout(()=>{
 
-    if(!gameOver && distance() <= 2.2){
+    if(!gameOver && distance()<=2.2){
 
       hitBoss(
-        player.mutated ? 40 : 25,
+        player.mutated?40:25,
         player.facing*1.15
       );
     }
@@ -803,14 +757,14 @@ function breakSpeed(){
 
 
 /* =========================================================
-   MUTATION
+   PLAYER MUTATION
 ========================================================= */
 
 function mutate(){
 
   if(gameOver)return;
 
-  if(player.rage < 100){
+  if(player.rage<100){
 
     say("🧬 NỘI CHƯA ĐẦY!");
     return;
@@ -822,14 +776,15 @@ function mutate(){
     return;
   }
 
-  player.rage = 0;
-  player.mutated = true;
-  player.action = "transform";
-  player.actionTime = .6;
+  player.rage=0;
+  player.mutated=true;
+
+  player.action="transform";
+  player.actionTime=.6;
 
   burst(
     screenX(player.x),
-    screenY(player.y+1.4),
+    screenY(1.5),
     45,
     "#ffffff",
     "#b348ff"
@@ -840,15 +795,12 @@ function mutate(){
   updateUI();
 
   setTimeout(()=>{
-
-    player.action = "";
-
+    player.action="";
   },600);
 
   setTimeout(()=>{
 
-    player.mutated = false;
-
+    player.mutated=false;
     say("↩️ Biến dị kết thúc!");
 
   },8000);
@@ -856,84 +808,215 @@ function mutate(){
 
 
 /* =========================================================
-   BOSS AI
+   BOSS AI - CORE
 ========================================================= */
 
 function bossAI(dt){
 
   if(gameOver)return;
 
-  const d = distance();
+  /* cooldown */
 
-  if(d > 1.75){
+  if(boss.cooldown>0)
+    boss.cooldown-=dt;
 
-    const dir =
-      player.x > boss.x ? 1 : -1;
+  if(boss.dodgeCooldown>0)
+    boss.dodgeCooldown-=dt;
 
-    boss.x += dir * 1.5 * dt;
 
-    boss.facing = dir;
+  /* enraged */
 
-    if(Math.random() < .18){
+  if(
+    !boss.enraged &&
+    boss.hp<=35
+  ){
+
+    boss.enraged=true;
+
+    say("😡 BOSS PHÁT ĐIÊN!");
+
+    burst(
+      screenX(boss.x),
+      screenY(1.4),
+      28,
+      "#ff4d63",
+      "#ff9b4d"
+    );
+  }
+
+
+  const d=distance();
+
+  /* hướng */
+
+  boss.facing =
+    player.x>=boss.x ? 1:-1;
+
+
+  /* =====================================
+     REACT
+  ===================================== */
+
+  if(boss.state==="react"){
+
+    boss.stateTime-=dt;
+
+    if(boss.stateTime<=0){
+
+      boss.state="decide";
+      boss.stateTime=.15;
+    }
+
+    return;
+  }
+
+
+  /* =====================================
+     DODGE
+  ===================================== */
+
+  /*
+     Nếu player vừa dùng skill
+     và boss còn dodge cooldown
+  */
+
+  if(
+    (player.action==="dash" ||
+     player.action==="after" ||
+     player.action==="break") &&
+
+    d<2.5 &&
+
+    boss.dodgeCooldown<=0 &&
+
+    Math.random()<(
+      boss.mutated ? .60 : .38
+    )
+  ){
+
+    bossDodge();
+    return;
+  }
+
+
+  /* =====================================
+     GUARD
+  ===================================== */
+
+  if(
+    player.action==="punch" &&
+    d<2.2 &&
+    !boss.action &&
+    Math.random()<(
+      boss.enraged?.22:.38
+    )
+  ){
+
+    bossGuard();
+    return;
+  }
+
+
+  /* =====================================
+     KEEP DISTANCE
+  ===================================== */
+
+  if(d<1.25 && !player.action){
+
+    /*
+      Có lúc lùi một chút
+      thay vì dí sát vô hạn
+    */
+
+    if(Math.random()<.35){
+
+      boss.x-=
+        boss.facing*
+        .6;
+
+      return;
+    }
+  }
+
+
+  /* =====================================
+     APPROACH
+  ===================================== */
+
+  if(d>2.2){
+
+    const speed =
+      boss.enraged
+        ? 2.4
+        : boss.mutated
+          ? 2.15
+          : 1.55;
+
+    boss.x+=
+      boss.facing*
+      speed*
+      dt;
+
+    boss.x=clamp(boss.x,-6,6);
+
+    if(
+      Math.random()<
+      (boss.mutated?.18:.10)
+    ){
+
       addSpeedLines(
         screenX(boss.x),
-        screenY(boss.y+.8)
+        screenY(.9)
       );
     }
 
     return;
   }
 
-  boss.facing =
-    player.x >= boss.x ? 1 : -1;
+
+  /* =====================================
+     DECISION
+  ===================================== */
 
   if(
     !boss.action &&
-    Math.random() < .018
+    boss.cooldown<=0
   ){
 
-    boss.action = "punch";
-    boss.actionTime = .3;
-
-    setTimeout(()=>{
-
-      if(
-        !gameOver &&
-        distance() < 1.95
-      ){
-
-        const damage =
-          boss.mutated ? 18 : 9;
-
-        hitPlayer(
-          damage,
-          boss.facing*.38
-        );
-
-        say("☠️ BOSS TẤN CÔNG!");
-      }
-
-    },100);
+    chooseBossAttack(d);
   }
 
-  if(boss.rage >= 100 && !boss.mutated){
 
-    boss.rage = 0;
-    boss.mutated = true;
+  /* =====================================
+     RAGE / MUTATION
+  ===================================== */
+
+  if(
+    boss.rage>=100 &&
+    !boss.mutated
+  ){
+
+    boss.rage=0;
+
+    boss.mutated=true;
+
+    boss.cooldown=.25;
 
     burst(
       screenX(boss.x),
-      screenY(boss.y+1.5),
-      35,
+      screenY(1.5),
+      38,
       "#ff5268",
-      "#82152c"
+      "#80152e"
     );
 
     say("☠️ BOSS ĐÃ BIẾN DỊ!");
 
     setTimeout(()=>{
 
-      boss.mutated = false;
+      boss.mutated=false;
+
+      say("Boss trở lại bình thường!");
 
     },8000);
   }
@@ -941,141 +1024,515 @@ function bossAI(dt){
 
 
 /* =========================================================
-   UPDATE GAME
+   BOSS DECISION
 ========================================================= */
 
-function update(dt){
+function chooseBossAttack(d){
 
-  if(gameOver)return;
+  const roll=Math.random();
 
-  if(hitStop > 0){
-    hitStop -= dt*1000;
+  /*
+     Khoảng gần:
+     combo / heavy / guard bait
+  */
+
+  if(d<=1.65){
+
+    if(roll<.42){
+
+      bossCombo();
+
+    }else if(roll<.68){
+
+      bossHeavy();
+
+    }else{
+
+      bossSideStep();
+    }
+
     return;
   }
 
-  /* movement */
 
-  if(moveDirection !== 0){
+  /*
+     Khoảng vừa:
+     lao tới hoặc chờ
+  */
 
-    player.x +=
-      moveDirection * 3.8 * dt;
+  if(d<=2.25){
 
-    player.x =
+    if(roll<.45){
+
+      bossLunge();
+
+    }else if(roll<.70){
+
+      bossCombo();
+
+    }else{
+
+      bossWait();
+    }
+
+    return;
+  }
+
+
+  bossLunge();
+}
+
+
+/* =========================================================
+   BOSS WAIT
+========================================================= */
+
+function bossWait(){
+
+  boss.state="wait";
+  boss.stateTime=.35;
+
+  boss.cooldown=
+    boss.enraged ? .25:.45;
+}
+
+
+/* =========================================================
+   BOSS GUARD
+========================================================= */
+
+function bossGuard(){
+
+  if(boss.action)return;
+
+  boss.action="guard";
+  boss.actionTime=.38;
+
+  boss.state="guard";
+
+  say("🛡️ BOSS ĐỠ ĐÒN!");
+
+  boss.cooldown=
+    boss.enraged ? .3:.55;
+
+  setTimeout(()=>{
+
+    if(
+      !gameOver &&
+      distance()<=2.1 &&
+      player.action
+    ){
+
+      /*
+        Guard chỉ giảm sát thương
+        nếu đòn thực sự chạm
+      */
+
+      player.action="";
+
+      say("☠️ Boss phản đòn!");
+
+      setTimeout(()=>{
+        bossCounter();
+      },90);
+    }
+
+  },160);
+}
+
+
+/* =========================================================
+   BOSS DODGE
+========================================================= */
+
+function bossDodge(){
+
+  boss.action="dodge";
+  boss.actionTime=.28;
+
+  boss.dodgeCooldown=
+    boss.mutated ? 1.0:1.8;
+
+  const side=
+    player.x>=boss.x ? -1:1;
+
+  boss.x+=side*(boss.mutated?1.15:.8);
+
+  boss.x=clamp(boss.x,-6,6);
+
+  say("💨 BOSS NÉ!");
+
+  addSpeedLines(
+    screenX(boss.x),
+    screenY(1)
+  );
+
+  boss.cooldown=.18;
+}
+
+
+/* =========================================================
+   BOSS SIDE STEP
+========================================================= */
+
+function bossSideStep(){
+
+  boss.action="dodge";
+  boss.actionTime=.25;
+
+  const side=
+    Math.random()<.5 ? -1:1;
+
+  boss.x+=side*.7;
+
+  boss.x=clamp(boss.x,-6,6);
+
+  boss.dodgeCooldown=
+    boss.mutated?0.8:1.5;
+
+  boss.cooldown=.3;
+}
+
+
+/* =========================================================
+   BOSS LUNGE
+========================================================= */
+
+function bossLunge(){
+
+  if(boss.action)return;
+
+  boss.action="lunge";
+  boss.actionTime=.34;
+
+  boss.cooldown=
+    boss.enraged ? .42 :
+    boss.mutated ? .48 :
+    .75;
+
+  const dir=
+    player.x>=boss.x ? 1:-1;
+
+  boss.facing=dir;
+
+  boss.x+=
+    dir*
+    (boss.mutated?1.0:.7);
+
+  say("☠️ BOSS LAO TỚI!");
+
+  setTimeout(()=>{
+
+    if(
+      !gameOver &&
+      distance()<=1.75
+    ){
+
+      const damage=
+        boss.mutated
+          ? 15
+          : boss.enraged
+            ? 12
+            : 8;
+
+      hitPlayer(
+        damage,
+        dir*.45
+      );
+    }
+
+  },110);
+}
+
+
+/* =========================================================
+   BOSS COMBO
+========================================================= */
+
+function bossCombo(){
+
+  if(boss.action)return;
+
+  boss.action="combo";
+
+  boss.comboStep=0;
+
+  const total=
+    boss.mutated ? 3 :
+    boss.enraged ? 3 :
+    2;
+
+  boss.cooldown=
+    boss.enraged ? .55 :
+    boss.mutated ? .65 :
+    .9;
+
+  say("☠️ BOSS COMBO!");
+
+  for(let i=0;i<total;i++){
+
+    setTimeout(()=>{
+
+      if(
+        gameOver ||
+        distance()>2.0
+      )return;
+
+      boss.comboStep=i+1;
+
+      const damage=
+        boss.mutated
+          ? (i===total-1?12:6)
+          : (i===total-1?9:5);
+
+      hitPlayer(
+        damage,
+        boss.facing*.18
+      );
+
+    },100+i*155);
+  }
+
+  setTimeout(()=>{
+
+    boss.action="";
+
+  },100+total*155+120);
+}
+
+
+/* =========================================================
+   BOSS HEAVY ATTACK
+========================================================= */
+
+function bossHeavy(){
+
+  if(boss.action)return;
+
+  boss.action="heavy";
+  boss.actionTime=.55;
+
+  boss.cooldown=
+    boss.enraged ? .7:.95;
+
+  say("💥 BOSS PHÁ ĐÒN!");
+
+  setTimeout(()=>{
+
+    if(
+      !gameOver &&
+      distance()<=2.0
+    ){
+
+      hitPlayer(
+        boss.mutated?22:15,
+        boss.facing*.7
+      );
+
+      bossRageFx();
+    }
+
+  },210);
+
+  setTimeout(()=>{
+
+    boss.action="";
+
+  },550);
+}
+
+
+/* =========================================================
+   BOSS COUNTER
+========================================================= */
+
+function bossCounter(){
+
+  if(gameOver)return;
+
+  boss.action="counter";
+  boss.actionTime=.35;
+
+  boss.cooldown=.6;
+
+  if(distance()<=2.0){
+
+    hitPlayer(
+      boss.mutated?17:11,
+      boss.facing*.4
+    );
+
+    say("⚡ BOSS PHẢN CÔNG!");
+  }
+
+  setTimeout(()=>{
+
+    boss.action="";
+
+  },350);
+}
+
+
+function bossRageFx(){
+
+  burst(
+    screenX(boss.x),
+    screenY(1.2),
+    14,
+    "#ff7b39",
+    "#ff2e52"
+  );
+}
+
+
+/* =========================================================
+   PLAYER MOVEMENT
+========================================================= */
+
+function updatePlayer(dt){
+
+  if(gameOver)return;
+
+  if(moveDirection!==0){
+
+    player.x+=
+      moveDirection*
+      3.8*
+      dt;
+
+    player.x=
       clamp(player.x,-6,6);
 
-    player.facing =
+    player.facing=
       moveDirection;
 
     if(!player.action){
 
       addSpeedLines(
         screenX(player.x),
-        screenY(player.y+.8)
+        screenY(.8)
       );
     }
   }
 
-  /* jump */
 
   if(player.jump){
 
-    player.y += player.vy * dt;
+    player.y+=player.vy*dt;
+    player.vy-=18*dt;
 
-    player.vy -= 18 * dt;
+    if(player.y<=0){
 
-    if(player.y <= 0){
-
-      player.y = 0;
-      player.vy = 0;
-      player.jump = false;
+      player.y=0;
+      player.vy=0;
+      player.jump=false;
     }
   }
 
-  /* actions */
 
-  if(player.actionTime > 0){
+  if(player.actionTime>0){
 
-    player.actionTime -= dt;
+    player.actionTime-=dt;
 
-    if(player.actionTime <= 0){
-
-      player.action = "";
-    }
+    if(player.actionTime<=0)
+      player.action="";
   }
 
-  if(boss.actionTime > 0){
 
-    boss.actionTime -= dt;
-
-    if(boss.actionTime <= 0){
-
-      boss.action = "";
-    }
-  }
-
-  if(player.hitFlash > 0)
-    player.hitFlash -= dt;
-
-  if(boss.hitFlash > 0)
-    boss.hitFlash -= dt;
-
-  /* boss */
-
-  bossAI(dt);
-
-  /* particles */
-
-  for(let i=particles.length-1;i>=0;i--){
-
-    const p = particles[i];
-
-    p.x += p.vx*dt;
-    p.y += p.vy*dt;
-    p.vy -= 8*dt;
-    p.life -= dt;
-
-    if(p.life <= 0)
-      particles.splice(i,1);
-  }
-
-  /* speed */
-
-  for(let i=speedLines.length-1;i>=0;i--){
-
-    const s = speedLines[i];
-
-    s.x += s.vx*dt;
-    s.life -= dt;
-
-    if(s.life <= 0)
-      speedLines.splice(i,1);
-  }
-
-  shake *= .86;
+  if(player.hitFlash>0)
+    player.hitFlash-=dt;
 }
 
 
 /* =========================================================
-   CAMERA / WORLD
+   BOSS ANIMATION TIMER
+========================================================= */
+
+function updateBossTimers(dt){
+
+  if(boss.actionTime>0){
+
+    boss.actionTime-=dt;
+
+    if(boss.actionTime<=0){
+
+      if(
+        boss.action!=="combo" &&
+        boss.action!=="guard"
+      ){
+
+        boss.action="";
+      }
+    }
+  }
+
+  if(boss.stateTime>0)
+    boss.stateTime-=dt;
+
+  if(boss.hitFlash>0)
+    boss.hitFlash-=dt;
+}
+
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+function updateParticles(dt){
+
+  for(
+    let i=particles.length-1;
+    i>=0;
+    i--
+  ){
+
+    const p=particles[i];
+
+    p.x+=p.vx*dt;
+    p.y+=p.vy*dt;
+
+    p.vy-=8*dt;
+    p.life-=dt;
+
+    if(p.life<=0)
+      particles.splice(i,1);
+  }
+
+
+  for(
+    let i=speedLines.length-1;
+    i>=0;
+    i--
+  ){
+
+    const s=speedLines[i];
+
+    s.x+=s.vx*dt;
+    s.life-=dt;
+
+    if(s.life<=0)
+      speedLines.splice(i,1);
+  }
+
+
+  shake*=.86;
+}
+
+
+/* =========================================================
+   WORLD
 ========================================================= */
 
 function getCamera(){
 
-  const middle =
-    (player.x + boss.x) / 2;
-
-  return middle;
+  return (player.x+boss.x)/2;
 }
 
 function worldToScreen(x){
 
-  const cam =
-    getCamera();
+  const cam=getCamera();
 
-  return (
-    W*.5 +
-    (x-cam)*W*.105
-  );
+  return W*.5+(x-cam)*W*.105;
 }
 
 function screenX(x){
@@ -1084,61 +1541,56 @@ function screenX(x){
 
 function screenY(y){
 
-  const ground =
-    H*.70;
-
-  return ground - y*H*.14;
+  return H*.70-y*H*.14;
 }
 
 
 /* =========================================================
-   DRAW BACKGROUND
+   BACKGROUND
 ========================================================= */
 
 function drawBackground(){
 
-  const sky =
+  const sky=
     ctx.createLinearGradient(
       0,0,0,H
     );
 
-  sky.addColorStop(0,"#080b18");
-  sky.addColorStop(.5,"#171338");
+  sky.addColorStop(0,"#070916");
+  sky.addColorStop(.5,"#18143a");
   sky.addColorStop(1,"#05060d");
 
-  ctx.fillStyle = sky;
+  ctx.fillStyle=sky;
   ctx.fillRect(0,0,W,H);
 
 
-  /* moon glow */
-
-  const moon =
+  const glow=
     ctx.createRadialGradient(
-      W*.5,H*.30,10,
-      W*.5,H*.30,230
+      W*.5,H*.27,10,
+      W*.5,H*.27,260
     );
 
-  moon.addColorStop(0,"rgba(126,65,255,.22)");
-  moon.addColorStop(1,"rgba(126,65,255,0)");
+  glow.addColorStop(
+    0,
+    "rgba(126,65,255,.22)"
+  );
 
-  ctx.fillStyle = moon;
+  glow.addColorStop(
+    1,
+    "rgba(126,65,255,0)"
+  );
+
+  ctx.fillStyle=glow;
   ctx.fillRect(0,0,W,H);
 
 
-  /* city silhouettes */
-
-  ctx.fillStyle = "#101125";
+  ctx.fillStyle="#101124";
 
   for(let i=0;i<16;i++){
 
-    const bw =
-      45 + (i%4)*18;
-
-    const bh =
-      70 + (i%5)*24;
-
-    const x =
-      i*bw-20;
+    const bw=45+(i%4)*18;
+    const bh=70+(i%5)*24;
+    const x=i*bw-20;
 
     ctx.fillRect(
       x,
@@ -1149,40 +1601,27 @@ function drawBackground(){
   }
 
 
-  /* lights */
-
-  ctx.fillStyle = "rgba(120,145,255,.18)";
+  ctx.fillStyle="rgba(120,145,255,.18)";
 
   for(let i=0;i<30;i++){
 
-    const x =
-      (i*83)%W;
+    const x=(i*83)%W;
+    const y=H*.35+(i%6)*24;
 
-    const y =
-      H*.35 + (i%6)*24;
-
-    ctx.fillRect(
-      x,
-      y,
-      5,
-      8
-    );
+    ctx.fillRect(x,y,5,8);
   }
 }
 
 
 /* =========================================================
-   DRAW ARENA
+   ARENA
 ========================================================= */
 
 function drawArena(){
 
-  const groundY =
-    H*.70;
+  const groundY=H*.70;
 
-  /* back platform */
-
-  ctx.fillStyle = "#252638";
+  ctx.fillStyle="#252638";
 
   ctx.fillRect(
     0,
@@ -1192,9 +1631,7 @@ function drawArena(){
   );
 
 
-  /* lines */
-
-  ctx.strokeStyle =
+  ctx.strokeStyle=
     "rgba(120,120,160,.12)";
 
   ctx.lineWidth=1;
@@ -1204,14 +1641,17 @@ function drawArena(){
     ctx.beginPath();
 
     ctx.moveTo(x,groundY);
-
     ctx.lineTo(x+15,H);
 
     ctx.stroke();
   }
 
 
-  for(let y=groundY+30;y<H;y+=38){
+  for(
+    let y=groundY+30;
+    y<H;
+    y+=38
+  ){
 
     ctx.beginPath();
 
@@ -1222,9 +1662,7 @@ function drawArena(){
   }
 
 
-  /* floor edge */
-
-  ctx.fillStyle = "#66677b";
+  ctx.fillStyle="#66677b";
 
   ctx.fillRect(
     0,
@@ -1234,9 +1672,7 @@ function drawArena(){
   );
 
 
-  /* center glow */
-
-  const g =
+  const g=
     ctx.createRadialGradient(
       W*.5,
       groundY,
@@ -1246,10 +1682,17 @@ function drawArena(){
       W*.25
     );
 
-  g.addColorStop(0,"rgba(150,80,255,.16)");
-  g.addColorStop(1,"rgba(150,80,255,0)");
+  g.addColorStop(
+    0,
+    "rgba(150,80,255,.16)"
+  );
 
-  ctx.fillStyle = g;
+  g.addColorStop(
+    1,
+    "rgba(150,80,255,0)"
+  );
+
+  ctx.fillStyle=g;
 
   ctx.fillRect(
     0,
@@ -1261,21 +1704,14 @@ function drawArena(){
 
 
 /* =========================================================
-   3D-STYLE CHARACTER DRAW
+   CHARACTER
 ========================================================= */
 
 function drawCharacter(ch,isBoss){
 
-  const x =
-    worldToScreen(ch.x);
-
-  const ground =
-    H*.70;
-
-  const y =
-    ground -
-    ch.y*H*.14;
-
+  const x=worldToScreen(ch.x);
+  const ground=H*.70;
+  const y=ground-ch.y*H*.14;
 
   ctx.save();
 
@@ -1300,23 +1736,21 @@ function drawCharacter(ch,isBoss){
   ctx.globalAlpha=1;
 
 
-  /* mutation aura */
+  /* aura */
 
   if(ch.mutated){
 
-    const aura =
+    const aura=
       ctx.createRadialGradient(
-        x,y-52,
-        8,
-        x,y-52,
-        75
+        x,y-52,8,
+        x,y-52,75
       );
 
     aura.addColorStop(
       0,
       isBoss
-        ? "rgba(255,40,75,.25)"
-        : "rgba(173,60,255,.32)"
+        ? "rgba(255,40,75,.28)"
+        : "rgba(173,60,255,.34)"
     );
 
     aura.addColorStop(
@@ -1329,23 +1763,18 @@ function drawCharacter(ch,isBoss){
     ctx.beginPath();
 
     ctx.arc(
-      x,y-52,
-      75,
-      0,
-      Math.PI*2
+      x,y-52,75,
+      0,Math.PI*2
     );
 
     ctx.fill();
   }
 
 
-  /* body scale feeling */
-
   let bodyW=42;
   let bodyH=65;
 
   if(ch.mutated){
-
     bodyW=48;
     bodyH=72;
   }
@@ -1354,67 +1783,53 @@ function drawCharacter(ch,isBoss){
   /* legs */
 
   drawLimb(
-    x-13,
-    y-8,
-    x-17,
-    y+34,
-    isBoss ? "#26202a":"#161b2c",
+    x-13,y-8,
+    x-17,y+34,
+    isBoss?"#28212b":"#161b2c",
     12
   );
 
   drawLimb(
-    x+13,
-    y-8,
-    x+17,
-    y+34,
-    isBoss ? "#26202a":"#161b2c",
+    x+13,y-8,
+    x+17,y+34,
+    isBoss?"#28212b":"#161b2c",
     12
   );
 
 
-  /* boots */
-
   drawBoot(
-    x-20,
-    y+31,
-    isBoss
-      ? "#4d1822"
-      : "#1c3255"
+    x-20,y+31,
+    isBoss?"#4d1822":"#1c3255"
   );
 
   drawBoot(
-    x+20,
-    y+31,
-    isBoss
-      ? "#4d1822"
-      : "#1c3255"
+    x+20,y+31,
+    isBoss?"#4d1822":"#1c3255"
   );
 
 
   /* torso */
 
-  const torsoGrad =
+  const torso=
     ctx.createLinearGradient(
-      x-bodyW/2,
-      y-76,
-      x+bodyW/2,
-      y-10
+      x-bodyW/2,y-76,
+      x+bodyW/2,y-10
     );
 
   if(isBoss){
 
-    torsoGrad.addColorStop(0,"#8f2138");
-    torsoGrad.addColorStop(.5,"#c7354d");
-    torsoGrad.addColorStop(1,"#571827");
+    torso.addColorStop(0,"#8f2138");
+    torso.addColorStop(.5,"#c7354d");
+    torso.addColorStop(1,"#571827");
 
   }else{
 
-    torsoGrad.addColorStop(0,"#141b2d");
-    torsoGrad.addColorStop(.5,"#243756");
-    torsoGrad.addColorStop(1,"#0a101d");
+    torso.addColorStop(0,"#141b2d");
+    torso.addColorStop(.5,"#243756");
+    torso.addColorStop(1,"#0a101d");
   }
 
-  ctx.fillStyle=torsoGrad;
+  ctx.fillStyle=torso;
 
   roundRect(
     ctx,
@@ -1428,21 +1843,21 @@ function drawCharacter(ch,isBoss){
   ctx.fill();
 
 
-  /* chest */
+  /* chest symbol */
 
   if(!isBoss){
 
     ctx.save();
 
-    ctx.fillStyle =
+    ctx.fillStyle=
       ch.mutated
         ? "#d76cff"
         : "#ffd227";
 
-    ctx.shadowBlur =
-      ch.mutated ? 18 : 8;
+    ctx.shadowBlur=
+      ch.mutated ? 18:8;
 
-    ctx.shadowColor =
+    ctx.shadowColor=
       ch.mutated
         ? "#ad48ff"
         : "#ffd227";
@@ -1463,60 +1878,61 @@ function drawCharacter(ch,isBoss){
   }
 
 
-  /* arms */
+  /* attack pose */
 
   let punchOffset=0;
 
   if(ch.action==="punch")
-    punchOffset = 27;
+    punchOffset=27;
 
-  if(ch.action==="break")
-    punchOffset = 34;
+  if(ch.action==="heavy" ||
+     ch.action==="break")
+    punchOffset=35;
 
   if(ch.action==="dash")
-    punchOffset = 18;
+    punchOffset=18;
 
+  if(ch.action==="counter")
+    punchOffset=30;
+
+
+  /* arms */
 
   drawLimb(
-    x-24,
-    y-70,
-    x-40,
-    y-34,
-    isBoss ? "#d08f69":"#e7ac7c",
+    x-24,y-70,
+    x-40,y-34,
+    isBoss?"#d08f69":"#e7ac7c",
     13
   );
 
   drawLimb(
-    x+24,
-    y-70,
+    x+24,y-70,
     x+40+(punchOffset*ch.facing),
     y-36,
-    isBoss ? "#d08f69":"#e7ac7c",
+    isBoss?"#d08f69":"#e7ac7c",
     13
   );
 
-
-  /* gloves */
 
   drawSphere(
     x-42,
     y-31,
     11,
-    isBoss ? "#501b27":"#23385d"
+    isBoss?"#501b27":"#23385d"
   );
 
   drawSphere(
     x+42+(punchOffset*ch.facing),
     y-32,
     11,
-    isBoss ? "#501b27":"#23385d"
+    isBoss?"#501b27":"#23385d"
   );
 
 
   /* neck */
 
-  ctx.fillStyle =
-    isBoss ? "#bb815f":"#d9996c";
+  ctx.fillStyle=
+    isBoss?"#bb815f":"#d9996c";
 
   ctx.fillRect(
     x-8,
@@ -1528,27 +1944,23 @@ function drawCharacter(ch,isBoss){
 
   /* head */
 
-  const headGrad =
+  const head=
     ctx.createRadialGradient(
-      x-8,
-      y-112,
-      5,
-      x,
-      y-104,
-      30
+      x-8,y-112,5,
+      x,y-104,30
     );
 
-  headGrad.addColorStop(
+  head.addColorStop(
     0,
-    isBoss ? "#dcab86":"#ffd0a5"
+    isBoss?"#dcab86":"#ffd0a5"
   );
 
-  headGrad.addColorStop(
+  head.addColorStop(
     1,
-    isBoss ? "#8f5c46":"#c47f5f"
+    isBoss?"#8f5c46":"#c47f5f"
   );
 
-  ctx.fillStyle=headGrad;
+  ctx.fillStyle=head;
 
   ctx.beginPath();
 
@@ -1567,10 +1979,8 @@ function drawCharacter(ch,isBoss){
 
   if(!isBoss){
 
-    ctx.fillStyle =
-      ch.mutated
-        ? "#c35dff"
-        : "#141927";
+    ctx.fillStyle=
+      ch.mutated?"#c35dff":"#141927";
 
     ctx.beginPath();
 
@@ -1587,12 +1997,13 @@ function drawCharacter(ch,isBoss){
 
   }else{
 
-    ctx.fillStyle =
-      ch.mutated ? "#7a091e":"#4d1725";
+    ctx.fillStyle=
+      ch.mutated?"#7a091e":"#4d1725";
 
     ctx.beginPath();
 
     ctx.moveTo(x-27,y-111);
+
     ctx.quadraticCurveTo(
       x-20,y-140,
       x+4,y-132
@@ -1609,9 +2020,12 @@ function drawCharacter(ch,isBoss){
   }
 
 
-  /* face */
+  /* eyes */
 
-  ctx.fillStyle="#111";
+  ctx.fillStyle=
+    ch.mutated
+      ? "#fff"
+      : "#111";
 
   ctx.fillRect(
     x-15,
@@ -1628,11 +2042,55 @@ function drawCharacter(ch,isBoss){
   );
 
 
+  /* dodge aura */
+
+  if(ch.action==="dodge"){
+
+    ctx.strokeStyle=
+      isBoss
+        ? "rgba(255,65,95,.65)"
+        : "rgba(130,80,255,.65)";
+
+    ctx.lineWidth=4;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,y-70,
+      55,
+      0,
+      Math.PI*2
+    );
+
+    ctx.stroke();
+  }
+
+
+  /* guard */
+
+  if(ch.action==="guard"){
+
+    ctx.strokeStyle="#62b7ff";
+    ctx.lineWidth=5;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,y-67,
+      50,
+      Math.PI*1.05,
+      Math.PI*1.95
+    );
+
+    ctx.stroke();
+  }
+
+
   /* hit flash */
 
-  if(ch.hitFlash > 0){
+  if(ch.hitFlash>0){
 
-    ctx.globalAlpha =
+    ctx.globalAlpha=
       clamp(ch.hitFlash/.18,0,1);
 
     ctx.fillStyle="#fff";
@@ -1653,14 +2111,17 @@ function drawCharacter(ch,isBoss){
   }
 
 
-  /* speed effect */
+  /* speed trails */
 
-  if(ch.action==="dash" ||
-     ch.action==="after"){
+  if(
+    ch.action==="dash" ||
+    ch.action==="after" ||
+    ch.action==="lunge"
+  ){
 
     for(let i=0;i<5;i++){
 
-      ctx.strokeStyle =
+      ctx.strokeStyle=
         isBoss
           ? "rgba(255,60,90,.35)"
           : "rgba(119,79,255,.45)";
@@ -1669,7 +2130,7 @@ function drawCharacter(ch,isBoss){
 
       ctx.beginPath();
 
-      const sx =
+      const sx=
         x-ch.facing*(30+i*15);
 
       ctx.moveTo(
@@ -1692,15 +2153,16 @@ function drawCharacter(ch,isBoss){
 
 
 /* =========================================================
-   SHAPE HELPERS
+   HELPERS
 ========================================================= */
 
-function drawLimb(x1,y1,x2,y2,color,width){
+function drawLimb(
+  x1,y1,x2,y2,color,width
+){
 
   const dx=x2-x1;
   const dy=y2-y1;
   const len=Math.hypot(dx,dy);
-
   const ang=Math.atan2(dy,dx);
 
   ctx.save();
@@ -1714,9 +2176,20 @@ function drawLimb(x1,y1,x2,y2,color,width){
       0,width/2
     );
 
-  grad.addColorStop(0,"#ffffff55");
-  grad.addColorStop(.25,color);
-  grad.addColorStop(1,"#00000055");
+  grad.addColorStop(
+    0,
+    "#ffffff55"
+  );
+
+  grad.addColorStop(
+    .25,
+    color
+  );
+
+  grad.addColorStop(
+    1,
+    "#00000055"
+  );
 
   ctx.fillStyle=grad;
 
@@ -1737,17 +2210,17 @@ function drawLimb(x1,y1,x2,y2,color,width){
 
 function drawBoot(x,y,color){
 
-  const g=
+  const grad=
     ctx.createLinearGradient(
       x-12,y-10,
       x+14,y+8
     );
 
-  g.addColorStop(0,"#ffffff33");
-  g.addColorStop(.35,color);
-  g.addColorStop(1,"#00000088");
+  grad.addColorStop(0,"#ffffff33");
+  grad.addColorStop(.35,color);
+  grad.addColorStop(1,"#00000088");
 
-  ctx.fillStyle=g;
+  ctx.fillStyle=grad;
 
   roundRect(
     ctx,
@@ -1764,7 +2237,7 @@ function drawBoot(x,y,color){
 
 function drawSphere(x,y,r,color){
 
-  const g=
+  const grad=
     ctx.createRadialGradient(
       x-r*.4,
       y-r*.5,
@@ -1774,27 +2247,26 @@ function drawSphere(x,y,r,color){
       r
     );
 
-  g.addColorStop(0,"#ffffff77");
-  g.addColorStop(.25,color);
-  g.addColorStop(1,"#00000099");
+  grad.addColorStop(0,"#ffffff77");
+  grad.addColorStop(.25,color);
+  grad.addColorStop(1,"#00000099");
 
-  ctx.fillStyle=g;
+  ctx.fillStyle=grad;
 
   ctx.beginPath();
 
   ctx.arc(
-    x,
-    y,
-    r,
-    0,
-    Math.PI*2
+    x,y,r,
+    0,Math.PI*2
   );
 
   ctx.fill();
 }
 
 
-function roundRect(ctx,x,y,w,h,r){
+function roundRect(
+  ctx,x,y,w,h,r
+){
 
   r=Math.min(r,w/2,h/2);
 
@@ -1831,14 +2303,14 @@ function roundRect(ctx,x,y,w,h,r){
 
 
 /* =========================================================
-   DRAW EFFECTS
+   EFFECT DRAW
 ========================================================= */
 
-function drawParticles(){
+function drawEffects(){
 
   for(const p of particles){
 
-    ctx.globalAlpha =
+    ctx.globalAlpha=
       clamp(p.life/p.max,0,1);
 
     ctx.fillStyle=p.c;
@@ -1861,7 +2333,7 @@ function drawParticles(){
 
   for(const s of speedLines){
 
-    ctx.globalAlpha =
+    ctx.globalAlpha=
       clamp(s.life/.25,0,1);
 
     ctx.strokeStyle="#a85cff";
@@ -1894,7 +2366,7 @@ function render(){
 
   ctx.save();
 
-  if(shake > .2){
+  if(shake>.2){
 
     ctx.translate(
       rand(-shake,shake),
@@ -1905,9 +2377,7 @@ function render(){
   drawBackground();
   drawArena();
 
-  /* fighters order by x */
-
-  if(player.x < boss.x){
+  if(player.x<boss.x){
 
     drawCharacter(
       player,
@@ -1932,7 +2402,7 @@ function render(){
     );
   }
 
-  drawParticles();
+  drawEffects();
 
   ctx.restore();
 }
@@ -1944,7 +2414,7 @@ function render(){
 
 function loop(now){
 
-  const dt =
+  const dt=
     Math.min(
       .033,
       (now-last)/1000
@@ -1952,7 +2422,18 @@ function loop(now){
 
   last=now;
 
-  update(dt);
+  if(hitStop>0){
+
+    hitStop-=dt*1000;
+
+  }else{
+
+    updatePlayer(dt);
+    updateBossTimers(dt);
+    bossAI(dt);
+    updateParticles(dt);
+  }
+
   render();
 
   requestAnimationFrame(loop);
@@ -1971,15 +2452,13 @@ function win(){
 
   say("🏆 KẺ TỐC ĐỘ CHIẾN THẮNG!");
 
-  document.getElementById(
-    "result"
-  ).textContent =
-    "🏆 CHIẾN THẮNG!";
+  document.getElementById("result")
+    .textContent="🏆 CHIẾN THẮNG!";
 
-  document.getElementById(
-    "resultScreen"
-  ).style.display="flex";
+  document.getElementById("resultScreen")
+    .style.display="flex";
 }
+
 
 function lose(){
 
@@ -1987,14 +2466,11 @@ function lose(){
 
   say("💀 Bạn đã bị đánh bại!");
 
-  document.getElementById(
-    "result"
-  ).textContent =
-    "💀 THẤT BẠI";
+  document.getElementById("result")
+    .textContent="💀 THẤT BẠI";
 
-  document.getElementById(
-    "resultScreen"
-  ).style.display="flex";
+  document.getElementById("resultScreen")
+    .style.display="flex";
 }
 
 
@@ -2016,6 +2492,7 @@ function restartGame(){
   player.jump=false;
   player.hitFlash=0;
 
+
   boss.x=2.8;
   boss.y=0;
   boss.hp=100;
@@ -2026,13 +2503,21 @@ function restartGame(){
   boss.mutated=false;
   boss.hitFlash=0;
 
+  boss.state="approach";
+  boss.stateTime=0;
+  boss.cooldown=0;
+  boss.dodgeCooldown=0;
+  boss.comboStep=0;
+  boss.enraged=false;
+
+
   particles=[];
   speedLines=[];
 
+  moveDirection=0;
   gameOver=false;
   hitStop=0;
   shake=0;
-  moveDirection=0;
 
   document.getElementById(
     "resultScreen"
@@ -2078,6 +2563,7 @@ window.addEventListener(
   }
 );
 
+
 window.addEventListener(
   "keyup",
   e=>{
@@ -2098,9 +2584,10 @@ window.addEventListener(
 ========================================================= */
 
 updateUI();
+
 say("⚡ Kẻ Tốc Độ bước vào đấu trường!");
 
 </script>
 
 </body>
-  </html>
+                                    </html>

@@ -2775,3 +2775,45 @@ window.addEventListener(
 
 </body>
   </html>
+function gameLoop(timestamp) {
+    // 1. Tính thời gian giữa 2 frame
+    const deltaTime = Math.min(
+        (timestamp - lastTime) / 1000,
+        0.033
+    );
+    lastTime = timestamp;
+
+    if (!gameOver) {
+
+        // 2. Nhận input của người chơi
+        processPlayerInput(deltaTime);
+
+        // 3. Cập nhật vật lý
+        updatePlayerPhysics(deltaTime);
+        updateBossPhysics(deltaTime);
+
+        // 4. Xử lý tương tác người chơi ↔ boss
+        handleCombatInteractions(deltaTime);
+
+        // 5. Cập nhật skill, hồi chiêu và thanh Biến Dị
+        updateSkills(deltaTime);
+        updateMutation(deltaTime);
+
+        // 6. Cập nhật hiệu ứng / animation
+        updateAnimations(deltaTime);
+        updateParticles(deltaTime);
+
+        // 7. Cập nhật giao diện
+        updateUI();
+    }
+
+    // 8. Vẽ frame hiện tại
+    renderGame();
+
+    // 9. Chạy vòng lặp tiếp theo
+    requestAnimationFrame(gameLoop);
+}
+
+// Khởi động game loop
+let lastTime = performance.now();
+requestAnimationFrame(gameLoop);

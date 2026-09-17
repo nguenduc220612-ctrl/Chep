@@ -3,764 +3,401 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0,user-scalable=no">
 
 <title>Đấu Trường Biến Dị</title>
 
 <style>
 *{
-  box-sizing:border-box;
-  user-select:none;
-  -webkit-user-select:none;
-  -webkit-tap-highlight-color:transparent;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#050611;
-  font-family:Arial,sans-serif;
-}
-
-body{
-  touch-action:none;
-}
-
-button{
-  border:0;
-  color:white;
-  font-weight:900;
-  cursor:pointer;
-  touch-action:manipulation;
-}
-
-/* =========================
-   NỀN CHUNG
-========================= */
-
-.screen{
-  position:fixed;
-  inset:0;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    radial-gradient(circle at 50% 35%,
-      rgba(115,45,210,.35),
-      transparent 34%),
-    linear-gradient(#070916,#05060e);
-}
-
-.screen::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(
-      90deg,
-      transparent 49.5%,
-      rgba(150,100,255,.08) 50%,
-      transparent 50.5%
-    );
-  background-size:80px 80px;
-  transform:perspective(500px) rotateX(55deg)
-           translateY(35%);
-  opacity:.5;
-}
-
-/* =========================
-   MỞ GAME
-========================= */
-
-#intro{
-  z-index:100;
-  flex-direction:column;
-  animation:introFade 2.5s forwards;
-}
-
-.logo{
-  position:relative;
-  z-index:2;
-  text-align:center;
-  color:white;
-  font-size:clamp(32px,9vw,64px);
-  font-weight:1000;
-  letter-spacing:3px;
-  text-shadow:
-    0 0 8px #7e3cff,
-    0 0 25px #7e3cff,
-    0 5px 15px #000;
-}
-
-.logo span{
-  display:block;
-  color:#ffd52d;
-  font-size:.45em;
-  margin-top:12px;
-  letter-spacing:6px;
-}
-
-.introLightning{
-  position:absolute;
-  font-size:100px;
-  opacity:.08;
-  color:#b25cff;
-  animation:spin 8s linear infinite;
-}
-
-@keyframes introFade{
-  0%{opacity:0}
-  20%{opacity:1}
-  75%{opacity:1}
-  100%{opacity:0;pointer-events:none}
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-/* =========================
-   MENU
-========================= */
-
-#menu{
-  z-index:50;
-  flex-direction:column;
-}
-
-.menuBox{
-  position:relative;
-  z-index:3;
-  width:min(90%,390px);
-  text-align:center;
-}
-
-.menuTitle{
-  color:white;
-  font-size:clamp(29px,8vw,48px);
-  font-weight:1000;
-  letter-spacing:2px;
-  text-shadow:
-    0 0 10px #783cff,
-    0 4px 10px #000;
-  margin-bottom:8px;
-}
-
-.subtitle{
-  color:#b9b4d8;
-  font-size:13px;
-  margin-bottom:28px;
-  letter-spacing:2px;
-}
-
-.menuButton{
-  width:100%;
-  height:62px;
-  margin:7px 0;
-  border-radius:17px;
-  font-size:19px;
-  background:linear-gradient(
-    135deg,
-    #7135c8,
-    #452080
-  );
-  box-shadow:
-    0 5px 0 #21103e,
-    0 0 18px rgba(123,53,220,.25);
-  transition:.15s;
-}
-
-.menuButton:active{
-  transform:translateY(4px);
-  box-shadow:0 1px 0 #21103e;
-}
-
-.playButton{
-  background:linear-gradient(
-    135deg,
-    #8d42e8,
-    #5422a8
-  );
-  font-size:22px;
-}
-
-.menuSmall{
-  background:#22253a;
-  font-size:15px;
-}
-
-.version{
-  margin-top:22px;
-  color:#666982;
-  font-size:11px;
-}
-
-/* =========================
-   CHỌN NHÂN VẬT
-========================= */
-
-#characters{
-  z-index:40;
-  display:none;
-  flex-direction:column;
-}
-
-.selectTitle{
-  color:white;
-  font-size:28px;
-  font-weight:1000;
-  margin-bottom:20px;
-  text-shadow:0 3px 10px #000;
-}
-
-.characterCard{
-  position:relative;
-  z-index:3;
-  width:min(88%,360px);
-  min-height:300px;
-  padding:22px;
-  border:2px solid #6934ae;
-  border-radius:24px;
-  background:rgba(15,14,32,.88);
-  box-shadow:
-    0 0 35px rgba(108,50,210,.22),
-    inset 0 0 30px rgba(100,50,190,.08);
-  text-align:center;
-}
-
-.charPreview{
-  height:145px;
-  position:relative;
-}
-
-.charHead{
-  position:absolute;
-  left:50%;
-  top:5px;
-  width:60px;
-  height:60px;
-  transform:translateX(-50%);
-  border-radius:50%;
-  background:#f4b17f;
-  box-shadow:0 0 0 5px #161a28;
-}
-
-.charHair{
-  position:absolute;
-  left:50%;
-  top:0;
-  width:66px;
-  height:30px;
-  transform:translateX(-50%);
-  border-radius:35px 35px 10px 10px;
-  background:#101522;
-}
-
-.charBody{
-  position:absolute;
-  left:50%;
-  top:65px;
-  width:76px;
-  height:76px;
-  transform:translateX(-50%);
-  border-radius:18px;
-  background:linear-gradient(
-    #263856,
-    #101725
-  );
-  box-shadow:0 0 25px #5930b8;
-}
-
-.charBody::after{
-  content:"⚡";
-  color:#ffd52a;
-  font-size:38px;
-  position:absolute;
-  left:50%;
-  top:16px;
-  transform:translateX(-50%);
-}
-
-.charName{
-  color:white;
-  font-size:24px;
-  font-weight:1000;
-  margin-top:8px;
-}
-
-.charDesc{
-  color:#aaa8c2;
-  font-size:13px;
-  margin:8px 0 18px;
-}
-
-.selectButton{
-  width:100%;
-  height:52px;
-  border-radius:15px;
-  background:#793bd0;
-  font-size:17px;
-}
-
-.backButton{
-  position:relative;
-  z-index:5;
-  width:min(88%,360px);
-  height:48px;
-  margin-top:12px;
-  border-radius:14px;
-  background:#292c40;
-}
-
-/* =========================
-   GAME
-========================= */
-
-#game{
-  position:fixed;
-  inset:0;
-  display:none;
-  overflow:hidden;
-  background:#070914;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    background:#07101b;
+    font-family:Arial,sans-serif;
+    color:white;
 }
 
 canvas{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
+    display:block;
+    width:100vw;
+    height:100vh;
+    background:#08111e;
 }
 
-#ui{
-  position:absolute;
-  inset:0;
-  z-index:10;
-  pointer-events:none;
+button{
+    border:none;
+    color:white;
+    background:#10283d;
+    border:1px solid #34749d;
+    border-radius:15px;
+    font-weight:bold;
+    touch-action:none;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* MENU */
+
+#menu{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:
+      radial-gradient(circle at 50% 20%,
+      #16466d,#07101b 65%);
+}
+
+.menuBox{
+    width:min(430px,95vw);
+    padding:25px;
+    border-radius:22px;
+    background:rgba(4,12,22,.94);
+    border:1px solid #34749d;
+    text-align:center;
 }
 
 .title{
-  position:absolute;
-  top:7px;
-  left:0;
-  width:100%;
-  text-align:center;
-  color:white;
-  font-size:20px;
-  font-weight:1000;
-  text-shadow:0 3px 8px #000;
+    font-size:32px;
+    font-weight:900;
+    margin-bottom:5px;
 }
 
-.bars{
-  position:absolute;
-  top:41px;
-  left:4%;
-  width:92%;
-  display:flex;
-  gap:14px;
+.subtitle{
+    color:#9edbff;
+    margin-bottom:20px;
 }
 
-.box{
-  width:50%;
+.characters{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
 }
 
-.name{
-  color:white;
-  font-size:12px;
-  font-weight:900;
-  margin-bottom:4px;
-  text-shadow:0 2px 5px #000;
+.character{
+    min-height:135px;
+    padding:10px;
+    background:#0d1d2d;
+}
+
+.character.selected{
+    border:2px solid #58d6ff;
+    background:#12334b;
+}
+
+.icon{
+    font-size:45px;
+    display:block;
+    margin-bottom:8px;
+}
+
+.menuButton{
+    width:100%;
+    height:52px;
+    margin-top:10px;
+    font-size:16px;
+}
+
+/* HUD */
+
+#hud{
+    position:fixed;
+    top:10px;
+    left:10px;
+    right:10px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.hudBox{
+    width:43%;
+}
+
+.hudName{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:4px;
+}
+
+.bar{
+    height:13px;
+    background:#182737;
+    border:1px solid #496b82;
+    border-radius:20px;
+    overflow:hidden;
 }
 
 .hp{
-  height:16px;
-  border:2px solid #666a7c;
-  border-radius:20px;
-  overflow:hidden;
-  background:#222431;
+    width:100%;
+    height:100%;
+    background:#43dc83;
 }
 
-.hp div{
-  height:100%;
-  width:100%;
-  background:linear-gradient(90deg,#a91d2d,#ff4153);
-  transition:width .12s;
+.mutation{
+    height:7px;
+    margin-top:4px;
+    background:#182737;
+    border-radius:20px;
+    overflow:hidden;
 }
 
-.rage{
-  margin-top:4px;
-  height:9px;
-  border:1px solid #65687a;
-  border-radius:20px;
-  overflow:hidden;
-  background:#1e2030;
+.mutationBar{
+    width:0%;
+    height:100%;
+    background:#53d8ff;
 }
 
-.rage div{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#7622d5,#d05cff);
+/* CONTROLS */
+
+#controls{
+    position:fixed;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
 }
 
-#message{
-  position:absolute;
-  top:88px;
-  width:100%;
-  text-align:center;
-  color:white;
-  font-size:14px;
-  font-weight:900;
-  text-shadow:0 2px 7px #000;
+.controlGroup{
+    display:flex;
+    gap:7px;
 }
 
-/* =========================
-   NÚT GAME
-========================= */
-
-.controls{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:8px;
-  height:125px;
-  z-index:20;
-  pointer-events:none;
+.control{
+    width:55px;
+    height:55px;
+    font-size:13px;
 }
 
-.group{
-  position:absolute;
-  bottom:4px;
-  display:flex;
-  gap:7px;
-  pointer-events:auto;
+.attack{
+    width:65px;
+    height:65px;
 }
 
-.left{left:10px}
-.right{right:10px}
-
-.gameBtn{
-  width:54px;
-  height:56px;
-  border-radius:17px;
-  background:#303449;
-  box-shadow:0 5px 0 #11131d;
-  font-size:20px;
+.skill{
+    background:#12364b;
 }
 
-.gameBtn:active{
-  transform:translateY(4px);
-  box-shadow:0 1px 0 #11131d;
+.mutateButton{
+    background:#292c55;
+    border-color:#8175e8;
 }
 
-.jump{background:#2778b6}
-.attack{background:#c52e40}
-.skill{background:#7335c7}
-.power{background:#ac4c20}
-.mutate{background:#8439d6}
-
-.mutate.ready{
-  animation:pulse .6s infinite alternate;
+.cooldown{
+    display:block;
+    font-size:9px;
+    color:#83ddff;
+    margin-top:2px;
 }
 
-@keyframes pulse{
-  from{box-shadow:0 0 5px #8f38dc,0 5px 0 #11131d}
-  to{box-shadow:0 0 24px #d568ff,0 5px 0 #11131d}
-}
-
-/* =========================
-   KẾT QUẢ
-========================= */
-
-#resultScreen{
-  position:absolute;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  background:rgba(0,0,0,.8);
-  z-index:30;
-}
-
-#result{
-  color:white;
-  font-size:35px;
-  font-weight:1000;
-  margin-bottom:20px;
-}
-
-.restart{
-  width:190px;
-  height:55px;
-  border-radius:15px;
-  background:#7837c8;
-  font-size:16px;
-}
-
-@media(max-width:500px){
-
-  .title{
-    font-size:17px;
-  }
-
-  .gameBtn{
-    width:49px;
-    height:53px;
-    font-size:17px;
-  }
+#back{
+    position:fixed;
+    top:10px;
+    left:10px;
+    width:55px;
+    height:45px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     MỞ GAME
-========================= -->
+<canvas id="game"></canvas>
 
-<div id="intro" class="screen">
+<!-- MENU -->
 
-  <div class="introLightning">⚡</div>
+<div id="menu">
 
-  <div class="logo">
-    ĐẤU TRƯỜNG
-    <br>
-    BIẾN DỊ
+<div class="menuBox">
 
-    <span>⚡ MUTATION ARENA ⚡</span>
-  </div>
+<div class="title">
+ĐẤU TRƯỜNG BIẾN DỊ
+</div>
+
+<div class="subtitle">
+Chọn nhân vật
+</div>
+
+<div class="characters">
+
+<button class="character selected"
+        data-character="speed">
+
+<span class="icon">⚡</span>
+
+<b>Kẻ Tốc Độ</b>
+
+<br>
+
+<small>Nhanh • Cận chiến</small>
+
+</button>
+
+
+<button class="character"
+        data-character="core">
+
+<span class="icon">⚙️</span>
+
+<b>Lõi Công Nghệ</b>
+
+<br>
+
+<small>Công nghệ • Drone</small>
+
+</button>
 
 </div>
 
 
-<!-- =========================
-     MENU CHÍNH
-========================= -->
+<button class="menuButton"
+        data-mode="cpu">
+ĐẤU VỚI MÁY
+</button>
 
-<div id="menu" class="screen">
 
-  <div class="menuBox">
+<button class="menuButton"
+        data-mode="pvp">
+ĐẤU VỚI NGƯỜI CHƠI
+</button>
 
-    <div class="menuTitle">
-      ⚡ ĐẤU TRƯỜNG BIẾN DỊ
-    </div>
 
-    <div class="subtitle">
-      BƯỚC VÀO TRẬN CHIẾN
-    </div>
+<button class="menuButton"
+        data-mode="boss">
+BOSS
+</button>
 
-    <button
-      class="menuButton playButton"
-      onclick="openCharacters()">
-      ▶️ CHƠI
-    </button>
+</div>
+</div>
 
-    <button
-      class="menuButton"
-      onclick="openCharacters()">
-      🧬 NHÂN VẬT
-    </button>
 
-    <button
-      class="menuButton menuSmall"
-      onclick="showMessageMenu()">
-      ⚙️ CÀI ĐẶT
-    </button>
+<!-- HUD -->
 
-    <div class="version">
-      BẢN THỬ NGHIỆM 0.1
-    </div>
+<div id="hud" class="hidden">
 
-  </div>
+<div class="hudBox">
+
+<div id="playerName"
+     class="hudName">
+</div>
+
+<div class="bar">
+<div id="playerHP"
+     class="hp">
+</div>
+</div>
+
+<div class="mutation">
+<div id="playerMutation"
+     class="mutationBar">
+</div>
+</div>
 
 </div>
 
 
-<!-- =========================
-     CHỌN NHÂN VẬT
-========================= -->
+<div class="hudBox">
 
-<div id="characters" class="screen">
+<div id="enemyName"
+     class="hudName"
+     style="text-align:right">
+</div>
 
-  <div class="selectTitle">
-    🧬 CHỌN NHÂN VẬT
-  </div>
+<div class="bar">
+<div id="enemyHP"
+     class="hp">
+</div>
+</div>
 
-  <div class="characterCard">
+<div class="mutation">
+<div id="enemyMutation"
+     class="mutationBar">
+</div>
+</div>
 
-    <div class="charPreview">
-
-      <div class="charHair"></div>
-      <div class="charHead"></div>
-      <div class="charBody"></div>
-
-    </div>
-
-    <div class="charName">
-      ⚡ KẺ TỐC ĐỘ
-    </div>
-
-    <div class="charDesc">
-      Chiến binh sở hữu tốc độ cực cao.
-      Khi nội đầy, Kẻ Tốc Độ có thể biến dị
-      trong một khoảng thời gian.
-    </div>
-
-    <button
-      class="selectButton"
-      onclick="startGame()">
-      ⚔️ BẮT ĐẦU TRẬN
-    </button>
-
-  </div>
-
-  <button
-    class="backButton"
-    onclick="backToMenu()">
-    ◀ QUAY LẠI
-  </button>
+</div>
 
 </div>
 
 
-<!-- =========================
-     GAME
-========================= -->
+<button id="back"
+        class="hidden">
+←
+</button>
 
-<div id="game">
 
-<canvas id="canvas"></canvas>
+<!-- CONTROLS -->
 
-<div id="ui">
+<div id="controls"
+     class="hidden">
 
-  <div class="title">
-    ⚡ ĐẤU TRƯỜNG BIẾN DỊ
-  </div>
+<div class="controlGroup">
 
-  <div class="bars">
+<button id="left"
+        class="control">
+◀
+<br>
+<small>Lùi</small>
+</button>
 
-    <div class="box">
+<button id="right"
+        class="control">
+▶
+<br>
+<small>Tiến</small>
+</button>
 
-      <div class="name">
-        ⚡ KẺ TỐC ĐỘ
-      </div>
-
-      <div class="hp">
-        <div id="playerHP"></div>
-      </div>
-
-      <div class="rage">
-        <div id="playerRage"></div>
-      </div>
-
-    </div>
-
-    <div class="box">
-
-      <div class="name" style="text-align:right">
-        ☠ BOSS
-      </div>
-
-      <div class="hp">
-        <div id="bossHP"></div>
-      </div>
-
-      <div class="rage">
-        <div id="bossRage"></div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div id="message">
-    ⚡ Kẻ Tốc Độ bước vào đấu trường!
-  </div>
+<button id="jump"
+        class="control">
+▲
+<br>
+<small>Nhảy</small>
+</button>
 
 </div>
 
 
-<!-- ĐIỀU KHIỂN -->
+<div class="controlGroup">
 
-<div class="controls">
+<button id="guard"
+        class="control">
+🛡
+<br>
+<small>Đỡ</small>
+</button>
 
-  <div class="group left">
+<button id="attack"
+        class="control attack">
+ĐÁNH
+</button>
 
-    <button
-      class="gameBtn"
-      ontouchstart="moveLeft()"
-      ontouchend="stopMove()"
-      onmousedown="moveLeft()"
-      onmouseup="stopMove()">
-      ◀
-    </button>
+<button id="skill1"
+        class="control skill">
+S1
+<span class="cooldown"></span>
+</button>
 
-    <button
-      class="gameBtn"
-      ontouchstart="moveRight()"
-      ontouchend="stopMove()"
-      onmousedown="moveRight()"
-      onmouseup="stopMove()">
-      ▶
-    </button>
+<button id="skill2"
+        class="control skill">
+S2
+<span class="cooldown"></span>
+</button>
 
-    <button
-      class="gameBtn jump"
-      onclick="jump()">
-      ⬆
-    </button>
-
-  </div>
-
-  <div class="group right">
-
-    <button
-      class="gameBtn attack"
-      onclick="attack()">
-      👊
-    </button>
-
-    <button
-      class="gameBtn skill"
-      onclick="dash()">
-      💨
-    </button>
-
-    <button
-      class="gameBtn skill"
-      onclick="afterImage()">
-      ⚡
-    </button>
-
-    <button
-      class="gameBtn power"
-      onclick="breakSpeed()">
-      💥
-    </button>
-
-    <button
-      id="mutateButton"
-      class="gameBtn mutate"
-      onclick="mutate()">
-      🧬
-    </button>
-
-  </div>
-
-</div>
-
-
-<div id="resultScreen">
-
-  <div id="result"></div>
-
-  <button
-    class="restart"
-    onclick="restartGame()">
-    🔄 CHƠI LẠI
-  </button>
+<button id="mutate"
+        class="control mutateButton">
+BIẾN
+</button>
 
 </div>
 
@@ -769,2051 +406,1449 @@ canvas{
 
 <script>
 
-/* =========================================================
-   MENU
-========================================================= */
+/* =========================
+   GAME SETUP
+========================= */
 
-const intro=document.getElementById("intro");
-const menu=document.getElementById("menu");
-const characters=document.getElementById("characters");
-const game=document.getElementById("game");
+const canvas =
+document.getElementById("game");
 
-setTimeout(()=>{
-
-  intro.style.display="none";
-  menu.style.display="flex";
-
-},2700);
+const ctx =
+canvas.getContext("2d");
 
 
-function openCharacters(){
-
-  menu.style.display="none";
-  characters.style.display="flex";
-}
-
-
-function backToMenu(){
-
-  characters.style.display="none";
-  menu.style.display="flex";
-}
-
-
-function showMessageMenu(){
-
-  alert(
-    "⚙️ CÀI ĐẶT\n\n" +
-    "Âm thanh: sẽ thêm sau\n" +
-    "Rung: sẽ thêm sau\n" +
-    "Đồ họa: đang nâng cấp"
-  );
-}
-
-
-/* =========================================================
-   CANVAS
-========================================================= */
-
-const canvas=document.getElementById("canvas");
-const ctx=canvas.getContext("2d");
-
-let W=0;
-let H=0;
-let dpr=1;
+let W = innerWidth;
+let H = innerHeight;
 
 function resize(){
 
-  dpr=Math.min(
-    window.devicePixelRatio||1,
-    2
-  );
+    W = innerWidth;
+    H = innerHeight;
 
-  W=window.innerWidth;
-  H=window.innerHeight;
-
-  canvas.width=W*dpr;
-  canvas.height=H*dpr;
-
-  canvas.style.width=W+"px";
-  canvas.style.height=H+"px";
-
-  ctx.setTransform(
-    dpr,0,0,dpr,0,0
-  );
+    canvas.width = W;
+    canvas.height = H;
 }
 
-window.addEventListener("resize",resize);
+addEventListener("resize",resize);
+
 resize();
 
 
-/* =========================================================
-   PLAYER
-========================================================= */
+/* =========================
+   CHARACTERS
+========================= */
 
-let player={
-  x:-2.8,
-  y:0,
-  vy:0,
-  hp:100,
-  rage:0,
-  facing:1,
-  action:"",
-  actionTime:0,
-  mutated:false,
-  jump:false,
-  hitFlash:0
+const characters = {
+
+speed:{
+
+    name:"Kẻ Tốc Độ",
+
+    normalSkill1:"Lướt Xung Kích",
+
+    normalSkill2:"Ảnh Tốc",
+
+    mutationSkill1:"Bão Tốc",
+
+    mutationSkill2:"Phân Thân",
+
+    color:"#62e8ff",
+
+    accent:"#188aff"
+},
+
+
+core:{
+
+    name:"Lõi Công Nghệ",
+
+    normalSkill1:"Drone Xung Điện",
+
+    normalSkill2:"Găng Năng Lượng",
+
+    mutationSkill1:"Bầy Drone",
+
+    mutationSkill2:"Lõi Quá Tải",
+
+    color:"#52c9ff",
+
+    accent:"#235cff"
+}
+
 };
 
 
-/* =========================================================
-   BOSS
-========================================================= */
+/* =========================
+   GAME STATE
+========================= */
 
-let boss={
-  x:2.8,
-  y:0,
-  hp:100,
-  rage:0,
-  facing:-1,
-  action:"",
-  actionTime:0,
-  mutated:false,
-  hitFlash:0,
-  state:"approach",
-  stateTime:0,
-  cooldown:0,
-  dodgeCooldown:0,
-  comboStep:0,
-  enraged:false
+let selectedCharacter =
+"speed";
+
+let gameMode =
+"cpu";
+
+let gameRunning =
+false;
+
+let gameOver =
+false;
+
+let lastTime =
+performance.now();
+
+
+/* =========================
+   INPUT
+========================= */
+
+const input = {
+
+    left:false,
+    right:false,
+    guard:false
+
 };
 
 
-let particles=[];
-let speedLines=[];
+/* =========================
+   FIGHTER
+========================= */
 
-let moveDirection=0;
-let gameOver=false;
+function createFighter(
+    character,
+    x,
+    enemy=false
+){
 
-let hitStop=0;
-let shake=0;
+    return {
 
-let last=performance.now();
+        character:character,
 
+        x:x,
 
-/* =========================================================
-   HÀM CƠ BẢN
-========================================================= */
+        y:0,
 
-function clamp(v,min,max){
-  return Math.max(min,Math.min(max,v));
-}
+        vx:0,
 
-function rand(min,max){
-  return Math.random()*(max-min)+min;
-}
+        vy:0,
 
-function distance(){
-  return Math.abs(player.x-boss.x);
-}
+        hp:100,
 
-function say(text){
-  document.getElementById("message").textContent=text;
-}
+        maxHP:100,
 
+        mutation:0,
 
-/* =========================================================
-   BẮT ĐẦU GAME
-========================================================= */
+        mutated:false,
 
-function startGame(){
+        mutationTime:0,
 
-  characters.style.display="none";
-  game.style.display="block";
+        attackTimer:0,
 
-  restartGame();
+        skill1Cooldown:0,
 
-  setTimeout(()=>{
-    say("⚡ Kẻ Tốc Độ bước vào đấu trường!");
-  },100);
+        skill2Cooldown:0,
+
+        guard:false,
+
+        enemy:enemy,
+
+        aiTimer:0
+    };
 }
 
 
-/* =========================================================
-   UI
-========================================================= */
+let player;
+let enemy;
 
-function updateUI(){
 
-  document.getElementById("playerHP")
-    .style.width=player.hp+"%";
+/* =========================
+   START GAME
+========================= */
 
-  document.getElementById("bossHP")
-    .style.width=boss.hp+"%";
+function startGame(mode){
 
-  document.getElementById("playerRage")
-    .style.width=player.rage+"%";
+    gameMode = mode;
 
-  document.getElementById("bossRage")
-    .style.width=boss.rage+"%";
+    player =
+    createFighter(
+        selectedCharacter,
+        W * .28,
+        false
+    );
 
-  const button=
-    document.getElementById("mutateButton");
 
-  if(player.rage>=100)
-    button.classList.add("ready");
-  else
-    button.classList.remove("ready");
+    let enemyCharacter =
+    selectedCharacter === "speed"
+    ? "core"
+    : "speed";
+
+
+    enemy =
+    createFighter(
+        mode === "boss"
+        ? "core"
+        : enemyCharacter,
+        W * .72,
+        true
+    );
+
+
+    if(mode === "boss"){
+
+        enemy.maxHP = 200;
+        enemy.hp = 200;
+    }
+
+
+    gameRunning = true;
+    gameOver = false;
+
+
+    document
+    .getElementById("menu")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("hud")
+    .classList.remove("hidden");
+
+
+    document
+    .getElementById("controls")
+    .classList.remove("hidden");
+
+
+    document
+    .getElementById("back")
+    .classList.remove("hidden");
+
+
+    updateUI();
 }
 
 
-/* =========================================================
-   DI CHUYỂN
-========================================================= */
+/* =========================
+   MENU
+========================= */
 
-function moveLeft(){
+document
+.querySelectorAll(".character")
+.forEach(button=>{
 
-  if(gameOver)return;
+    button.addEventListener(
+        "click",
+        ()=>{
 
-  moveDirection=-1;
+            selectedCharacter =
+            button.dataset.character;
+
+
+            document
+            .querySelectorAll(".character")
+            .forEach(b=>
+                b.classList.remove("selected")
+            );
+
+
+            button.classList.add(
+                "selected"
+            );
+        }
+    );
+});
+
+
+document
+.querySelectorAll("[data-mode]")
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        ()=>{
+
+            startGame(
+                button.dataset.mode
+            );
+        }
+    );
+});
+
+
+document
+.getElementById("back")
+.addEventListener(
+    "click",
+    showMenu
+);
+
+
+function showMenu(){
+
+    gameRunning = false;
+
+    document
+    .getElementById("menu")
+    .classList.remove("hidden");
+
+    document
+    .getElementById("hud")
+    .classList.add("hidden");
+
+    document
+    .getElementById("controls")
+    .classList.add("hidden");
+
+    document
+    .getElementById("back")
+    .classList.add("hidden");
 }
 
-function moveRight(){
 
-  if(gameOver)return;
+/* =========================
+   HOLD BUTTON
+   THẢ RA = DỪNG NGAY
+========================= */
 
-  moveDirection=1;
-}
+function holdButton(
+    id,
+    property
+){
 
-function stopMove(){
-
-  moveDirection=0;
-}
-
-function jump(){
-
-  if(gameOver||player.jump)return;
-
-  player.jump=true;
-  player.vy=8.8;
-}
+    const button =
+    document.getElementById(id);
 
 
-/* =========================================================
-   EFFECT
-========================================================= */
+    button.addEventListener(
+        "pointerdown",
+        event=>{
 
-function burst(x,y,count,c1,c2){
+            event.preventDefault();
 
-  for(let i=0;i<count;i++){
+            input[property] = true;
 
-    particles.push({
-      x,
-      y,
-      vx:rand(-4,4),
-      vy:rand(-2,5),
-      life:rand(.25,.55),
-      max:.55,
-      size:rand(3,7),
-      c:Math.random()<.5?c1:c2
-    });
-  }
-}
+            button.setPointerCapture(
+                event.pointerId
+            );
+        }
+    );
 
-function addSpeedLines(x,y){
 
-  for(let i=0;i<3;i++){
+    button.addEventListener(
+        "pointerup",
+        event=>{
 
-    speedLines.push({
-      x:x+rand(-.5,.5),
-      y:y+rand(0,1.8),
-      vx:rand(-10,-6),
-      life:.25
-    });
-  }
-}
+            event.preventDefault();
 
-function hitStopNow(ms=105){
+            input[property] = false;
+        }
+    );
 
-  hitStop=ms;
-  shake=9;
+
+    button.addEventListener(
+        "pointercancel",
+        ()=>{
+
+            input[property] = false;
+        }
+    );
 }
 
 
-/* =========================================================
+holdButton("left","left");
+
+holdButton("right","right");
+
+holdButton("guard","guard");
+
+
+/* =========================
+   JUMP
+========================= */
+
+document
+.getElementById("jump")
+.addEventListener(
+    "pointerdown",
+    event=>{
+
+        event.preventDefault();
+
+        if(
+            player &&
+            player.y === 0
+        ){
+
+            player.vy = -470;
+        }
+    }
+);
+
+
+/* =========================
+   ATTACK
+========================= */
+
+document
+.getElementById("attack")
+.addEventListener(
+    "pointerdown",
+    event=>{
+
+        event.preventDefault();
+
+        normalAttack(
+            player,
+            enemy
+        );
+    }
+);
+
+
+/* =========================
+   SKILLS
+========================= */
+
+document
+.getElementById("skill1")
+.addEventListener(
+    "pointerdown",
+    event=>{
+
+        event.preventDefault();
+
+        useSkill(
+            player,
+            enemy,
+            1
+        );
+    }
+);
+
+
+document
+.getElementById("skill2")
+.addEventListener(
+    "pointerdown",
+    event=>{
+
+        event.preventDefault();
+
+        useSkill(
+            player,
+            enemy,
+            2
+        );
+    }
+);
+
+
+/* =========================
+   MUTATION
+========================= */
+
+document
+.getElementById("mutate")
+.addEventListener(
+    "pointerdown",
+    event=>{
+
+        event.preventDefault();
+
+        if(
+            player &&
+            player.mutation >= 100 &&
+            !player.mutated
+        ){
+
+            player.mutated = true;
+
+            player.mutationTime = 8;
+        }
+    }
+);
+
+
+/* =========================
    DAMAGE
-========================================================= */
+========================= */
 
-function hitBoss(damage,knockback){
+function damage(
+    target,
+    amount
+){
 
-  boss.hp-=damage;
+    if(target.guard){
 
-  player.rage=
-    clamp(
-      player.rage+damage*1.25,
-      0,
-      100
+        amount *= .25;
+    }
+
+
+    target.hp =
+    Math.max(
+        0,
+        target.hp - amount
     );
 
-  boss.rage=
-    clamp(
-      boss.rage+damage*.28,
-      0,
-      100
-    );
 
-  boss.x+=knockback;
+    if(target === enemy){
 
-  boss.x=clamp(
-    boss.x,
-    -6,
-    6
-  );
+        player.mutation =
+        Math.min(
+            100,
+            player.mutation +
+            amount
+        );
+    }
 
-  boss.hitFlash=.18;
 
-  burst(
-    screenX(boss.x),
-    screenY(1.4),
-    18,
-    "#ffffff",
-    "#7d45ff"
-  );
+    if(target === player){
 
-  hitStopNow();
-
-  boss.state="react";
-  boss.stateTime=.28;
-
-  if(boss.hp<=0){
-
-    boss.hp=0;
-
-    win();
-  }
-
-  updateUI();
+        enemy.mutation =
+        Math.min(
+            100,
+            enemy.mutation +
+            amount * .5
+        );
+    }
 }
 
 
-function hitPlayer(damage,knockback){
+/* =========================
+   NORMAL ATTACK
+========================= */
 
-  player.hp-=damage;
+function normalAttack(
+    attacker,
+    target
+){
 
-  player.x+=knockback;
+    if(
+        !attacker ||
+        !target ||
+        attacker.attackTimer > 0
+    ){
 
-  player.x=clamp(
-    player.x,
-    -6,
-    6
-  );
+        return;
+    }
 
-  player.hitFlash=.18;
 
-  player.rage=
-    clamp(
-      player.rage+damage*.65,
-      0,
-      100
+    attacker.attackTimer =
+    .25;
+
+
+    const distance =
+    Math.abs(
+        attacker.x -
+        target.x
     );
 
-  burst(
-    screenX(player.x),
-    screenY(1.4),
-    16,
-    "#ffffff",
-    "#ff4052"
-  );
 
-  hitStopNow();
+    if(distance < 95){
 
-  if(player.hp<=0){
+        let power =
+        attacker.mutated
+        ? 22
+        : 14;
 
-    player.hp=0;
 
-    lose();
-  }
-
-  updateUI();
+        damage(
+            target,
+            power
+        );
+    }
 }
 
 
-/* =========================================================
-   PLAYER ATTACK
-========================================================= */
+/* =========================
+   SKILL SYSTEM
+========================= */
 
-function attack(){
+function useSkill(
+    attacker,
+    target,
+    number
+){
 
-  if(gameOver||player.action)return;
+    if(!attacker)return;
 
-  player.action="punch";
-  player.actionTime=.28;
 
-  if(distance()<=1.9){
+    const cooldown =
+    number === 1
+    ? "skill1Cooldown"
+    : "skill2Cooldown";
 
-    setTimeout(()=>{
 
-      if(!gameOver){
+    if(
+        attacker[cooldown] > 0
+    ){
 
-        hitBoss(
-          player.mutated?18:10,
-          player.facing*.45
+        return;
+    }
+
+
+    attacker[cooldown] =
+    number === 1
+    ? 4
+    : 7;
+
+
+    let power;
+
+
+    if(!attacker.mutated){
+
+        power =
+        number === 1
+        ? 20
+        : 27;
+
+    }else{
+
+        /* SKILL BIẾN DỊ */
+
+        power =
+        number === 1
+        ? 34
+        : 42;
+    }
+
+
+    const distance =
+    Math.abs(
+        attacker.x -
+        target.x
+    );
+
+
+    if(distance < 200){
+
+        damage(
+            target,
+            power
+        );
+    }
+
+
+    /* Lướt */
+
+    if(number === 1){
+
+        attacker.vx =
+        attacker.x <
+        target.x
+        ? 420
+        : -420;
+    }
+
+
+    /* Găng năng lượng */
+
+    if(number === 2){
+
+        target.vx =
+        target.x <
+        attacker.x
+        ? -300
+        : 300;
+    }
+}
+
+
+/* =========================
+   PLAYER INPUT
+========================= */
+
+function updatePlayer(){
+
+    if(!player)return;
+
+
+    player.guard =
+    input.guard;
+
+
+    let direction = 0;
+
+
+    if(input.left)
+        direction -= 1;
+
+
+    if(input.right)
+        direction += 1;
+
+
+    if(!player.guard){
+
+        /*
+         QUAN TRỌNG:
+         không nhấn = vận tốc ngang = 0
+        */
+
+        player.vx =
+        direction * 260;
+
+    }else{
+
+        player.vx = 0;
+    }
+}
+
+
+/* =========================
+   BOSS / AI
+========================= */
+
+function updateAI(dt){
+
+    if(!enemy)return;
+
+
+    if(gameMode === "pvp"){
+
+        return;
+    }
+
+
+    enemy.aiTimer -= dt;
+
+
+    const distance =
+    player.x -
+    enemy.x;
+
+
+    const direction =
+    Math.sign(distance);
+
+
+    if(
+        Math.abs(distance) > 105
+    ){
+
+        enemy.vx =
+        direction *
+        (gameMode === "boss"
+        ? 150
+        : 180);
+
+    }else{
+
+        enemy.vx = 0;
+    }
+
+
+    if(enemy.aiTimer <= 0){
+
+        enemy.aiTimer =
+        .6 +
+        Math.random() * .8;
+
+
+        if(
+            Math.abs(distance) < 105
+        ){
+
+            normalAttack(
+                enemy,
+                player
+            );
+
+        }else{
+
+            useSkill(
+                enemy,
+                player,
+                Math.random() < .5
+                ? 1
+                : 2
+            );
+        }
+    }
+}
+
+
+/* =========================
+   PHYSICS
+========================= */
+
+function updatePhysics(
+    fighter,
+    dt
+){
+
+    if(!fighter)return;
+
+
+    fighter.attackTimer =
+    Math.max(
+        0,
+        fighter.attackTimer - dt
+    );
+
+
+    fighter.skill1Cooldown =
+    Math.max(
+        0,
+        fighter.skill1Cooldown - dt
+    );
+
+
+    fighter.skill2Cooldown =
+    Math.max(
+        0,
+        fighter.skill2Cooldown - dt
+    );
+
+
+    /* BIẾN DỊ */
+
+    if(fighter.mutated){
+
+        fighter.mutationTime -= dt;
+
+
+        if(
+            fighter.mutationTime <= 0
+        ){
+
+            fighter.mutated = false;
+
+            fighter.mutation = 0;
+        }
+    }
+
+
+    /* Trọng lực */
+
+    fighter.vy +=
+    1100 * dt;
+
+
+    fighter.y +=
+    fighter.vy * dt;
+
+
+    if(fighter.y > 0){
+
+        fighter.y = 0;
+
+        fighter.vy = 0;
+    }
+
+
+    /* Di chuyển */
+
+    fighter.x +=
+    fighter.vx * dt;
+
+
+    /* Giới hạn */
+
+    fighter.x =
+    Math.max(
+        35,
+        Math.min(
+            W - 35,
+            fighter.x
+        )
+    );
+
+
+    /*
+      Chỉ giảm vận tốc khi
+      không có input điều khiển.
+      AI cũng tự đặt vận tốc.
+    */
+
+    fighter.vx *=
+    Math.pow(
+        .0001,
+        dt
+    );
+}
+
+
+/* =========================
+   GAME UPDATE
+========================= */
+
+function updateGame(dt){
+
+    if(
+        !gameRunning ||
+        gameOver
+    ){
+
+        return;
+    }
+
+
+    updatePlayer();
+
+    updateAI(dt);
+
+
+    updatePhysics(
+        player,
+        dt
+    );
+
+
+    updatePhysics(
+        enemy,
+        dt
+    );
+
+
+    if(
+        player.hp <= 0 ||
+        enemy.hp <= 0
+    ){
+
+        gameOver = true;
+
+        gameRunning = false;
+
+        setTimeout(()=>{
+
+            alert(
+                enemy.hp <= 0
+                ? "BẠN THẮNG!"
+                : "BẠN THUA!"
+            );
+
+            showMenu();
+
+        },100);
+    }
+
+
+    updateUI();
+}
+
+
+/* =========================
+   DRAW FIGHTER
+========================= */
+
+function drawFighter(
+    fighter
+){
+
+    const data =
+    characters[
+        fighter.character
+    ];
+
+
+    const x =
+    fighter.x;
+
+
+    const y =
+    H - 130 -
+    fighter.y;
+
+
+    ctx.save();
+
+
+    ctx.translate(
+        x,
+        y
+    );
+
+
+    if(fighter.enemy){
+
+        ctx.scale(
+            -1,
+            1
+        );
+    }
+
+
+    /* Aura biến dị */
+
+    if(fighter.mutated){
+
+        ctx.strokeStyle =
+        data.color;
+
+        ctx.lineWidth = 4;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            -55,
+            58,
+            0,
+            Math.PI * 2
         );
 
-        say("👊 ĐÁNH TRÚNG!");
-      }
-
-    },95);
-
-  }else{
-
-    say("💨 Quá xa!");
-  }
-}
-
-
-function dash(){
-
-  if(gameOver||player.action)return;
-
-  if(distance()>5){
-
-    say("💨 Boss quá xa!");
-    return;
-  }
-
-  player.action="dash";
-  player.actionTime=.35;
-
-  player.x=
-    boss.x-player.facing*.95;
-
-  player.x=clamp(
-    player.x,
-    -6,
-    6
-  );
-
-  addSpeedLines(
-    screenX(player.x),
-    screenY(1)
-  );
-
-  say("💨 LƯỚT XUYÊN!");
-
-  setTimeout(()=>{
-
-    if(
-      !gameOver &&
-      distance()<=1.8
-    ){
-
-      hitBoss(
-        player.mutated?25:15,
-        player.facing*.8
-      );
+        ctx.stroke();
     }
 
-  },80);
-}
 
+    /* Thân */
 
-function afterImage(){
-
-  if(gameOver||player.action)return;
-
-  if(distance()>2.6){
-
-    say("⚡ Hãy áp sát!");
-    return;
-  }
-
-  player.action="after";
-  player.actionTime=.38;
-
-  say("⚡ ẢNH TỐC!");
-
-  for(let i=0;i<5;i++){
-
-    setTimeout(()=>{
-
-      addSpeedLines(
-        screenX(player.x)-i*12,
-        screenY(1)
-      );
-
-    },i*35);
-  }
-
-  setTimeout(()=>{
-
-    if(
-      !gameOver &&
-      distance()<=2
-    ){
-
-      hitBoss(
-        player.mutated?28:17,
-        player.facing*.5
-      );
-    }
-
-  },100);
-}
-
-
-function breakSpeed(){
-
-  if(gameOver||player.action)return;
-
-  if(distance()>2){
-
-    say("💥 Quá xa!");
-    return;
-  }
-
-  player.action="break";
-  player.actionTime=.48;
-
-  say("💥 PHÁ TỐC!");
-
-  setTimeout(()=>{
-
-    if(
-      !gameOver &&
-      distance()<=2.2
-    ){
-
-      hitBoss(
-        player.mutated?40:25,
-        player.facing*1.15
-      );
-    }
-
-  },135);
-}
-
-
-/* =========================================================
-   BIẾN DỊ
-========================================================= */
-
-function mutate(){
-
-  if(gameOver)return;
-
-  if(player.rage<100){
-
-    say("🧬 NỘI CHƯA ĐẦY!");
-
-    return;
-  }
-
-  if(player.mutated){
-
-    say("🔥 Đang biến dị!");
-
-    return;
-  }
-
-  player.rage=0;
-  player.mutated=true;
-
-  player.action="transform";
-  player.actionTime=.6;
-
-  burst(
-    screenX(player.x),
-    screenY(1.5),
-    45,
-    "#ffffff",
-    "#b348ff"
-  );
-
-  say("🧬 KẺ TỐC ĐỘ — BIẾN DỊ!");
-
-  updateUI();
-
-  setTimeout(()=>{
-
-    player.action="";
-
-  },600);
-
-  setTimeout(()=>{
-
-    player.mutated=false;
-
-    say("↩️ Biến dị kết thúc!");
-
-  },8000);
-}
-
-
-/* =========================================================
-   BOSS AI
-========================================================= */
-
-function bossAI(dt){
-
-  if(gameOver)return;
-
-  if(boss.cooldown>0)
-    boss.cooldown-=dt;
-
-  if(boss.dodgeCooldown>0)
-    boss.dodgeCooldown-=dt;
-
-  if(
-    !boss.enraged &&
-    boss.hp<=35
-  ){
-
-    boss.enraged=true;
-
-    say("😡 BOSS PHÁT ĐIÊN!");
-
-    burst(
-      screenX(boss.x),
-      screenY(1.4),
-      28,
-      "#ff4d63",
-      "#ff9b4d"
-    );
-  }
-
-  const d=distance();
-
-  boss.facing=
-    player.x>=boss.x?1:-1;
-
-  if(boss.state==="react"){
-
-    boss.stateTime-=dt;
-
-    if(boss.stateTime<=0){
-
-      boss.state="decide";
-      boss.stateTime=.15;
-    }
-
-    return;
-  }
-
-  if(
-    (player.action==="dash" ||
-     player.action==="after" ||
-     player.action==="break") &&
-    d<2.5 &&
-    boss.dodgeCooldown<=0 &&
-    Math.random()<
-    (boss.mutated?.60:.38)
-  ){
-
-    bossDodge();
-
-    return;
-  }
-
-  if(
-    player.action==="punch" &&
-    d<2.2 &&
-    !boss.action &&
-    Math.random()<
-    (boss.enraged?.22:.38)
-  ){
-
-    bossGuard();
-
-    return;
-  }
-
-  if(
-    d<1.25 &&
-    !player.action
-  ){
-
-    if(Math.random()<.35){
-
-      boss.x-=
-        boss.facing*.6;
-
-      return;
-    }
-  }
-
-  if(d>2.2){
-
-    const speed=
-      boss.enraged
-        ?2.4
-        :boss.mutated
-          ?2.15
-          :1.55;
-
-    boss.x+=
-      boss.facing*
-      speed*
-      dt;
-
-    boss.x=
-      clamp(
-        boss.x,
-        -6,
-        6
-      );
-
-    return;
-  }
-
-  if(
-    !boss.action &&
-    boss.cooldown<=0
-  ){
-
-    chooseBossAttack(d);
-  }
-
-  if(
-    boss.rage>=100 &&
-    !boss.mutated
-  ){
-
-    boss.rage=0;
-    boss.mutated=true;
-    boss.cooldown=.25;
-
-    burst(
-      screenX(boss.x),
-      screenY(1.5),
-      38,
-      "#ff5268",
-      "#80152e"
-    );
-
-    say("☠️ BOSS ĐÃ BIẾN DỊ!");
-
-    setTimeout(()=>{
-
-      boss.mutated=false;
-
-      say("Boss trở lại bình thường!");
-
-    },8000);
-  }
-}
-
-
-function chooseBossAttack(d){
-
-  const roll=Math.random();
-
-  if(d<=1.65){
-
-    if(roll<.42)
-      bossCombo();
-
-    else if(roll<.68)
-      bossHeavy();
-
-    else
-      bossSideStep();
-
-    return;
-  }
-
-  if(d<=2.25){
-
-    if(roll<.45)
-      bossLunge();
-
-    else if(roll<.70)
-      bossCombo();
-
-    else
-      bossWait();
-
-    return;
-  }
-
-  bossLunge();
-}
-
-
-function bossWait(){
-
-  boss.state="wait";
-  boss.stateTime=.35;
-
-  boss.cooldown=
-    boss.enraged?.25:.45;
-}
-
-
-function bossGuard(){
-
-  if(boss.action)return;
-
-  boss.action="guard";
-  boss.actionTime=.38;
-  boss.state="guard";
-
-  say("🛡️ BOSS ĐỠ ĐÒN!");
-
-  boss.cooldown=
-    boss.enraged?.3:.55;
-
-  setTimeout(()=>{
-
-    if(
-      !gameOver &&
-      distance()<=2.1 &&
-      player.action
-    ){
-
-      player.action="";
-
-      say("☠️ Boss phản đòn!");
-
-      setTimeout(()=>{
-        bossCounter();
-      },90);
-    }
-
-  },160);
-}
-
-
-function bossDodge(){
-
-  boss.action="dodge";
-  boss.actionTime=.28;
-
-  boss.dodgeCooldown=
-    boss.mutated?1:1.8;
-
-  const side=
-    player.x>=boss.x?-1:1;
-
-  boss.x+=
-    side*
-    (boss.mutated?1.15:.8);
-
-  boss.x=
-    clamp(
-      boss.x,
-      -6,
-      6
-    );
-
-  say("💨 BOSS NÉ!");
-
-  addSpeedLines(
-    screenX(boss.x),
-    screenY(1)
-  );
-
-  boss.cooldown=.18;
-}
-
-
-function bossSideStep(){
-
-  boss.action="dodge";
-  boss.actionTime=.25;
-
-  const side=
-    Math.random()<.5?-1:1;
-
-  boss.x+=side*.7;
-
-  boss.x=
-    clamp(
-      boss.x,
-      -6,
-      6
-    );
-
-  boss.dodgeCooldown=
-    boss.mutated?.8:1.5;
-
-  boss.cooldown=.3;
-}
-
-
-function bossLunge(){
-
-  if(boss.action)return;
-
-  boss.action="lunge";
-  boss.actionTime=.34;
-
-  boss.cooldown=
-    boss.enraged?.42:
-    boss.mutated?.48:
-    .75;
-
-  const dir=
-    player.x>=boss.x?1:-1;
-
-  boss.facing=dir;
-
-  boss.x+=
-    dir*
-    (boss.mutated?1:.7);
-
-  say("☠️ BOSS LAO TỚI!");
-
-  setTimeout(()=>{
-
-    if(
-      !gameOver &&
-      distance()<=1.75
-    ){
-
-      const damage=
-        boss.mutated
-          ?15
-          :boss.enraged
-            ?12
-            :8;
-
-      hitPlayer(
-        damage,
-        dir*.45
-      );
-    }
-
-  },110);
-}
-
-
-function bossCombo(){
-
-  if(boss.action)return;
-
-  boss.action="combo";
-  boss.comboStep=0;
-
-  const total=
-    boss.mutated?3:
-    boss.enraged?3:
-    2;
-
-  boss.cooldown=
-    boss.enraged?.55:
-    boss.mutated?.65:
-    .9;
-
-  say("☠️ BOSS COMBO!");
-
-  for(let i=0;i<total;i++){
-
-    setTimeout(()=>{
-
-      if(
-        gameOver ||
-        distance()>2
-      )return;
-
-      boss.comboStep=i+1;
-
-      const damage=
-        boss.mutated
-          ?(i===total-1?12:6)
-          :(i===total-1?9:5);
-
-      hitPlayer(
-        damage,
-        boss.facing*.18
-      );
-
-    },100+i*155);
-  }
-
-  setTimeout(()=>{
-
-    boss.action="";
-
-  },100+total*155+120);
-}
-
-
-function bossHeavy(){
-
-  if(boss.action)return;
-
-  boss.action="heavy";
-  boss.actionTime=.55;
-
-  boss.cooldown=
-    boss.enraged?.7:.95;
-
-  say("💥 BOSS PHÁ ĐÒN!");
-
-  setTimeout(()=>{
-
-    if(
-      !gameOver &&
-      distance()<=2
-    ){
-
-      hitPlayer(
-        boss.mutated?22:15,
-        boss.facing*.7
-      );
-
-      bossRageFx();
-    }
-
-  },210);
-
-  setTimeout(()=>{
-
-    boss.action="";
-
-  },550);
-}
-
-
-function bossCounter(){
-
-  if(gameOver)return;
-
-  boss.action="counter";
-  boss.actionTime=.35;
-  boss.cooldown=.6;
-
-  if(distance()<=2){
-
-    hitPlayer(
-      boss.mutated?17:11,
-      boss.facing*.4
-    );
-
-    say("⚡ BOSS PHẢN CÔNG!");
-  }
-
-  setTimeout(()=>{
-
-    boss.action="";
-
-  },350);
-}
-
-
-function bossRageFx(){
-
-  burst(
-    screenX(boss.x),
-    screenY(1.2),
-    14,
-    "#ff7b39",
-    "#ff2e52"
-  );
-}
-
-
-/* =========================================================
-   UPDATE
-========================================================= */
-
-function updatePlayer(dt){
-
-  if(gameOver)return;
-
-  if(moveDirection!==0){
-
-    player.x+=
-      moveDirection*
-      3.8*
-      dt;
-
-    player.x=
-      clamp(
-        player.x,
-        -6,
-        6
-      );
-
-    player.facing=
-      moveDirection;
-
-    if(!player.action){
-
-      addSpeedLines(
-        screenX(player.x),
-        screenY(.8)
-      );
-    }
-  }
-
-  if(player.jump){
-
-    player.y+=
-      player.vy*dt;
-
-    player.vy-=
-      18*dt;
-
-    if(player.y<=0){
-
-      player.y=0;
-      player.vy=0;
-      player.jump=false;
-    }
-  }
-
-  if(player.actionTime>0){
-
-    player.actionTime-=dt;
-
-    if(player.actionTime<=0)
-      player.action="";
-  }
-
-  if(player.hitFlash>0)
-    player.hitFlash-=dt;
-}
-
-
-function updateBossTimers(dt){
-
-  if(boss.actionTime>0){
-
-    boss.actionTime-=dt;
-
-    if(boss.actionTime<=0){
-
-      if(
-        boss.action!=="combo" &&
-        boss.action!=="guard"
-      ){
-
-        boss.action="";
-      }
-    }
-  }
-
-  if(boss.stateTime>0)
-    boss.stateTime-=dt;
-
-  if(boss.hitFlash>0)
-    boss.hitFlash-=dt;
-}
-
-
-/* =========================================================
-   PARTICLES
-========================================================= */
-
-function updateParticles(dt){
-
-  for(
-    let i=particles.length-1;
-    i>=0;
-    i--
-  ){
-
-    const p=particles[i];
-
-    p.x+=p.vx*dt;
-    p.y+=p.vy*dt;
-
-    p.vy-=8*dt;
-    p.life-=dt;
-
-    if(p.life<=0)
-      particles.splice(i,1);
-  }
-
-  for(
-    let i=speedLines.length-1;
-    i>=0;
-    i--
-  ){
-
-    const s=speedLines[i];
-
-    s.x+=s.vx*dt;
-    s.life-=dt;
-
-    if(s.life<=0)
-      speedLines.splice(i,1);
-  }
-
-  shake*=.86;
-}
-
-
-/* =========================================================
-   CAMERA
-========================================================= */
-
-function getCamera(){
-
-  return(player.x+boss.x)/2;
-}
-
-function worldToScreen(x){
-
-  const cam=getCamera();
-
-  return W*.5+
-    (x-cam)*W*.105;
-}
-
-function screenX(x){
-  return worldToScreen(x);
-}
-
-function screenY(y){
-
-  return H*.70-
-    y*H*.14;
-}
-
-
-/* =========================================================
-   BACKGROUND
-========================================================= */
-
-function drawBackground(){
-
-  const sky=
-    ctx.createLinearGradient(
-      0,0,0,H
-    );
-
-  sky.addColorStop(0,"#070916");
-  sky.addColorStop(.5,"#18143a");
-  sky.addColorStop(1,"#05060d");
-
-  ctx.fillStyle=sky;
-  ctx.fillRect(0,0,W,H);
-
-  const glow=
-    ctx.createRadialGradient(
-      W*.5,H*.27,10,
-      W*.5,H*.27,260
-    );
-
-  glow.addColorStop(
-    0,
-    "rgba(126,65,255,.22)"
-  );
-
-  glow.addColorStop(
-    1,
-    "rgba(126,65,255,0)"
-  );
-
-  ctx.fillStyle=glow;
-  ctx.fillRect(0,0,W,H);
-
-  ctx.fillStyle="#101124";
-
-  for(let i=0;i<16;i++){
-
-    const bw=45+(i%4)*18;
-    const bh=70+(i%5)*24;
-    const x=i*bw-20;
+    ctx.fillStyle =
+    "#111c2a";
 
     ctx.fillRect(
-      x,
-      H*.54-bh,
-      bw-7,
-      bh
-    );
-  }
-}
-
-
-/* =========================================================
-   ARENA
-========================================================= */
-
-function drawArena(){
-
-  const groundY=H*.70;
-
-  ctx.fillStyle="#252638";
-
-  ctx.fillRect(
-    0,
-    groundY,
-    W,
-    H-groundY
-  );
-
-  ctx.strokeStyle=
-    "rgba(120,120,160,.12)";
-
-  ctx.lineWidth=1;
-
-  for(
-    let x=-W;
-    x<W*2;
-    x+=55
-  ){
-
-    ctx.beginPath();
-
-    ctx.moveTo(x,groundY);
-    ctx.lineTo(x+15,H);
-
-    ctx.stroke();
-  }
-
-  for(
-    let y=groundY+30;
-    y<H;
-    y+=38
-  ){
-
-    ctx.beginPath();
-
-    ctx.moveTo(0,y);
-    ctx.lineTo(W,y);
-
-    ctx.stroke();
-  }
-
-  ctx.fillStyle="#66677b";
-
-  ctx.fillRect(
-    0,
-    groundY-5,
-    W,
-    5
-  );
-}
-
-
-/* =========================================================
-   NHÂN VẬT
-========================================================= */
-
-function drawCharacter(ch,isBoss){
-
-  const x=worldToScreen(ch.x);
-  const ground=H*.70;
-  const y=
-    ground-ch.y*H*.14;
-
-  ctx.save();
-
-  /* bóng */
-
-  ctx.globalAlpha=.28;
-  ctx.fillStyle="#000";
-
-  ctx.beginPath();
-
-  ctx.ellipse(
-    x,
-    ground+7,
-    34,
-    10,
-    0,0,Math.PI*2
-  );
-
-  ctx.fill();
-
-  ctx.globalAlpha=1;
-
-  /* aura biến dị */
-
-  if(ch.mutated){
-
-    const aura=
-      ctx.createRadialGradient(
-        x,y-52,8,
-        x,y-52,75
-      );
-
-    aura.addColorStop(
-      0,
-      isBoss
-        ?"rgba(255,40,75,.28)"
-        :"rgba(173,60,255,.34)"
+        -21,
+        -72,
+        42,
+        60
     );
 
-    aura.addColorStop(
-      1,
-      "rgba(0,0,0,0)"
-    );
 
-    ctx.fillStyle=aura;
+    /* Đầu */
+
+    ctx.fillStyle =
+    "#eaf4ff";
 
     ctx.beginPath();
 
     ctx.arc(
-      x,y-52,75,
-      0,Math.PI*2
-    );
-
-    ctx.fill();
-  }
-
-  /* chân */
-
-  drawLimb(
-    x-13,y-8,
-    x-17,y+34,
-    isBoss?"#28212b":"#161b2c",
-    12
-  );
-
-  drawLimb(
-    x+13,y-8,
-    x+17,y+34,
-    isBoss?"#28212b":"#161b2c",
-    12
-  );
-
-  /* thân */
-
-  ctx.fillStyle=
-    isBoss?"#a62b43":"#172238";
-
-  roundRect(
-    ctx,
-    x-23,
-    y-84,
-    46,
-    65,
-    14
-  );
-
-  ctx.fill();
-
-  /* biểu tượng */
-
-  if(!isBoss){
-
-    ctx.fillStyle=
-      ch.mutated
-        ?" #d76cff".trim()
-        :"#ffd227";
-
-    ctx.font="32px Arial";
-    ctx.textAlign="center";
-
-    ctx.fillText(
-      "⚡",
-      x,
-      y-43
-    );
-  }else{
-
-    ctx.fillStyle="#fff";
-    ctx.font="22px Arial";
-    ctx.textAlign="center";
-
-    ctx.fillText(
-      "☠",
-      x,
-      y-45
-    );
-  }
-
-  /* tay */
-
-  let punchOffset=0;
-
-  if(ch.action==="punch")
-    punchOffset=27;
-
-  if(
-    ch.action==="heavy" ||
-    ch.action==="break"
-  )
-    punchOffset=35;
-
-  drawLimb(
-    x-24,y-70,
-    x-40,y-34,
-    isBoss?"#d08f69":"#e7ac7c",
-    13
-  );
-
-  drawLimb(
-    x+24,y-70,
-    x+40+
-      punchOffset*ch.facing,
-    y-36,
-    isBoss?"#d08f69":"#e7ac7c",
-    13
-  );
-
-  /* cổ */
-
-  ctx.fillStyle=
-    isBoss?"#bb815f":"#d9996c";
-
-  ctx.fillRect(
-    x-8,
-    y-96,
-    16,
-    13
-  );
-
-  /* đầu */
-
-  ctx.fillStyle=
-    isBoss?"#cf9877":"#f0ae7f";
-
-  ctx.beginPath();
-
-  ctx.arc(
-    x,
-    y-108,
-    27,
-    0,
-    Math.PI*2
-  );
-
-  ctx.fill();
-
-  /* tóc */
-
-  ctx.fillStyle=
-    isBoss
-      ?"#4d1725"
-      :ch.mutated
-        ?"#b84eff"
-        :"#111827";
-
-  ctx.beginPath();
-
-  ctx.arc(
-    x,
-    y-117,
-    28,
-    Math.PI,
-    Math.PI*2
-  );
-
-  ctx.fill();
-
-  /* mắt */
-
-  ctx.fillStyle=
-    ch.mutated
-      ?"#fff"
-      :"#111";
-
-  ctx.fillRect(
-    x-15,
-    y-109,
-    8,
-    4
-  );
-
-  ctx.fillRect(
-    x+7,
-    y-109,
-    8,
-    4
-  );
-
-  /* né */
-
-  if(ch.action==="dodge"){
-
-    ctx.strokeStyle=
-      isBoss
-        ?"rgba(255,65,95,.65)"
-        :"rgba(130,80,255,.65)";
-
-    ctx.lineWidth=4;
-
-    ctx.beginPath();
-
-    ctx.arc(
-      x,
-      y-70,
-      55,
-      0,
-      Math.PI*2
-    );
-
-    ctx.stroke();
-  }
-
-  /* đỡ */
-
-  if(ch.action==="guard"){
-
-    ctx.strokeStyle="#62b7ff";
-    ctx.lineWidth=5;
-
-    ctx.beginPath();
-
-    ctx.arc(
-      x,
-      y-67,
-      50,
-      Math.PI*1.05,
-      Math.PI*1.95
-    );
-
-    ctx.stroke();
-  }
-
-  /* hiệu ứng trúng */
-
-  if(ch.hitFlash>0){
-
-    ctx.globalAlpha=
-      clamp(
-        ch.hitFlash/.18,
         0,
-        1
-      );
-
-    ctx.fillStyle="#fff";
-
-    ctx.beginPath();
-
-    ctx.arc(
-      x,
-      y-74,
-      53,
-      0,
-      Math.PI*2
+        -91,
+        20,
+        0,
+        Math.PI * 2
     );
 
     ctx.fill();
 
-    ctx.globalAlpha=1;
-  }
 
-  ctx.restore();
-}
+    /* Tóc */
 
-
-/* =========================================================
-   LIMB
-========================================================= */
-
-function drawLimb(
-  x1,y1,x2,y2,color,width
-){
-
-  const dx=x2-x1;
-  const dy=y2-y1;
-
-  const len=
-    Math.hypot(dx,dy);
-
-  const ang=
-    Math.atan2(dy,dx);
-
-  ctx.save();
-
-  ctx.translate(x1,y1);
-  ctx.rotate(ang);
-
-  ctx.fillStyle=color;
-
-  roundRect(
-    ctx,
-    0,
-    -width/2,
-    len,
-    width,
-    width/2
-  );
-
-  ctx.fill();
-
-  ctx.restore();
-}
-
-
-/* =========================================================
-   ROUND RECT
-========================================================= */
-
-function roundRect(
-  ctx,x,y,w,h,r
-){
-
-  r=Math.min(
-    r,
-    w/2,
-    h/2
-  );
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    x+r,
-    y
-  );
-
-  ctx.arcTo(
-    x+w,y,
-    x+w,y+h,
-    r
-  );
-
-  ctx.arcTo(
-    x+w,y+h,
-    x,y+h,
-    r
-  );
-
-  ctx.arcTo(
-    x,y+h,
-    x,y,
-    r
-  );
-
-  ctx.arcTo(
-    x,y,
-    x+w,y,
-    r
-  );
-
-  ctx.closePath();
-}
-
-
-/* =========================================================
-   EFFECT DRAW
-========================================================= */
-
-function drawEffects(){
-
-  for(const p of particles){
-
-    ctx.globalAlpha=
-      clamp(
-        p.life/p.max,
-        0,
-        1
-      );
-
-    ctx.fillStyle=p.c;
-
-    ctx.beginPath();
-
-    ctx.arc(
-      screenX(p.x),
-      screenY(p.y),
-      p.size,
-      0,
-      Math.PI*2
-    );
-
-    ctx.fill();
-  }
-
-  ctx.globalAlpha=1;
-
-
-  for(const s of speedLines){
-
-    ctx.globalAlpha=
-      clamp(
-        s.life/.25,
-        0,
-        1
-      );
-
-    ctx.strokeStyle="#a85cff";
-    ctx.lineWidth=3;
+    ctx.fillStyle =
+    "#cbd9e8";
 
     ctx.beginPath();
 
     ctx.moveTo(
-      worldToScreen(s.x),
-      screenY(s.y)
+        -20,
+        -95
     );
 
     ctx.lineTo(
-      worldToScreen(s.x+.7),
-      screenY(s.y)
+        0,
+        -115
     );
 
-    ctx.stroke();
-  }
+    ctx.lineTo(
+        22,
+        -96
+    );
 
-  ctx.globalAlpha=1;
+    ctx.fill();
+
+
+    /* Lõi */
+
+    ctx.fillStyle =
+    data.color;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -50,
+        9,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+
+    /* Công nghệ */
+
+    if(
+        fighter.character === "core"
+    ){
+
+        ctx.strokeStyle =
+        data.color;
+
+        ctx.lineWidth = 4;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            35,
+            -62,
+            13,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.stroke();
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            22,
+            -62
+        );
+
+        ctx.lineTo(
+            35,
+            -62
+        );
+
+        ctx.stroke();
+
+
+        if(fighter.mutated){
+
+            ctx.strokeStyle =
+            "#b9f5ff";
+
+            ctx.lineWidth = 6;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                -35,
+                -55,
+                15,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.stroke();
+        }
+
+    }else{
+
+        /* Tia tốc độ */
+
+        ctx.strokeStyle =
+        data.color;
+
+        ctx.lineWidth = 5;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            -25,
+            -50
+        );
+
+        ctx.lineTo(
+            -45,
+            -75
+        );
+
+        ctx.stroke();
+    }
+
+
+    /* Đỡ */
+
+    if(fighter.guard){
+
+        ctx.strokeStyle =
+        "#ffffff";
+
+        ctx.lineWidth = 5;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            35,
+            -55,
+            28,
+            -1.2,
+            1.2
+        );
+
+        ctx.stroke();
+    }
+
+
+    /* Đánh */
+
+    if(
+        fighter.attackTimer > 0
+    ){
+
+        ctx.strokeStyle =
+        data.color;
+
+        ctx.lineWidth = 8;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            20,
+            -50
+        );
+
+        ctx.lineTo(
+            75,
+            -50
+        );
+
+        ctx.stroke();
+    }
+
+
+    ctx.restore();
 }
 
 
-/* =========================================================
+/* =========================
    RENDER
-========================================================= */
+========================= */
 
 function render(){
 
-  ctx.save();
-
-  if(shake>.2){
-
-    ctx.translate(
-      rand(-shake,shake),
-      rand(-shake,shake)
-    );
-  }
-
-  drawBackground();
-  drawArena();
-
-  if(player.x<boss.x){
-
-    drawCharacter(
-      player,
-      false
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
     );
 
-    drawCharacter(
-      boss,
-      true
+
+    /* Background */
+
+    const gradient =
+    ctx.createLinearGradient(
+        0,
+        0,
+        0,
+        H
     );
 
-  }else{
 
-    drawCharacter(
-      boss,
-      true
+    gradient.addColorStop(
+        0,
+        "#071421"
     );
 
-    drawCharacter(
-      player,
-      false
-    );
-  }
 
-  drawEffects();
-
-  ctx.restore();
-}
-
-
-/* =========================================================
-   GAME LOOP
-========================================================= */
-
-function loop(now){
-
-  const dt=
-    Math.min(
-      .033,
-      (now-last)/1000
+    gradient.addColorStop(
+        1,
+        "#152b40"
     );
 
-  last=now;
 
-  if(hitStop>0){
-
-    hitStop-=dt*1000;
-
-  }else{
-
-    updatePlayer(dt);
-    updateBossTimers(dt);
-    bossAI(dt);
-    updateParticles(dt);
-  }
-
-  render();
-
-  requestAnimationFrame(loop);
-}
-
-requestAnimationFrame(loop);
+    ctx.fillStyle =
+    gradient;
 
 
-/* =========================================================
-   WIN / LOSE
-========================================================= */
-
-function win(){
-
-  gameOver=true;
-
-  say(
-    "🏆 KẺ TỐC ĐỘ CHIẾN THẮNG!"
-  );
-
-  document.getElementById("result")
-    .textContent="🏆 CHIẾN THẮNG!";
-
-  document.getElementById(
-    "resultScreen"
-  ).style.display="flex";
-}
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H
+    );
 
 
-function lose(){
+    /* Thành phố */
 
-  gameOver=true;
-
-  say(
-    "💀 Bạn đã bị đánh bại!"
-  );
-
-  document.getElementById("result")
-    .textContent="💀 THẤT BẠI";
-
-  document.getElementById(
-    "resultScreen"
-  ).style.display="flex";
-}
+    ctx.fillStyle =
+    "rgba(70,140,190,.12)";
 
 
-/* =========================================================
-   RESET
-========================================================= */
-
-function restartGame(){
-
-  player={
-    x:-2.8,
-    y:0,
-    vy:0,
-    hp:100,
-    rage:0,
-    facing:1,
-    action:"",
-    actionTime:0,
-    mutated:false,
-    jump:false,
-    hitFlash:0
-  };
-
-  boss={
-    x:2.8,
-    y:0,
-    hp:100,
-    rage:0,
-    facing:-1,
-    action:"",
-    actionTime:0,
-    mutated:false,
-    hitFlash:0,
-    state:"approach",
-    stateTime:0,
-    cooldown:0,
-    dodgeCooldown:0,
-    comboStep:0,
-    enraged:false
-  };
-
-  particles=[];
-  speedLines=[];
-
-  moveDirection=0;
-  gameOver=false;
-  hitStop=0;
-  shake=0;
-
-  document.getElementById(
-    "resultScreen"
-  ).style.display="none";
-
-  updateUI();
-}
-
-
-/* =========================================================
-   KEYBOARD
-========================================================= */
-
-window.addEventListener(
-  "keydown",
-  e=>{
-
-    if(e.key==="ArrowLeft")
-      moveLeft();
-
-    if(e.key==="ArrowRight")
-      moveRight();
-
-    if(e.key==="ArrowUp")
-      jump();
-
-    if(e.key==="z")
-      attack();
-
-    if(e.key==="x")
-      dash();
-
-    if(e.key==="c")
-      afterImage();
-
-    if(e.key==="v")
-      breakSpeed();
-
-    if(e.key==="b")
-      mutate();
-  }
-);
-
-
-window.addEventListener(
-  "keyup",
-  e=>{
-
-    if(
-      e.key==="ArrowLeft" ||
-      e.key==="ArrowRight"
+    for(
+        let i=0;
+        i<10;
+        i++
     ){
 
-      stopMove();
+        const x =
+        i*150 -
+        (performance.now()/40)%150;
+
+
+        ctx.fillRect(
+            x,
+            H-310,
+            90,
+            190
+        );
     }
-  }
+
+
+    /* Sàn */
+
+    ctx.strokeStyle =
+    "#38586c";
+
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        H-122
+    );
+
+    ctx.lineTo(
+        W,
+        H-122
+    );
+
+    ctx.stroke();
+
+
+    if(player)
+        drawFighter(player);
+
+
+    if(enemy)
+        drawFighter(enemy);
+}
+
+
+/* =========================
+   UI
+========================= */
+
+function updateUI(){
+
+    if(!player || !enemy)
+        return;
+
+
+    document
+    .getElementById("playerName")
+    .textContent =
+    characters[player.character].name +
+    (player.mutated
+    ? " • BIẾN DỊ"
+    : "");
+
+
+    document
+    .getElementById("enemyName")
+    .textContent =
+    gameMode === "boss"
+    ? "BOSS"
+    : characters[
+        enemy.character
+      ].name;
+
+
+    document
+    .getElementById("playerHP")
+    .style.width =
+    (
+      player.hp /
+      player.maxHP *
+      100
+    ) + "%";
+
+
+    document
+    .getElementById("enemyHP")
+    .style.width =
+    (
+      enemy.hp /
+      enemy.maxHP *
+      100
+    ) + "%";
+
+
+    document
+    .getElementById("playerMutation")
+    .style.width =
+    player.mutation + "%";
+
+
+    document
+    .getElementById("enemyMutation")
+    .style.width =
+    enemy.mutation + "%";
+
+
+    const data =
+    characters[player.character];
+
+
+    document
+    .querySelector("#skill1 .cooldown")
+    .textContent =
+    player.skill1Cooldown > 0
+    ? player.skill1Cooldown.toFixed(1)
+    : (
+        player.mutated
+        ? data.mutationSkill1
+        : data.normalSkill1
+      );
+
+
+    document
+    .querySelector("#skill2 .cooldown")
+    .textContent =
+    player.skill2Cooldown > 0
+    ? player.skill2Cooldown.toFixed(1)
+    : (
+        player.mutated
+        ? data.mutationSkill2
+        : data.normalSkill2
+      );
+}
+
+
+/* =========================
+   MAIN GAME LOOP
+========================= */
+
+function gameLoop(timestamp){
+
+    const deltaTime =
+    Math.min(
+        (timestamp-lastTime)/1000,
+        0.033
+    );
+
+
+    lastTime =
+    timestamp;
+
+
+    /*
+      1. Nhận input
+      2. AI
+      3. Vật lý
+      4. Combat
+      5. Skill
+      6. Mutation
+      7. UI
+      8. Render
+    */
+
+    updateGame(
+        deltaTime
+    );
+
+
+    render();
+
+
+    requestAnimationFrame(
+        gameLoop
+    );
+}
+
+
+requestAnimationFrame(
+    gameLoop
 );
 
 </script>
 
 </body>
   </html>
-function gameLoop(timestamp) {
-    // 1. Tính thời gian giữa 2 frame
-    const deltaTime = Math.min(
-        (timestamp - lastTime) / 1000,
-        0.033
-    );
-    lastTime = timestamp;
-
-    if (!gameOver) {
-
-        // 2. Nhận input của người chơi
-        processPlayerInput(deltaTime);
-
-        // 3. Cập nhật vật lý
-        updatePlayerPhysics(deltaTime);
-        updateBossPhysics(deltaTime);
-
-        // 4. Xử lý tương tác người chơi ↔ boss
-        handleCombatInteractions(deltaTime);
-
-        // 5. Cập nhật skill, hồi chiêu và thanh Biến Dị
-        updateSkills(deltaTime);
-        updateMutation(deltaTime);
-
-        // 6. Cập nhật hiệu ứng / animation
-        updateAnimations(deltaTime);
-        updateParticles(deltaTime);
-
-        // 7. Cập nhật giao diện
-        updateUI();
-    }
-
-    // 8. Vẽ frame hiện tại
-    renderGame();
-
-    // 9. Chạy vòng lặp tiếp theo
-    requestAnimationFrame(gameLoop);
-}
-
-// Khởi động game loop
-let lastTime = performance.now();
-requestAnimationFrame(gameLoop);
